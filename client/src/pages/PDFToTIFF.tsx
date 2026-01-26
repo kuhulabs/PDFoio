@@ -1,0 +1,215 @@
+import { TOOL_SEO } from "@/seo/seo";
+import React, { useState, useEffect } from "react";
+import { Link } from "wouter";
+import { FileUpload } from "@/components/FileUpload";
+import { ToolFooter } from "@/components/ToolFooter";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SEOHead } from "@/components/SEOHead";
+import { convertPDFToTIFF, downloadBlob } from "@/lib/realPdfUtils";
+import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
+
+export default function PDFToTIFF() {
+  const seoData = TOOL_SEO['pdf-to-tiff'];
+  const [file, setFile] = useState<File | null>(null);
+  const [compressionType, setCompressionType] = useState<'none' | 'lzw' | 'jpeg'>('none');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
+  const { toast } = useToast();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleFilesSelected = (files: File[]) => {
+    setFile(files[0]);
+    setConvertedFile(null);
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'PDFo_ToTIFF.zip');
+  };
+
+  const handleConvert = async () => {
+    if (!file) return;
+    
+    setIsProcessing(true);
+    setProgress(0);
+    try {
+      setProgress(25);
+      setProgress(70);
+      const zipBlob = await convertPDFToTIFF(file);
+      setProgress(100);
+      setConvertedFile(zipBlob);
+      
+      await trackToolUsage("PDF to TIFF", "conversion", 1);
+      
+      toast({
+        title: "Success!",
+        description: "PDF has been converted to TIFF images successfully. Download button available below.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to convert PDF to TIFF. Please try again.",
+        variant: "destructive",
+      });
+      setProgress(0);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <>
+      <SEOHead 
+        title={seoData.title}
+        description={seoData.metaDescription}
+        keywords={(seoData as any).keywords || ""}
+        canonicalUrl="https://pdfo.io/pdf-to-tiff"
+      />
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back to Tools */}
+        <div className="mb-8">
+          <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm" data-testid="link-back-home">
+            ← Back to Tools
+          </Link>
+        </div>
+
+        {/* Tool Header */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4" role="img" aria-label="PDF to TIFF conversion tool">
+            <i className="fas fa-file-image" aria-hidden="true"></i>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">PDF to TIFF</h1>
+          <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
+            Convert your PDF pages to TIFF format with compression options
+          </p>
+          
+          {/* Features */}
+          <div className="flex justify-center gap-6 mt-6 text-sm">
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Professional Format
+            </div>
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Compression Options
+            </div>
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Free to Use
+            </div>
+          </div>
+        </div>
+
+        {!file ? (
+          <FileUpload
+            onFilesSelected={handleFilesSelected}
+            acceptMultiple={false}
+          />
+        ) : (
+          <>
+            {/* File Info Card */}
+            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border-2 border-amber-200 dark:border-amber-700 rounded-lg p-4 mb-6">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center text-white flex-shrink-0">
+                    <i className="fas fa-file-pdf text-xl"></i>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-gray-900 dark:text-white truncate">{file.name}</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Size: {(file.size / 1024).toFixed(2)} KB</p>
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-800 text-amber-800 dark:text-amber-100 mt-2">
+                      <i className="fas fa-file-image mr-1"></i>Ready to Convert
+                    </span>
+                  </div>
+                </div>
+                <button onClick={() => { setFile(null); setConvertedFile(null); }} className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" title="Remove file" data-testid="button-remove-file">
+                  <i className="fas fa-times text-xl"></i>
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Conversion Options</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Compression Type</Label>
+                  <Select value={compressionType} onValueChange={(value: 'none' | 'lzw' | 'jpeg') => setCompressionType(value)}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">None (Uncompressed)</SelectItem>
+                      <SelectItem value="lzw">LZW Compression</SelectItem>
+                      <SelectItem value="jpeg">JPEG Compression</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Choose compression method for file size vs quality balance
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mt-6">
+                <Button
+                  onClick={handleConvert}
+                  disabled={isProcessing}
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+                >
+                  {isProcessing ? "Converting..." : "Convert to TIFF"}
+                </Button>
+              </div>
+              
+              <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                <p className="text-sm text-amber-700 dark:text-amber-300">
+                  <i className="fas fa-info-circle mr-2"></i>
+                  All pages will be converted to TIFF format and downloaded as a ZIP file.
+                </p>
+              </div>
+            </div>
+            
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="amber"
+              className="mt-6"
+            />
+            
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download TIFF Images (ZIP)
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
+              <div className="text-center mt-6">
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <ToolFooter />
+    </>
+  );
+}

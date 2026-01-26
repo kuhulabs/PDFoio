@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    
+    <!-- SEO Meta Tags -->
+    <title>PDFo.io - Free Online PDF Tools | Merge, Split, Compress</title>
+    <meta name="description" content="Free online PDF tools - Merge, Split, Compress, Convert PDFs. No signup required. Fast, secure, and easy to use.">
+    <meta name="keywords" content="PDF tools, merge PDF, split PDF, compress PDF, PDF converter, online PDF editor">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="PDFo.io - Free Online PDF Tools">
+    <meta property="og:description" content="Free online PDF tools - Merge, Split, Compress, Convert PDFs">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Fonts (Only 2-3 needed fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Latest version) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Analytics -->
+    <script async src="https://plausible.io/js/pa-zdPlswqHtQW8aiyX6hR6z.js"></script>
+    <script>
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()
+    </script>
+    
+    <!-- Prevent theme flash -->
+    <script>
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

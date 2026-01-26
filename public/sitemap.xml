@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://pdfo.in/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://pdfo.in/about</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pdfo.in/contact</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pdfo.in/privacy</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://pdfo.in/terms</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://pdfo.in/summarize</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/merge</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/compress</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/split</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/rotate</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/unlock</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/lock</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/watermark</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/metadata</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/page-numbers</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/remove-blank-pages</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/delete-pages</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/reorder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/word-to-pdf</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/excel-to-pdf</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/png-to-pdf</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/images-to-pdf</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-word</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-excel</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-ppt</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-jpg</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-png</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-tiff</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-txt</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pdfo.in/pdf-to-json</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+</urlset>
