@@ -1,10 +1,8 @@
-import { TOOL_SEO } from "@/seo/seo";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -21,6 +19,23 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
+import { TOOL_SEO } from "@/seo/seo";
+import {
+  ArrowLeft,
+  Image as ImageIcon,
+  FileText,
+  Download,
+  RefreshCw,
+  CheckCircle,
+  Coffee,
+  Layers,
+  Zap,
+  ChevronDown,
+  ChevronUp,
+  FileArchive,
+  FileImage,
+  Ghost, // For transparency icon
+} from "lucide-react";
 
 export default function PDFToPNG() {
   const seoData = TOOL_SEO["pdf-to-png"];
@@ -34,7 +49,6 @@ export default function PDFToPNG() {
   const [isIndividualOpen, setIsIndividualOpen] = useState(false);
   const { toast } = useToast();
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -44,45 +58,55 @@ export default function PDFToPNG() {
     setConvertedFile(null);
     setIndividualImages([]);
     setPageCount(0);
+    setProgress(0);
   };
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, "PDFo_ToPNG.zip");
+    const fileName = file
+      ? `PDFo_${file.name.replace(/\.[^/.]+$/, "")}_Images.zip`
+      : "PDFo_PNG_Images.zip";
+    downloadBlob(convertedFile, fileName);
   };
 
   const handleDownloadSingle = (imageBlob: Blob, pageNum: number) => {
-    downloadBlob(imageBlob, `PDFo_Page${pageNum}.png`);
+    const fileName = file
+      ? `Page_${pageNum}_${file.name.replace(/\.[^/.]+$/, "")}.png`
+      : `PDFo_Page${pageNum}.png`;
+    downloadBlob(imageBlob, fileName);
   };
 
   const handleConvert = async () => {
     if (!file) return;
 
     setIsProcessing(true);
-    setProgress(0);
+    setProgress(10);
     try {
-      setProgress(10);
       const options: ImageConversionOptions = { transparentBackground };
 
-      // We'll update progress based on page processing in a future iteration
-      // For now, let's just show progress starting
-      setProgress(30);
+      // Simulate progress
+      const interval = setInterval(
+        () => setProgress((prev) => Math.min(prev + 5, 90)),
+        500,
+      );
 
       const result = await convertPDFToImages(file, "png", options);
+
+      clearInterval(interval);
       setProgress(100);
       setConvertedFile(result.zipBlob);
       setIndividualImages(result.images);
       setPageCount(result.pageCount);
+
       toast({
         title: "Success!",
-        description: `PDF converted to ${result.pageCount} PNG images. Download individually or as ZIP.`,
+        description: `Converted ${result.pageCount} pages to PNG.`,
       });
     } catch (error) {
       console.error("PNG conversion error:", error);
       toast({
-        title: "Error",
-        description:
-          "Failed to convert PDF to PNG. Please ensure the PDF is not password protected.",
+        title: "Conversion Failed",
+        description: "Failed to convert PDF. Please try again.",
         variant: "destructive",
       });
       setProgress(0);
@@ -91,55 +115,61 @@ export default function PDFToPNG() {
     }
   };
 
+  const resetTool = () => {
+    setFile(null);
+    setConvertedFile(null);
+    setIndividualImages([]);
+    setPageCount(0);
+    setProgress(0);
+  };
+
   return (
     <>
       <SEOHead
+        breadcrumbs={[
+          { name: "Home", url: window.location.origin },
+          { name: "PDF to PNG", url: `${window.location.origin}/pdf-to-png` },
+        ]}
         title={seoData.title}
         description={seoData.metaDescription}
-        keywords={(seoData as any).keywords || ""}
-        canonicalUrl="https://pdfo.io/pdf-to-png"
+        keywords={
+          (seoData as any).keywords ||
+          "pdf to png, convert pdf to transparent png, pdf image extractor"
+        }
+        canonicalUrl={`${window.location.origin}/pdf-to-png`}
+        faqs={seoData.faqs}
       />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back to Tools */}
-        <div className="mb-8">
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
+        {/* Navigation */}
+        <div className="mb-6">
           <Link
             href="/"
-            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm"
-            data-testid="link-back-home"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
           >
-            ← Back to Tools
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back to Tools
           </Link>
         </div>
 
-        {/* Tool Header */}
-        <div className="text-center mb-8">
-          <div
-            className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4"
-            role="img"
-            aria-label="PDF to PNG conversion tool"
-          >
-            <i className="far fa-images" aria-hidden="true"></i>
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
+            <ImageIcon className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            PDF to PNG
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            {seoData.h1}
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Convert your PDF pages to PNG images with transparency support
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg leading-relaxed">
+            {seoData.shortIntro}
           </p>
 
-          {/* Features */}
-          <div className="flex justify-center gap-6 mt-6 text-sm">
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Transparency Support
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm font-medium">
+            <div className="flex items-center text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full">
+              <Ghost className="w-4 h-4 mr-2" /> Transparency Support
             </div>
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Lossless Quality
-            </div>
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Free to Use
+            <div className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
+              <Zap className="w-4 h-4 mr-2" /> Lossless Quality
             </div>
           </div>
         </div>
@@ -148,138 +178,153 @@ export default function PDFToPNG() {
           <FileUpload
             onFilesSelected={handleFilesSelected}
             acceptMultiple={false}
+            accept=".pdf"
+            title="Drag & Drop PDF"
+            className="max-w-2xl mx-auto"
           />
         ) : (
-          <>
-            {/* File Info Card */}
-            <div className="bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 border-2 border-emerald-200 dark:border-emerald-700 rounded-lg p-4 mb-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3 flex-1">
-                  <div className="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center text-white flex-shrink-0">
-                    <i className="fas fa-file-pdf text-xl"></i>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-gray-900 dark:text-white truncate">
-                      {file.name}
-                    </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      Size: {(file.size / 1024).toFixed(2)} KB
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-100">
-                        <i className="fas fa-image mr-1"></i>
-                        Ready to Convert
-                      </span>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {!convertedFile ? (
+              <div className="max-w-xl mx-auto bg-card border rounded-xl shadow-sm p-6 sm:p-8">
+                {/* File Info */}
+                <div className="flex items-center justify-between mb-8 pb-6 border-b">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/20 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                      <FileText className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground truncate max-w-[180px] sm:max-w-xs">
+                        {file.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        {(file.size / 1024).toFixed(2)} KB
+                      </p>
                     </div>
                   </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={resetTool}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <i className="fas fa-times"></i>
+                  </Button>
                 </div>
-                <button
-                  onClick={() => {
-                    setFile(null);
-                    setConvertedFile(null);
-                    setIndividualImages([]);
-                    setPageCount(0);
-                  }}
-                  className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  title="Remove file"
-                  data-testid="button-remove-file"
-                >
-                  <i className="fas fa-times text-xl"></i>
-                </button>
-              </div>
-            </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Conversion Options
-              </h3>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Transparent Background
-                    </Label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Enable transparency instead of white background
-                    </p>
+                {/* Options */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+                    <div className="space-y-0.5">
+                      <Label className="text-base flex items-center gap-2">
+                        <Ghost className="w-4 h-4 text-emerald-600" />{" "}
+                        Transparent Background
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Remove white background (useful for logos/graphics)
+                      </p>
+                    </div>
+                    <Switch
+                      checked={transparentBackground}
+                      onCheckedChange={setTransparentBackground}
+                    />
                   </div>
-                  <Switch
-                    checked={transparentBackground}
-                    onCheckedChange={setTransparentBackground}
-                  />
+
+                  <Button
+                    onClick={handleConvert}
+                    disabled={isProcessing}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md h-12 text-lg"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                        Converting...
+                      </>
+                    ) : (
+                      "Convert to PNG"
+                    )}
+                  </Button>
                 </div>
               </div>
+            ) : (
+              /* Success View */
+              <div className="max-w-3xl mx-auto space-y-6 animate-in zoom-in-95 duration-300">
+                <div className="bg-card border rounded-xl shadow-sm p-8 text-center">
+                  <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                  </div>
 
-              <div className="mt-6">
-                <Button
-                  onClick={handleConvert}
-                  disabled={isProcessing}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                >
-                  {isProcessing ? "Converting..." : "Convert to PNG"}
-                </Button>
-              </div>
+                  <h2 className="text-2xl font-bold mb-2">
+                    Conversion Complete!
+                  </h2>
+                  <p className="text-muted-foreground mb-8">
+                    Your PDF has been converted into {pageCount} lossless PNG
+                    images.
+                  </p>
 
-              <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <p className="text-sm text-green-700 dark:text-green-300">
-                  <i className="fas fa-info-circle mr-2"></i>
-                  All pages will be converted to PNG format and downloaded as a
-                  ZIP file.
-                </p>
-              </div>
-            </div>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button
+                      onClick={handleDownload}
+                      size="lg"
+                      className="bg-green-600 hover:bg-green-700 text-white shadow-lg font-semibold w-full sm:w-auto h-12"
+                    >
+                      <FileArchive className="w-5 h-5 mr-2" />
+                      Download All (ZIP)
+                    </Button>
 
-            <ProgressBar
-              progress={progress}
-              isVisible={isProcessing}
-              color="emerald"
-              className="mt-6"
-            />
+                    <Button
+                      onClick={resetTool}
+                      variant="outline"
+                      size="lg"
+                      className="w-full sm:w-auto h-12"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Convert Another
+                    </Button>
+                  </div>
+                </div>
 
-            {/* Download Section */}
-            {convertedFile && !isProcessing && individualImages.length > 0 && (
-              <div className="space-y-6 mt-6">
-                {/* Individual Downloads - Collapsible */}
+                {/* Individual Downloads */}
                 <Collapsible
                   open={isIndividualOpen}
                   onOpenChange={setIsIndividualOpen}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+                  className="bg-card border rounded-xl shadow-sm overflow-hidden"
                 >
-                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <CollapsibleTrigger
-                      className="w-full flex items-center justify-between hover:opacity-80 transition-opacity"
-                      data-testid="button-toggle-individual"
-                    >
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        <i className="fas fa-images mr-2 text-emerald-500"></i>
-                        Individual Images ({pageCount} pages)
-                      </h3>
-                      <i
-                        className={`fas fa-chevron-${isIndividualOpen ? "up" : "down"} text-gray-500`}
-                      ></i>
-                    </CollapsibleTrigger>
-                  </div>
+                  <CollapsibleTrigger className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-2 font-semibold">
+                      <ImageIcon className="w-5 h-5 text-emerald-500" />
+                      Download Individual Pages
+                    </div>
+                    {isIndividualOpen ? (
+                      <ChevronUp className="w-4 h-4" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4" />
+                    )}
+                  </CollapsibleTrigger>
 
                   <CollapsibleContent>
-                    <div className="p-6">
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    <div className="p-4 border-t bg-muted/20">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {individualImages.map((imageBlob, index) => (
                           <button
                             key={index}
                             onClick={() =>
                               handleDownloadSingle(imageBlob, index + 1)
                             }
-                            className="flex flex-col items-center justify-center p-4 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg border-2 border-emerald-200 dark:border-emerald-700 transition-colors"
-                            data-testid={`button-download-page-${index + 1}`}
+                            className="group flex flex-col items-center p-3 bg-background border rounded-lg hover:border-emerald-500 hover:shadow-md transition-all"
                           >
-                            <i className="fas fa-file-image text-2xl text-emerald-500 mb-2"></i>
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            <div className="w-full aspect-[3/4] bg-muted mb-2 rounded overflow-hidden flex items-center justify-center relative">
+                              <FileImage className="w-8 h-8 text-muted-foreground/50 group-hover:text-emerald-500 transition-colors" />
+                              {transparentBackground && (
+                                <div className="absolute top-1 right-1 bg-black/50 rounded-full p-1">
+                                  <Ghost className="w-2 h-2 text-white" />
+                                </div>
+                              )}
+                            </div>
+                            <span className="text-sm font-medium">
                               Page {index + 1}
                             </span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              <i className="fas fa-download mr-1"></i>
-                              Download
+                            <span className="text-xs text-emerald-600 dark:text-emerald-400 mt-1 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Download className="w-3 h-3 mr-1" /> Download
                             </span>
                           </button>
                         ))}
@@ -288,28 +333,31 @@ export default function PDFToPNG() {
                   </CollapsibleContent>
                 </Collapsible>
 
-                {/* ZIP Download */}
-                <div className="text-center space-y-4">
-                  <Button
-                    onClick={handleDownload}
-                    size="lg"
-                    className="bg-green-500 hover:bg-green-600 text-white px-8"
-                    data-testid="button-download-zip"
+                {/* Buy Me Coffee */}
+                <div className="text-center pt-4">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Saved you time?
+                  </p>
+                  <a
+                    href="https://www.buymeacoffee.com/kuhulabsq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-black bg-[#FFDD00] hover:bg-[#FFDD00]/90 rounded-full shadow-sm hover:shadow transition-transform hover:scale-105"
                   >
-                    <i className="fas fa-file-archive mr-2"></i>
-                    Download All as ZIP
-                  </Button>
-                  <BuyMeCoffeeButton />
+                    <Coffee className="h-4 w-4 mr-2" />
+                    Buy me a coffee
+                  </a>
                 </div>
               </div>
             )}
 
-            {!convertedFile && !isProcessing && (
-              <div className="text-center mt-6">
-                <BuyMeCoffeeButton />
-              </div>
-            )}
-          </>
+            <ProgressBar
+              progress={progress}
+              isVisible={isProcessing}
+              color="emerald"
+              className="fixed top-0 left-0 right-0 z-50 h-1"
+            />
+          </div>
         )}
       </div>
 
