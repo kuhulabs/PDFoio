@@ -1,29 +1,34 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SEOHead } from "@/components/SEOHead";
-import { TOOL_SEO } from "@/seo/seo";
-import { ToolSEOContent } from "@/components/ToolSEOContent";
 import { downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Unlock, 
-  FileText, 
-  X, 
-  Eye, 
-  EyeOff, 
+import { ToolSEOContent } from "@/components/ToolSEOContent";
+import { TOOL_SEO } from "@/seo/seo";
+import {
+  ArrowLeft,
+  Unlock,
+  FileText,
   Download,
-  ArrowLeft
+  RefreshCw,
+  CheckCircle,
+  Coffee,
+  Eye,
+  EyeOff,
+  KeyRound,
+  ShieldAlert,
+  X,
 } from "lucide-react";
 
 export default function UnlockPDF() {
   const seoData = TOOL_SEO["unlock"];
+
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +37,6 @@ export default function UnlockPDF() {
   const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -40,11 +44,14 @@ export default function UnlockPDF() {
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
     setConvertedFile(null);
+    setPassword("");
+    setProgress(0);
   };
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, "PDFo_Unlock.pdf");
+    const fileName = file ? `PDFo_Unlocked_${file.name}` : "PDFo_Unlocked.pdf";
+    downloadBlob(convertedFile, fileName);
   };
 
   const canUnlock = password.length > 0 && !isProcessing;
@@ -53,89 +60,58 @@ export default function UnlockPDF() {
     if (!file || !canUnlock) return;
 
     setIsProcessing(true);
-    setProgress(0);
-    try {
-      setProgress(20);
+    setProgress(10); // Start progress
 
-      // Create form data for upload
+    try {
       const formData = new FormData();
-      formData.append("pdf", file);
+      formData.append("pdf", file); // Note: API expects 'pdf', not 'file' based on previous code
       formData.append("password", password);
 
-      setProgress(40);
+      // Simulate progress while waiting for server
+      const interval = setInterval(
+        () => setProgress((prev) => Math.min(prev + 5, 90)),
+        300,
+      );
 
-      // Call backend API for REAL decryption
       const response = await fetch("/api/pdf/unlock", {
         method: "POST",
         body: formData,
       });
 
-      setProgress(70);
+      clearInterval(interval);
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Decryption failed");
       }
 
-      // Get decrypted PDF blob
       const unlockedBlob = await response.blob();
       setProgress(100);
       setConvertedFile(unlockedBlob);
+
       toast({
         title: "Success!",
-        description:
-          "PDF has been DECRYPTED successfully. Password protection removed!",
+        description: "PDF unlocked successfully.",
       });
 
-      // Reset form
       setPassword("");
     } catch (error: any) {
-      // Extract specific error message
-      let errorMessage =
-        "Failed to decrypt PDF. Please check your password and try again.";
-      let errorDetails = "Error";
+      console.error(error);
 
-      if (error instanceof Error) {
-        // Specific error cases from backend
-        if (
-          error.message.includes("password") ||
-          error.message.includes("incorrect") ||
-          error.message.includes("wrong")
-        ) {
-          errorMessage = "Incorrect password. Please try again.";
-          errorDetails = "AuthenticationError";
-        } else if (
-          error.message.includes("require a password to open") ||
-          error.message.includes("editing restrictions")
-        ) {
-          errorMessage =
-            "This PDF doesn't need a password to open. It only has editing restrictions.";
-          errorDetails = "PermissionsError";
-        } else if (
-          error.message.includes("not locked") ||
-          error.message.includes("not protected")
-        ) {
-          errorMessage = "This PDF is not password protected.";
-          errorDetails = "NotProtectedError";
-        } else if (
-          error.message.includes("corrupted") ||
-          error.message.includes("invalid")
-        ) {
-          errorMessage = "Invalid or corrupted PDF file.";
-          errorDetails = "PDFLoadError";
-        } else if (
-          error.message.includes("size") ||
-          error.message.includes("large")
-        ) {
-          errorMessage = "PDF file too large (max 10MB).";
-          errorDetails = "MemoryError";
-        } else {
-          errorMessage = error.message || errorMessage;
-        }
+      let errorMessage = "Failed to decrypt PDF. Please check your password.";
+
+      // Handle specific error messages
+      if (
+        error.message?.includes("password") ||
+        error.message?.includes("incorrect")
+      ) {
+        errorMessage = "Incorrect password. Please try again.";
+      } else if (error.message?.includes("not locked")) {
+        errorMessage = "This PDF is not password protected.";
       }
 
       toast({
-        title: `Error: ${errorDetails || "Unknown"}`,
+        title: "Unlock Failed",
         description: errorMessage,
         variant: "destructive",
       });
@@ -143,6 +119,13 @@ export default function UnlockPDF() {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const resetTool = () => {
+    setFile(null);
+    setConvertedFile(null);
+    setPassword("");
+    setProgress(0);
   };
 
   return (
@@ -154,165 +137,195 @@ export default function UnlockPDF() {
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
-        keywords="unlock pdf, remove pdf password, decrypt pdf"
+        keywords="unlock pdf, remove pdf password, decrypt pdf, open protected pdf"
         canonicalUrl={`${window.location.origin}/unlock`}
         faqs={seoData.faqs}
       />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back to Tools */}
-        <div className="mb-8">
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
+        {/* Navigation */}
+        <div className="mb-6">
           <Link
             href="/"
-            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm"
-            data-testid="link-back-home"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
           >
-            ← Back to Tools
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back to Tools
           </Link>
         </div>
 
-        {/* Tool Header */}
-        <div className="text-center mb-8">
-          <div
-            className="w-16 h-16 bg-pink-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4 shadow-lg shadow-pink-500/20"
-            role="img"
-            aria-label="Unlock PDF tool"
-          >
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
             <Unlock className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Unlock PDF
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            {seoData.h1}
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Decrypt password-protected PDFs - remove encryption and access your
-            files
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg leading-relaxed">
+            {seoData.shortIntro}
           </p>
+
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm font-medium">
+            <div className="flex items-center text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full">
+              <KeyRound className="w-4 h-4 mr-2" /> Decrypt Instantly
+            </div>
+            <div className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
+              <ShieldAlert className="w-4 h-4 mr-2" /> Secure Processing
+            </div>
+          </div>
         </div>
 
         {!file ? (
           <FileUpload
             onFilesSelected={handleFilesSelected}
             acceptMultiple={false}
-            maxSize={10 * 1024 * 1024}
+            maxSize={50 * 1024 * 1024}
+            accept=".pdf"
+            className="max-w-2xl mx-auto"
           />
         ) : (
-          <>
-            {/* File Info Card */}
-            <div className="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-2 border-pink-200 dark:border-pink-700 rounded-lg p-4 mb-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3 flex-1">
-                  <div className="w-12 h-12 bg-pink-500 rounded-lg flex items-center justify-center text-white flex-shrink-0">
-                    <FileText className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-gray-900 dark:text-white truncate">
-                      {file.name}
-                    </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      Size: {(file.size / 1024).toFixed(2)} KB
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-pink-100 dark:bg-pink-800 text-pink-800 dark:text-pink-100">
-                        <Unlock className="w-3 h-3 mr-1" />
-                        Ready to Unlock
-                      </span>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {!convertedFile ? (
+              <div className="max-w-xl mx-auto bg-card border rounded-xl shadow-sm p-6 sm:p-8">
+                {/* File Info */}
+                <div className="flex items-center justify-between mb-8 pb-6 border-b">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/20 rounded-lg flex items-center justify-center text-pink-600 dark:text-pink-400">
+                      <FileText className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground truncate max-w-[180px] sm:max-w-xs">
+                        {file.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
                     </div>
                   </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setFile(null);
-                    setConvertedFile(null);
-                    setPassword("");
-                  }}
-                  className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  title="Remove file"
-                  data-testid="button-remove-file"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Enter PDF Password
-              </h3>
-
-              <div className="space-y-4">
-                <div>
-                  <Label
-                    htmlFor="password"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={resetTool}
+                    className="text-muted-foreground hover:text-destructive"
                   >
-                    Password
-                  </Label>
-                  <div className="relative mt-1">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter PDF password"
-                      className="pr-10"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && canUnlock) {
-                          handleUnlockPDF();
-                        }
-                      }}
-                      data-testid="input-password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                      data-testid="button-toggle-password"
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+
+                {/* Password Form */}
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="text-sm font-medium">
+                      Enter PDF Password
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Type the password to unlock"
+                        className="pr-10 h-12 text-lg"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && canUnlock) {
+                            handleUnlockPDF();
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      We do not store your password or file.
+                    </p>
                   </div>
+
+                  <Button
+                    onClick={handleUnlockPDF}
+                    disabled={!canUnlock}
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white shadow-md h-12 text-lg font-semibold"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />{" "}
+                        Unlocking...
+                      </>
+                    ) : (
+                      <>
+                        <Unlock className="w-4 h-4 mr-2" /> Unlock PDF
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
+            ) : (
+              /* Success View */
+              <div className="max-w-2xl mx-auto bg-card border rounded-xl shadow-sm p-8 text-center animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                </div>
 
-              <div className="mt-6">
-                <Button
-                  onClick={handleUnlockPDF}
-                  disabled={!canUnlock}
-                  className="w-full bg-pink-600 hover:bg-pink-700 text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
-                  data-testid="button-unlock-pdf"
-                >
-                  {isProcessing ? "Decrypting PDF..." : "Unlock PDF"}
-                </Button>
+                <h2 className="text-2xl font-bold mb-2">PDF Unlocked!</h2>
+                <p className="text-muted-foreground mb-8">
+                  The password has been successfully removed from your document.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    onClick={handleDownload}
+                    size="lg"
+                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg font-semibold w-full sm:w-auto h-12"
+                  >
+                    <Download className="w-5 h-5 mr-2" />
+                    Download Unlocked File
+                  </Button>
+
+                  <Button
+                    onClick={resetTool}
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto h-12"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Unlock Another
+                  </Button>
+                </div>
+
+                {/* Buy Me Coffee */}
+                <div className="mt-8 pt-6 border-t">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Saved you time?
+                  </p>
+                  <a
+                    href="https://www.buymeacoffee.com/kuhulabsq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-black bg-[#FFDD00] hover:bg-[#FFDD00]/90 rounded-full shadow-sm hover:shadow transition-transform hover:scale-105"
+                  >
+                    <Coffee className="h-4 w-4 mr-2" />
+                    Buy me a coffee
+                  </a>
+                </div>
               </div>
-            </div>
+            )}
 
             <ProgressBar
               progress={progress}
               isVisible={isProcessing}
-              indicatorColor="bg-purple-500"
-              className="mt-6"
+              color="pink"
+              className="fixed top-0 left-0 right-0 z-50 h-1"
             />
-
-            {/* Download Button */}
-            {convertedFile && !isProcessing && (
-              <div className="text-center space-y-4 mt-6">
-                <Button
-                  onClick={handleDownload}
-                  size="lg"
-                  className="bg-green-500 hover:bg-green-600 text-white px-8"
-                >
-                  <Download className="w-5 h-5 mr-2" />
-                  Download Unlocked PDF
-                </Button>
-                <BuyMeCoffeeButton />
-              </div>
-            )}
-
-            {!convertedFile && !isProcessing && (
-              <div className="text-center mt-6">
-                <BuyMeCoffeeButton />
-              </div>
-            )}
-          </>
+          </div>
         )}
       </div>
 

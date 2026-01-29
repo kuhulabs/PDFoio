@@ -7,10 +7,20 @@ import { ToolFooter } from "@/components/ToolFooter";
 import { mergePDFs } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
-import { Download, RefreshCw, Plus, Layers } from "lucide-react"; // Added Layers icon
+import {
+  Download,
+  Coffee,
+  RefreshCw,
+  ArrowLeft,
+  Merge,
+  Files,
+  CheckCircle,
+  Zap,
+  Shield,
+  Plus,
+} from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton"; // Using this now
 import { TOOL_SEO } from "@/seo/seo";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
 
@@ -23,7 +33,12 @@ export default function MergePDF() {
 
   const seoData = TOOL_SEO["merge"];
 
-  // 1. MEMORY MANAGEMENT: Cleanup Blob URL on unmount or change
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Cleanup memory when component unmounts or url changes
   useEffect(() => {
     return () => {
       if (mergedPdfUrl) {
@@ -32,19 +47,14 @@ export default function MergePDF() {
     };
   }, [mergedPdfUrl]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const handleFilesSelected = (selectedFiles: File[]) => {
     if (selectedFiles.length === 0) return;
-    setFiles(prev => [...prev, ...selectedFiles]);
-    
-    // If we add files after merging, reset the merge state
+    setFiles((prev) => [...prev, ...selectedFiles]);
+
+    // Reset previous merge if new files are added
     if (mergedPdfUrl) {
       URL.revokeObjectURL(mergedPdfUrl);
       setMergedPdfUrl(null);
-      setProgress(0);
     }
   };
 
@@ -56,35 +66,39 @@ export default function MergePDF() {
     if (files.length < 2) {
       toast({
         title: "Not enough files",
-        description: "Please select at least 2 PDF files to merge.",
-        variant: "destructive"
+        description: "Please upload at least 2 PDF files to merge.",
+        variant: "destructive",
       });
       return;
     }
-    
+
     setIsProcessing(true);
     setProgress(0);
-    
-    // Cleanup previous result if exists
-    if (mergedPdfUrl) URL.revokeObjectURL(mergedPdfUrl);
-    setMergedPdfUrl(null);
-    
+
+    if (mergedPdfUrl) {
+      URL.revokeObjectURL(mergedPdfUrl);
+      setMergedPdfUrl(null);
+    }
+
     try {
+      // Simulate start
       setProgress(10);
-      
+
       const mergedBlob = await mergePDFs(files, (current, total) => {
-        const fileProgress = (current / total) * 80; 
+        // Calculate progress: 10% start + 80% processing
+        const fileProgress = (current / total) * 80;
         setProgress(10 + fileProgress);
       });
-      
+
       setProgress(95);
-      
+
       const url = URL.createObjectURL(mergedBlob);
       setMergedPdfUrl(url);
-      
+
       setProgress(100);
+
       await trackToolUsage("Merge PDF", "manipulation", files.length);
-      
+
       toast({
         title: "Success!",
         description: `Successfully merged ${files.length} PDF files.`,
@@ -93,7 +107,7 @@ export default function MergePDF() {
       console.error(error);
       toast({
         title: "Merge Failed",
-        description: "An error occurred while merging your files. Please try again.",
+        description: "Could not merge the PDF files. Please try again.",
         variant: "destructive",
       });
       setProgress(0);
@@ -104,9 +118,10 @@ export default function MergePDF() {
 
   const handleDownload = () => {
     if (mergedPdfUrl) {
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = mergedPdfUrl;
-      a.download = `PDFo_Merge_${new Date().toISOString().slice(0,10)}.pdf`; // Better filename
+      const timestamp = new Date().toISOString().slice(0, 10);
+      a.download = `PDFo-merged-${timestamp}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -114,149 +129,193 @@ export default function MergePDF() {
   };
 
   const clearFiles = () => {
-    if (mergedPdfUrl) URL.revokeObjectURL(mergedPdfUrl); // Cleanup memory
+    if (mergedPdfUrl) {
+      URL.revokeObjectURL(mergedPdfUrl);
+    }
     setFiles([]);
     setMergedPdfUrl(null);
     setProgress(0);
   };
 
-  // 
-
   return (
     <>
-      <SEOHead 
+      <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin }, 
-          { name: "Merge PDF", url: `${window.location.origin}/merge` }
-        ]} 
+          { name: "Home", url: window.location.origin },
+          { name: "Merge PDF", url: `${window.location.origin}/merge` },
+        ]}
         title={seoData.title}
         description={seoData.metaDescription}
-        keywords="merge pdf, combine pdf, join pdf online, free pdf merger"
+        keywords="merge pdf, combine pdf, join pdf online, pdf merger, stitch pdf"
         canonicalUrl={`${window.location.origin}/merge`}
         faqs={seoData.faqs}
       />
-      
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
         {/* Navigation */}
-        <div className="mb-8">
-          <Link href="/" className="text-muted-foreground hover:text-foreground flex items-center text-sm transition-colors">
-            ← Back to Tools
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back to Tools
           </Link>
         </div>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-6 shadow-lg shadow-blue-500/20">
-            <Layers className="h-8 w-8" />
+        {/* Header Section */}
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
+            <Merge className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {seoData.h1}
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg leading-relaxed">
             {seoData.shortIntro}
           </p>
+
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm font-medium">
+            <div className="flex items-center text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full">
+              <Zap className="w-4 h-4 mr-2" /> Fast Processing
+            </div>
+            <div className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
+              <Shield className="w-4 h-4 mr-2" /> Secure & Private
+            </div>
+          </div>
         </div>
 
-        {/* Main Workspace */}
+        {/* Main Interface */}
         {files.length === 0 ? (
-          <div className="max-w-3xl mx-auto">
-            <FileUpload
-              onFilesSelected={handleFilesSelected}
-              acceptMultiple={true}
-              title="Drop PDFs to Merge"
-              subtitle="Combine multiple PDFs into one document"
-            />
-          </div>
+          <FileUpload
+            onFilesSelected={handleFilesSelected}
+            acceptMultiple={true}
+            accept=".pdf"
+            title="Combine PDF Files"
+            className="max-w-2xl mx-auto"
+          />
         ) : (
-          <div className="space-y-8 animate-in fade-in duration-500">
-            {/* List and Reorder Area */}
-            <DocumentsList
-              files={files}
-              onFilesChange={handleFilesReorder}
-              title="Arrange Your Files"
-            />
-            
-            {/* Add More Button */}
-            <div className="flex justify-center">
-               <FileUpload
-                  onFilesSelected={handleFilesSelected}
-                  acceptMultiple={true}
-                  variant="button"
-                  buttonText="Add More PDFs"
-                  className="w-full max-w-xs"
-               />
-            </div>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {!mergedPdfUrl ? (
+              <div className="space-y-6">
+                {/* File List & Controls */}
+                <div className="bg-card border rounded-xl shadow-sm p-2 sm:p-4">
+                  <div className="flex justify-between items-center px-2 mb-2">
+                    <h3 className="font-semibold flex items-center gap-2">
+                      <Files className="w-4 h-4 text-blue-500" />
+                      {files.length} Files Selected
+                    </h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearFiles}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      Clear All
+                    </Button>
+                  </div>
 
-            {/* Progress Bar */}
-            <ProgressBar 
-              progress={progress} 
-              isVisible={isProcessing || !!mergedPdfUrl} // Keep visible if finished
-              indicatorColor="bg-blue-500"
-              className="max-w-xl mx-auto"
-              showLabel={true}
-            />
+                  <DocumentsList
+                    files={files}
+                    onFilesChange={handleFilesReorder}
+                    title="" // Removing title from inner component as we handled it above
+                    allowPageReorder={false}
+                  />
 
-            {/* Action Area */}
-            <div className="flex flex-col items-center justify-center gap-6 py-4">
-              {!mergedPdfUrl ? (
-                <div className="flex gap-4">
+                  <div className="mt-4 flex justify-center pb-2">
+                    <FileUpload
+                      onFilesSelected={handleFilesSelected}
+                      acceptMultiple={true}
+                      variant="button"
+                      buttonText="Add More PDFs"
+                      className="w-full sm:w-auto"
+                    />
+                  </div>
+                </div>
+
+                {/* Sticky Merge Button */}
+                <div className="sticky bottom-6 z-10 flex justify-center mt-8">
                   <Button
                     onClick={handleMerge}
                     disabled={files.length < 2 || isProcessing}
-                    size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 text-white min-w-[200px] shadow-lg hover:shadow-blue-500/25 transition-all"
+                    className="rounded-full bg-blue-600 hover:bg-blue-700 text-white min-w-[200px] h-12 shadow-lg font-semibold text-lg hover:scale-105 transition-transform"
                   >
-                    {isProcessing ? 'Merging...' : 'Merge PDFs'}
+                    {isProcessing ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />{" "}
+                        Merging...
+                      </>
+                    ) : (
+                      <>
+                        <Merge className="w-4 h-4 mr-2" /> Merge {files.length}{" "}
+                        PDFs
+                      </>
+                    )}
                   </Button>
-                  
+                </div>
+              </div>
+            ) : (
+              /* Success View */
+              <div className="max-w-2xl mx-auto bg-card border rounded-xl shadow-sm p-8 text-center animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                </div>
+
+                <h2 className="text-2xl font-bold mb-2">PDFs Merged!</h2>
+                <p className="text-muted-foreground mb-8">
+                  Your files have been combined into a single document.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    onClick={handleDownload}
+                    size="lg"
+                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg font-semibold w-full sm:w-auto h-12"
+                  >
+                    <Download className="w-5 h-5 mr-2" />
+                    Download Merged PDF
+                  </Button>
+
                   <Button
                     onClick={clearFiles}
                     variant="outline"
                     size="lg"
-                    disabled={isProcessing}
+                    className="w-full sm:w-auto h-12"
                   >
-                    Clear All
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Merge Another
                   </Button>
                 </div>
-              ) : (
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-8 text-center w-full max-w-lg animate-in zoom-in-50">
-                  <h3 className="text-xl font-bold text-green-800 dark:text-green-300 mb-2">
-                    Files Merged Successfully!
-                  </h3>
-                  <p className="text-green-600 dark:text-green-400 mb-6">
-                    Your document is ready for download.
+
+                {/* Buy Me Coffee */}
+                <div className="mt-8 pt-6 border-t">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Saved you time?
                   </p>
-                  
-                  <div className="flex flex-col gap-4">
-                    <Button
-                      onClick={handleDownload}
-                      size="lg"
-                      className="w-full bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-green-500/25"
-                    >
-                      <Download className="h-5 w-5 mr-2" />
-                      Download Merged PDF
-                    </Button>
-
-                    <div className="flex gap-3 justify-center mt-2">
-                       <Button onClick={clearFiles} variant="ghost" size="sm" className="text-gray-500">
-                         <RefreshCw className="h-4 w-4 mr-2" />
-                         Merge New Files
-                       </Button>
-                    </div>
-
-                    {/* 2. CONSISTENCY: Using the actual component */}
-                    <div className="border-t border-green-200 dark:border-green-800/50 pt-4 mt-2">
-                      <BuyMeCoffeeButton className="w-full justify-center" />
-                    </div>
-                  </div>
+                  <a
+                    href="https://www.buymeacoffee.com/kuhulabsq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-black bg-[#FFDD00] hover:bg-[#FFDD00]/90 rounded-full shadow-sm hover:shadow transition-transform hover:scale-105"
+                  >
+                    <Coffee className="h-4 w-4 mr-2" />
+                    Buy me a coffee
+                  </a>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            <ProgressBar
+              progress={progress}
+              isVisible={isProcessing}
+              color="blue"
+              className="fixed top-0 left-0 right-0 z-50 h-1"
+            />
           </div>
         )}
       </div>
 
-      <ToolSEOContent 
+      <ToolSEOContent
         intro={seoData.intro}
         howItWorks={seoData.howItWorks}
         benefits={seoData.benefits}

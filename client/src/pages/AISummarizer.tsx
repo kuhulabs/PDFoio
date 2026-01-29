@@ -1,89 +1,148 @@
-// 1. FIXED: 'import' must be lowercase
-import { TOOL_SEO } from "@/seo/seo";
 import { useEffect } from "react";
 import { Link } from "wouter";
 import { ToolFooter } from "@/components/ToolFooter";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-// 2. FIXED: Using Lucide icons for consistency
-import { ArrowLeft, Bot, Construction, Sparkles } from "lucide-react"; 
+import { TOOL_SEO } from "@/seo/seo";
+import {
+  ArrowLeft,
+  Bot,
+  Sparkles,
+  BrainCircuit,
+  Construction,
+} from "lucide-react";
 
 export default function AISummarizer() {
-  const seoData = TOOL_SEO['summarize'];
+  const seoData = TOOL_SEO["summarize"];
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-      <SEOHead 
+    <>
+      <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin }, 
-          { name: "AI PDF Summarizer", url: `${window.location.origin}/summarize` }
-        ]}  
-        title={seoData?.title || "AI PDF Summarizer - Free Online Tool"}
-        description={seoData?.metaDescription || "Summarize PDF documents using AI. Fast, accurate, and free."}
-        keywords={(seoData as any)?.keywords || "ai pdf summarizer, pdf summary tool"}
+          { name: "Home", url: window.location.origin },
+          { name: "AI Summarizer", url: `${window.location.origin}/summarize` },
+        ]}
+        title={
+          seoData?.title || "AI PDF Summarizer - Summarize Documents Instantly"
+        }
+        description={
+          seoData?.metaDescription ||
+          "Use AI to summarize long PDF documents into concise bullet points."
+        }
+        keywords={
+          (seoData as any)?.keywords ||
+          "ai pdf summarizer, summarize pdf, ai document analysis"
+        }
+        canonicalUrl={`${window.location.origin}/summarize`}
       />
-      
-      <div className="flex-grow max-w-4xl mx-auto px-4 py-12 w-full">
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[70vh] flex flex-col">
         {/* Navigation */}
-        <div className="mb-12">
-          <Link href="/">
-            <a className="inline-flex items-center text-violet-600 dark:text-violet-400 font-medium hover:underline transition-colors">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Tools
-            </a>
+        <div className="mb-8">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back to Tools
           </Link>
         </div>
 
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center p-3 mb-4 bg-violet-100 dark:bg-violet-900/30 rounded-2xl">
-            <Sparkles className="w-8 h-8 text-violet-600 dark:text-violet-400" />
+          <div className="w-16 h-16 bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm animate-in zoom-in duration-500">
+            <Bot className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-foreground mb-4 tracking-tight">
             AI PDF Summarizer
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Summarize long PDFs into clear, concise bullet points using advanced AI.
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg leading-relaxed">
+            Turn long documents into clear, actionable insights using advanced
+            Artificial Intelligence.
           </p>
         </div>
 
         {/* Coming Soon Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 p-12 text-center relative overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-500 via-purple-500 to-blue-500" />
-          
-          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 bg-violet-50 dark:bg-violet-900/20 rounded-full animate-pulse">
-            <Bot className="w-12 h-12 text-violet-600 dark:text-violet-400" />
-          </div>
-          
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Coming Soon
-          </h2>
-          
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <span className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide flex items-center">
-              <Construction className="w-3 h-3 mr-1" />
-              Under Development
-            </span>
-          </div>
+        <div className="max-w-3xl mx-auto w-full bg-card border border-violet-200 dark:border-violet-900/50 rounded-2xl shadow-xl p-8 md:p-12 text-center relative overflow-hidden">
+          {/* Decorative Background Elements */}
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-violet-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl"></div>
 
-          <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto leading-relaxed">
-            We are fine-tuning our AI models to ensure you get the most accurate summaries possible. Check back shortly!
-          </p>
-          
-          <Link href="/">
-            <Button size="lg" className="bg-violet-600 hover:bg-violet-700 text-white font-bold py-6 px-8 rounded-xl transition-all shadow-lg hover:shadow-violet-500/25 hover:-translate-y-1">
-              Explore Available Tools
-            </Button>
-          </Link>
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="mb-6 inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-violet-500 to-fuchsia-600 rounded-full shadow-lg shadow-violet-500/20">
+              <Sparkles className="text-white w-10 h-10 animate-pulse" />
+            </div>
+
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Coming Very Soon
+            </h2>
+
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
+              We are currently fine-tuning our AI models to provide you with the
+              most accurate summaries.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center w-full">
+              <Link href="/">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md gap-2 h-12 text-base"
+                >
+                  <ArrowLeft className="w-4 h-4" /> Explore Other Tools
+                </Button>
+              </Link>
+
+              <Button
+                variant="outline"
+                size="lg"
+                disabled
+                className="w-full sm:w-auto border-violet-200 dark:border-violet-800 text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/20 h-12 text-base cursor-not-allowed opacity-100"
+              >
+                <Construction className="w-4 h-4 mr-2" /> In Development
+              </Button>
+            </div>
+
+            {/* Feature Teaser Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 w-full text-left">
+              <div className="p-4 rounded-xl bg-background/50 border shadow-sm">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 mb-3">
+                  <BrainCircuit className="w-4 h-4" />
+                </div>
+                <h3 className="font-semibold text-sm">Smart Analysis</h3>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Extracts key points instantly.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-background/50 border shadow-sm">
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 mb-3">
+                  <i className="fas fa-list-ul text-xs"></i>
+                </div>
+                <h3 className="font-semibold text-sm">Bullet Points</h3>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Get concise, readable lists.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-background/50 border shadow-sm">
+                <div className="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 mb-3">
+                  <i className="fas fa-language text-xs"></i>
+                </div>
+                <h3 className="font-semibold text-sm">Multi-language</h3>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Supports major global languages.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <ToolFooter />
-    </div>
+    </>
   );
 }
