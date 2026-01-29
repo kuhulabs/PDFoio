@@ -1,4 +1,3 @@
-// 1. FIXED: 'import' must be lowercase
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,17 +7,18 @@ import {
   Infinity, 
   Monitor, 
   XCircle, 
-  UserCheck,
-  GraduationCap,
-  Briefcase,
-  Layers,
-  Heart,
+  UserCheck, 
+  GraduationCap, 
+  Briefcase, 
+  Layers, 
+  Heart, 
   Mail,
-  CheckCircle2 // Added for bullet points
+  Coffee,
+  CheckCircle2,
+  Globe
 } from "lucide-react";
 import { Link } from "wouter";
 import { MainFooter } from "@/components/MainFooter";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton"; // 2. REUSE: Component use kiya
 
 export default function About() {
   return (
@@ -26,7 +26,7 @@ export default function About() {
       <div className="flex-1 pb-12">
         <SEOHead 
           breadcrumbs={[
-            { name: "Home", url: window.location.origin }, 
+            { name: "Home", url: window.location.origin },
             { name: "About", url: `${window.location.origin}/about` }
           ]}  
           title="About PDFo - Simple, Secure & Free PDF Tools"
@@ -34,137 +34,106 @@ export default function About() {
         />
 
         {/* 1. Hero Section */}
-        <section className="bg-primary/5 py-16 md:py-24 border-b border-border/50">
+        <section className="bg-gradient-to-b from-primary/5 to-background py-20 md:py-32 border-b">
           <div className="container px-4 mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-foreground">
-              About PDFo – Simple, Secure & <span className="text-primary">Free</span>
+            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary mb-6 animate-in fade-in slide-in-from-bottom-3">
+              <span>🚀 Simply Powerful PDF Tools</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 text-foreground max-w-4xl mx-auto leading-tight">
+              We make working with PDFs <br className="hidden md:block" />
+              <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">Simple, Secure & Free</span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              We help individuals and businesses master their documents with fast, privacy-first, and completely free online tools.
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              No installations. No sign-ups. No headaches. Just the tools you need to get the job done right now.
             </p>
           </div>
         </section>
 
         <div className="container px-4 mx-auto mt-16 space-y-24">
           
-          {/* 2. Who We Are */}
+          {/* 2. Mission Statement */}
           <section className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6 text-foreground">Who We Are</h2>
-            <div className="text-lg text-muted-foreground space-y-4 leading-relaxed">
-              <p>
-                PDFo is an online platform designed to solve daily PDF challenges with ease. Whether you need to merge documents, compress files, or edit metadata, we provide the tools to get it done in seconds.
-              </p>
-              <p>
-                Built for students, professionals, freelancers, and businesses, PDFo removes the barriers of expensive software. No installation, no sign-up, and absolutely no watermarks on your professional documents.
-              </p>
+            <div className="grid md:grid-cols-2 gap-12 items-center text-left">
+              <div>
+                <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  We believe essential digital tools should be accessible to everyone. Our mission is to democratize PDF management by providing a suite of professional-grade tools that are completely free, incredibly fast, and relentlessly secure.
+                </p>
+                <div className="mt-6 flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>Always Free for Everyone</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>Privacy First Architecture</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>No Hidden Paywalls</span>
+                  </div>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-2xl blur-2xl -z-10"></div>
+                <div className="bg-card border rounded-2xl p-8 shadow-xl">
+                  <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6 mx-auto">
+                    <Globe className="w-8 h-8 text-primary" />
+                  </div>
+                  <p className="text-xl font-medium text-center italic">
+                    "Technology works best when it gets out of the way. We build tools that just work."
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
-          {/* 3. Our Mission */}
-          <section className="max-w-4xl mx-auto bg-primary text-primary-foreground rounded-3xl p-8 md:p-12 text-center shadow-xl shadow-primary/10">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6 opacity-90">Our Mission</h2>
-            <p className="text-xl md:text-2xl leading-relaxed italic font-medium">
-              "To make professional document tools accessible to everyone — free, fast, and secure — without compromising user privacy."
-            </p>
-          </section>
-
-          {/* 4. Why Choose PDFo? */}
+          {/* 3. Why Choose PDFo? (Cards) */}
           <section>
-            <h2 className="text-3xl font-bold text-center mb-12 text-foreground">Why Choose PDFo</h2>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Why Choose PDFo?</h2>
+              <p className="text-muted-foreground">Built for performance, designed for privacy.</p>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { icon: ShieldCheck, title: "Privacy-first", desc: "Your files are encrypted during processing and auto-deleted after use." },
-                { icon: Zap, title: "Lightning Fast", desc: "Optimized algorithms ensure your files are processed in the blink of an eye." },
-                { icon: Infinity, title: "100% Free", desc: "No hidden costs, no premium tiers. All tools are available to everyone for free." },
-                { icon: Monitor, title: "Universal Access", desc: "Works seamlessly on all devices - Windows, Mac, Linux, iOS, and Android." },
-                { icon: XCircle, title: "No Watermark", desc: "We believe in professional results. Your documents stay clean and original." },
-                { icon: UserCheck, title: "No Sign-up", desc: "Start working immediately. We don't require any personal information." },
+                { icon: ShieldCheck, title: "Privacy-First", desc: "Your files are encrypted securely and automatically deleted from our servers permanently after 1 hour." },
+                { icon: Zap, title: "Lightning Fast", desc: "Our optimized processing engine handles even large files in seconds, running directly in your browser where possible." },
+                { icon: Infinity, title: "100% Free", desc: "No trial periods, no credit cards, no 'premium' tier. Every tool is available to everyone, completely free." },
+                { icon: Monitor, title: "Universal Access", desc: "Works perfectly on any device with a browser—Windows, Mac, Linux, iPhone, or Android." },
+                { icon: XCircle, title: "No Watermarks", desc: "We respect your documents. We never add watermarks to your files. Your work stays yours." },
+                { icon: UserCheck, title: "No Sign-up Required", desc: "Start working immediately. We don't ask for your email or force you to create an account." },
               ].map((feature, i) => (
-                <Card key={i} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border/50">
-                  <CardContent className="pt-8">
-                    <div className="mb-4 inline-flex p-3 rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="w-8 h-8 text-primary" />
+                <Card key={i} className="hover:shadow-lg transition-all hover:-translate-y-1 border-primary/10">
+                  <CardContent className="pt-6">
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                      <feature.icon className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold mb-3 text-foreground">{feature.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
+                    <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </section>
 
-          {/* 5. Our Tools & Technology */}
-          <section className="grid md:grid-cols-2 gap-12 items-center bg-muted/30 p-8 rounded-3xl border border-border/50">
-            <div className="order-2 md:order-1">
-              <h2 className="text-3xl font-bold mb-6 text-foreground">Powering Your Productivity</h2>
-              <ul className="space-y-4 text-lg text-muted-foreground">
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="text-green-500 w-6 h-6 shrink-0" /> 20+ professional PDF tools
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="text-green-500 w-6 h-6 shrink-0" /> AI-powered Summarization
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="text-green-500 w-6 h-6 shrink-0" /> Browser-based local processing
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="text-green-500 w-6 h-6 shrink-0" /> Frequent updates & new features
-                </li>
-              </ul>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/merge">
-                  <Button variant="outline" className="rounded-full">Merge PDF</Button>
-                </Link>
-                <Link href="/compress">
-                   <Button variant="outline" className="rounded-full">Compress PDF</Button>
-                </Link>
-                <Link href="/summarize">
-                   <Button variant="default" className="rounded-full">Try AI Tools</Button>
-                </Link>
-              </div>
-            </div>
-            <div className="order-1 md:order-2 flex justify-center">
-              <div className="w-full max-w-sm bg-background rounded-2xl p-8 shadow-xl border border-border/50 flex items-center justify-center aspect-square relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent" />
-                <Layers className="w-32 h-32 text-primary relative z-10" />
-              </div>
+          {/* 4. Company & Made in India */}
+          <section className="bg-muted/30 rounded-3xl p-10 md:p-16 text-center border">
+            <h2 className="text-3xl font-bold mb-6">Built by Kuhu Labs</h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              PDFo is proudly developed by <span className="font-semibold text-foreground">Kuhu Labs</span>, a technology studio committed to building elegant, high-performance digital solutions that simplify complex tasks.
+            </p>
+            
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white dark:bg-gray-800 rounded-full shadow-sm border text-lg font-medium">
+              <span className="text-2xl">🇮🇳</span> 
+              <span>Proudly Made in India</span>
             </div>
           </section>
 
-          {/* 6. Security & Privacy */}
-          <section className="bg-background rounded-2xl p-8 md:p-12 border border-border shadow-sm">
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              <div className="md:w-1/2">
-                <h2 className="text-3xl font-bold mb-6 flex items-center gap-3 text-foreground">
-                  <ShieldCheck className="text-primary w-8 h-8" /> Security & Privacy
-                </h2>
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Our Commitment</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  We take your document security seriously. PDFo is built with a privacy-first architecture. In many cases, files are processed directly in your browser and never even leave your device.
-                </p>
-              </div>
-              <div className="md:w-1/2 bg-muted/50 rounded-xl p-6">
-                <ul className="grid grid-cols-1 gap-4">
-                  {[
-                    "Files encrypted during transfer (SSL/TLS)",
-                    "Automatic file deletion after 1 hour",
-                    "No data mining or content analysis",
-                    "GDPR compliant practices"
-                  ].map((point, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <ShieldCheck className="text-primary w-5 h-5 mt-1 shrink-0" />
-                      <span className="text-muted-foreground">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          {/* 7. Who Is PDFo For? */}
+          {/* 5. Who is it for? */}
           <section>
-            <h2 className="text-3xl font-bold text-center mb-12 text-foreground">Who Uses PDFo?</h2>
-            <div className="flex flex-wrap justify-center gap-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Who Uses PDFo?</h2>
+            <div className="flex flex-wrap justify-center gap-6">
               {[
                 { icon: GraduationCap, label: "Students" },
                 { icon: Briefcase, label: "Professionals" },
@@ -173,47 +142,39 @@ export default function About() {
                 { icon: ShieldCheck, label: "Legal Teams" },
                 { icon: Zap, label: "Startups" },
               ].map((item, i) => (
-                <div key={i} className="flex flex-col items-center gap-3 p-6 bg-card border rounded-2xl w-36 md:w-44 hover:border-primary/50 transition-colors duration-300">
-                  <item.icon className="w-8 h-8 text-primary" />
-                  <span className="font-medium text-foreground">{item.label}</span>
+                <div key={i} className="group flex flex-col items-center gap-3 p-6 bg-card border rounded-2xl w-36 md:w-44 transition-all hover:border-primary hover:shadow-md">
+                  <item.icon className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <span className="font-medium">{item.label}</span>
                 </div>
               ))}
             </div>
           </section>
 
-          {/* 8. Contact & Support */}
-          <section className="text-center border-t border-border pt-20">
-            <h2 className="text-3xl font-bold mb-6 text-foreground">Get in Touch</h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Have questions, feedback, or found a bug? We'd love to hear from you.
+          {/* 6. Contact & Support CTA */}
+          <section className="text-center pt-10 pb-10">
+            <h2 className="text-3xl font-bold mb-6">We'd Love to Hear From You</h2>
+            <p className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto">
+              Have a suggestion, found a bug, or just want to say hi? Our support team is always ready to help.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link href="/contact">
-                <Button size="lg" className="px-8 h-14 text-lg font-medium shadow-lg hover:shadow-primary/20">
-                  <Mail className="w-5 h-5 mr-2" />
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button asChild size="lg" className="h-12 px-8 text-base">
+                <Link href="/contact">
+                  <Mail className="w-4 h-4 mr-2" />
                   Contact Support
-                </Button>
-              </Link>
-              
-              {/* 2. REUSE: Consistent Buy Me Coffee Button */}
-              <div className="h-14 flex items-center">
-                 <BuyMeCoffeeButton />
-              </div>
+                </Link>
+              </Button>
+
+              <Button asChild variant="outline" size="lg" className="h-12 px-8 text-base bg-[#FFDD00] hover:bg-[#FFDD00]/90 text-black border-none hover:text-black">
+                <a href="https://www.buymeacoffee.com/kuhulabsq" target="_blank" rel="noopener noreferrer">
+                  <Coffee className="w-4 h-4 mr-2" />
+                  Buy us a Coffee
+                </a>
+              </Button>
             </div>
           </section>
         </div>
       </div>
-      
-      {/* 9. Company Info Footer Section */}
-      <div className="bg-muted/30 border-t border-border py-12 text-center">
-         <p className="text-lg text-muted-foreground mb-2">
-            Developed by <span className="font-semibold text-foreground">Kuhu Labs</span>
-         </p>
-         <div className="flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground">
-            Proudly Made in India 🇮🇳
-         </div>
-      </div>
-
       <MainFooter />
     </div>
   );

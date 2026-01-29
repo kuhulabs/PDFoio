@@ -1,4 +1,3 @@
-// 1. FIXED: 'import' must be lowercase
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { SEOHead } from "@/components/SEOHead";
@@ -11,7 +10,10 @@ import {
   CheckCircle2, 
   Clock, 
   Send,
-  Webhook
+  ArrowRight,
+  Terminal,
+  Server,
+  Shield
 } from "lucide-react";
 import { MainFooter } from "@/components/MainFooter";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,89 +29,115 @@ export default function ApiPage() {
         />
 
         {/* Hero Section */}
-        <section className="bg-slate-950 text-white py-16 md:py-24 border-b border-slate-800 relative overflow-hidden">
-          {/* Background Grid Pattern Effect */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+        <section className="relative overflow-hidden bg-slate-950 text-white py-20 md:py-32 border-b border-slate-800">
+          {/* Background Grid Pattern */}
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20"></div>
           
           <div className="container px-4 mx-auto text-center relative z-10">
-            <Badge variant="outline" className="mb-6 border-blue-500/50 text-blue-400 px-4 py-1.5 rounded-full">
-              <ConstructionIcon className="w-3 h-3 mr-2 inline" />
+            <Badge variant="outline" className="mb-6 border-blue-500/50 text-blue-400 px-4 py-1.5 text-sm bg-blue-500/10 backdrop-blur-sm">
+              <span className="flex h-2 w-2 rounded-full bg-blue-400 mr-2 animate-pulse"></span>
               Work in Progress
             </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
-              PDFo API – <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400">Coming Soon</span>
+            
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8">
+              PDFo API <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Coming Soon</span>
             </h1>
-            <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-              Powerful, scalable, and secure PDF processing APIs for developers. Integrate professional PDF manipulation directly into your apps.
+            
+            <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed mb-10">
+              Integrate enterprise-grade PDF manipulation directly into your applications. Fast, secure, and developer-friendly.
             </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12 px-8">
+                <Link href="/contact">
+                  Request Early Access <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white h-12 px-8">
+                <a href="#features">View Capabilities</a>
+              </Button>
+            </div>
           </div>
         </section>
 
         <div className="container px-4 mx-auto mt-16 space-y-24">
           
-          {/* Code Example Section */}
-          <section className="max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="flex-1 space-y-4">
-                    <h2 className="text-3xl font-bold">Simple Integration</h2>
-                    <p className="text-muted-foreground text-lg">
-                        Process documents with a simple JSON payload. We handle the heavy lifting and notify your webhook when the job is done.
-                    </p>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500"/> Async processing</li>
-                        <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500"/> Webhook notifications</li>
-                        <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500"/> S3 / URL input support</li>
-                    </ul>
+          {/* Code Example */}
+          <section className="max-w-4xl mx-auto -mt-32 relative z-20">
+            <div className="bg-[#0f172a] rounded-xl border border-slate-700 shadow-2xl overflow-hidden backdrop-blur-xl">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50 bg-slate-900/50">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 </div>
-
-                {/* Code Block */}
-                <div className="flex-1 w-full">
-                    <div className="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-2xl overflow-hidden font-mono text-sm relative group">
-                    <div className="flex items-center gap-2 mb-4 border-b border-slate-800 pb-2">
-                        <div className="w-3 h-3 rounded-full bg-red-500" />
-                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                        <div className="w-3 h-3 rounded-full bg-green-500" />
-                        <span className="text-slate-500 ml-2 text-xs">POST /api/v1/merge</span>
-                    </div>
-                    <pre className="text-blue-300 overflow-x-auto custom-scrollbar">
-{`{
-  "tasks": ["merge"],
-  "files": [
-    "https://cdn.example.com/report_a.pdf",
-    "https://cdn.example.com/report_b.pdf"
-  ],
-  "options": {
-    "output_name": "annual_report_2024.pdf"
-  },
-  "webhook_url": "https://api.yourapp.com/hooks"
-}`}
-                    </pre>
-                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Badge variant="secondary" className="text-xs">JSON</Badge>
-                    </div>
-                    </div>
+                <div className="text-xs font-mono text-slate-500 flex items-center">
+                  <Terminal className="w-3 h-3 mr-1" /> bash
                 </div>
-            </div>
-            
-            <div className="mt-12">
-                
+              </div>
+              <div className="p-6 overflow-x-auto">
+                <pre className="font-mono text-sm leading-relaxed">
+                  <code className="text-slate-300">
+                    <span className="text-purple-400">curl</span> -X POST https://api.pdfo.io/v1/merge \<br/>
+                    &nbsp;&nbsp;<span className="text-blue-400">-H</span> <span className="text-green-400">"Authorization: Bearer YOUR_API_KEY"</span> \<br/>
+                    &nbsp;&nbsp;<span className="text-blue-400">-H</span> <span className="text-green-400">"Content-Type: application/json"</span> \<br/>
+                    &nbsp;&nbsp;<span className="text-blue-400">-d</span> '<span className="text-yellow-300">{`{
+    "files": [
+      "https://pdfo.io/files/doc1.pdf",
+      "https://pdfo.io/files/doc2.pdf"
+    ],
+    "options": {
+      "normalize": true
+    }
+  }`}</span>'
+                  </code>
+                </pre>
+              </div>
             </div>
           </section>
 
-          {/* What the API Will Offer */}
-          <section>
-            <h2 className="text-3xl font-bold text-center mb-12">API Capabilities</h2>
+          {/* Features Grid */}
+          <section id="features">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold mb-4">Powerful Capabilities</h2>
+              <p className="text-muted-foreground text-lg">Everything you need to build robust PDF workflows.</p>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Zap, title: "Core Operations", desc: "Merge, split, and compress PDFs with high-performance engines." },
-                { icon: FileJson, title: "High Fidelity", desc: "Convert PDF to Word, Excel, & Images while preserving exact layout." },
-                { icon: Cpu, title: "AI Extraction", desc: "Extract structured data (tables, invoices) using our AI models." },
-                { icon: Webhook, title: "Webhooks", desc: "Event-driven architecture. Receive real-time updates on job status." },
+                { 
+                  icon: Zap, 
+                  color: "text-amber-500",
+                  bg: "bg-amber-500/10",
+                  title: "Core Operations", 
+                  desc: "Merge, split, rotate, and compress PDFs with high-performance engines." 
+                },
+                { 
+                  icon: FileJson, 
+                  color: "text-blue-500",
+                  bg: "bg-blue-500/10",
+                  title: "High-Fidelity Conversion", 
+                  desc: "Convert PDF to Office formats, Images, and HTML with layout preservation." 
+                },
+                { 
+                  icon: Cpu, 
+                  color: "text-purple-500",
+                  bg: "bg-purple-500/10",
+                  title: "AI Extraction", 
+                  desc: "Leverage LLMs for intelligent summarization and structured data extraction." 
+                },
+                { 
+                  icon: Shield, 
+                  color: "text-emerald-500",
+                  bg: "bg-emerald-500/10",
+                  title: "Enterprise Security", 
+                  desc: "SOC2 compliant infrastructure with end-to-end encryption and auto-deletion." 
+                },
               ].map((item, i) => (
-                <Card key={i} className="group hover:shadow-lg transition-all duration-300 border-border/50">
+                <Card key={i} className="hover:shadow-lg transition-all hover:-translate-y-1 border-primary/10">
                   <CardContent className="pt-6">
-                    <div className="mb-4 inline-flex p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <item.icon className="w-6 h-6 text-primary" />
+                    <div className={`w-12 h-12 rounded-xl ${item.bg} flex items-center justify-center mb-4`}>
+                      <item.icon className={`w-6 h-6 ${item.color}`} />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{item.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
@@ -119,52 +147,60 @@ export default function ApiPage() {
             </div>
           </section>
 
-          {/* Development Status Tracker */}
-          <section className="max-w-4xl mx-auto bg-card rounded-2xl p-8 md:p-12 border shadow-sm">
-            <div className="flex flex-col md:flex-row gap-12 items-center">
+          {/* Roadmap / Status */}
+          <section className="max-w-5xl mx-auto bg-card border rounded-3xl p-8 md:p-12 shadow-sm">
+            <div className="flex flex-col lg:flex-row gap-12">
               <div className="flex-1 space-y-6">
-                <h2 className="text-3xl font-bold">Development Roadmap</h2>
-                <p className="text-lg text-muted-foreground">
-                  The PDFo API is currently in alpha testing. We are stress-testing our infrastructure to ensure enterprise-grade reliability.
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-medium">
+                  <Clock className="w-3 h-3" /> Roadmap 2024
+                </div>
+                <h2 className="text-3xl font-bold">Development Status</h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  We are currently in the <strong>Closed Alpha</strong> phase, testing core endpoints with select partners. Our focus is on optimizing latency and ensuring 99.9% uptime reliability.
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <Badge variant="secondary" className="px-3 py-1">
-                    <Clock className="w-3 h-3 mr-2" /> Phase 1: Alpha
-                  </Badge>
-                  <Badge variant="secondary" className="px-3 py-1">
-                    <Lock className="w-3 h-3 mr-2" /> Security Audits
-                  </Badge>
+                
+                <div className="grid grid-cols-2 gap-4 pt-4">
+                  <div className="p-4 bg-muted/50 rounded-xl">
+                    <Server className="w-5 h-5 text-primary mb-2" />
+                    <div className="font-semibold">API Gateway</div>
+                    <div className="text-sm text-muted-foreground">90% Complete</div>
+                  </div>
+                  <div className="p-4 bg-muted/50 rounded-xl">
+                    <Lock className="w-5 h-5 text-primary mb-2" />
+                    <div className="font-semibold">Auth System</div>
+                    <div className="text-sm text-muted-foreground">100% Complete</div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex-1 space-y-6 w-full">
-                <div className="space-y-2">
+
+              <div className="flex-1 space-y-8">
+                <div className="space-y-3">
                   <div className="flex justify-between text-sm font-medium">
-                    <span>Architecture Design</span>
-                    <span className="text-green-600 flex items-center gap-1"><CheckCircle2 className="w-3 h-3"/> Complete</span>
+                    <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500"/> Core Engines</span>
+                    <span className="text-green-600">Ready</span>
                   </div>
                   <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 w-full" />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-medium">
-                    <span>Core Endpoints (Merge/Split)</span>
-                    <span className="text-blue-600">90% Ready</span>
-                  </div>
-                  <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 w-[90%]" />
+                    <div className="h-full bg-green-500 w-full animate-pulse" />
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex justify-between text-sm font-medium">
-                    <span>Public Beta Launch</span>
-                    <span className="text-muted-foreground">Q4 2024</span>
+                    <span className="flex items-center gap-2"><Code2 className="w-4 h-4 text-blue-500"/> SDKs (Node, Python)</span>
+                    <span className="text-blue-600">In Progress</span>
                   </div>
                   <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-slate-300 dark:bg-slate-700 w-[20%]" />
+                    <div className="h-full bg-blue-500 w-[75%]" />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm font-medium">
+                    <span className="flex items-center gap-2"><FileJson className="w-4 h-4 text-purple-500"/> Documentation</span>
+                    <span className="text-purple-600">Drafting</span>
+                  </div>
+                  <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-purple-500 w-[40%]" />
                   </div>
                 </div>
               </div>
@@ -172,17 +208,24 @@ export default function ApiPage() {
           </section>
 
           {/* CTA */}
-          <section className="text-center pb-8">
-            <h2 className="text-3xl font-bold mb-4">Request Developer Access</h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-              Be the first to build with PDFo. We are accepting a limited number of developers for our closed beta program.
-            </p>
-            <Button asChild size="lg" className="px-8 h-12 text-lg font-medium shadow-lg hover:shadow-primary/25">
-              <Link href="/contact">
-                <Send className="w-4 h-4 mr-2" />
-                Join Waitlist
-              </Link>
-            </Button>
+          <section className="text-center pb-12">
+            <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-12 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-10"></div>
+              
+              <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+                <h2 className="text-3xl md:text-4xl font-bold">Ready to Build?</h2>
+                <p className="text-slate-300 text-lg">
+                  Get notified when we launch public beta. First 100 developers get <span className="text-white font-semibold">10,000 free credits</span>.
+                </p>
+                <div className="flex justify-center pt-4">
+                  <Button asChild size="lg" className="bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 font-bold h-12 px-8">
+                    <Link href="/contact">
+                      Join Waitlist
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </section>
 
         </div>
@@ -190,31 +233,4 @@ export default function ApiPage() {
       <MainFooter />
     </div>
   );
-}
-
-// Simple icon for the badge
-function ConstructionIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="2" y="6" width="20" height="8" rx="1" />
-      <path d="M17 14v7" />
-      <path d="M7 14v7" />
-      <path d="M17 3v3" />
-      <path d="M7 3v3" />
-      <path d="M10 14 2.3 6.3" />
-      <path d="m14 6 7.7 7.7" />
-      <path d="m8 6 8 8" />
-    </svg>
-  )
 }
