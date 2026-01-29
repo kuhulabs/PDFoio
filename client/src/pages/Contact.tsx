@@ -11,7 +11,8 @@ import {
   Globe,
   ArrowRight,
   Coffee,
-  HelpCircle
+  HelpCircle,
+  Heart
 } from "lucide-react";
 import { MainFooter } from "@/components/MainFooter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
