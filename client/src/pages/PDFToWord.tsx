@@ -1,21 +1,34 @@
-import { TOOL_SEO } from "@/seo/seo";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { SEOHead } from "@/components/SEOHead";
-import { convertPDFToWord, downloadBlob, type DocumentConversionOptions } from "@/lib/realPdfUtils";
+import {
+  convertPDFToWord,
+  downloadBlob,
+  type DocumentConversionOptions,
+} from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
+import { TOOL_SEO } from "@/seo/seo";
+import {
+  ArrowLeft,
+  FileText,
+  Download,
+  RefreshCw,
+  CheckCircle,
+  Coffee,
+  ScanText,
+  Zap,
+} from "lucide-react";
 
 export default function PDFToWord() {
-  const seoData = TOOL_SEO['pdf-to-word'];
+  const seoData = TOOL_SEO["pdf-to-word"];
   const [file, setFile] = useState<File | null>(null);
   const [ocrEnabled, setOcrEnabled] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -23,7 +36,6 @@ export default function PDFToWord() {
   const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -31,36 +43,47 @@ export default function PDFToWord() {
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
     setConvertedFile(null);
+    setProgress(0);
   };
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'PDFo_Word.docx');
+    const fileName = file
+      ? file.name.replace(/\.[^/.]+$/, "") + ".docx"
+      : "PDFo_Word_Doc.docx";
+    downloadBlob(convertedFile, fileName);
   };
 
   const handleConvert = async () => {
     if (!file) return;
-    
+
     setIsProcessing(true);
-    setProgress(0);
+    setProgress(10);
     try {
-      setProgress(25);
       const options: DocumentConversionOptions = { ocr: ocrEnabled };
-      setProgress(70);
+
+      // Simulate progress
+      const interval = setInterval(
+        () => setProgress((prev) => Math.min(prev + 5, 90)),
+        500,
+      );
+
       const docBlob = await convertPDFToWord(file, options);
+
+      clearInterval(interval);
       setProgress(100);
       setConvertedFile(docBlob);
-      
-      // Track usage for dashboard
+
       await trackToolUsage("PDF to Word", "conversion", 1);
-      
+
       toast({
         title: "Success!",
-        description: "PDF has been converted to Word document successfully. Download button available below.",
+        description: "PDF converted to Word successfully.",
       });
     } catch (error) {
+      console.error(error);
       toast({
-        title: "Error",
+        title: "Conversion Failed",
         description: "Failed to convert PDF to Word. Please try again.",
         variant: "destructive",
       });
@@ -70,45 +93,59 @@ export default function PDFToWord() {
     }
   };
 
+  const resetTool = () => {
+    setFile(null);
+    setConvertedFile(null);
+    setProgress(0);
+  };
+
   return (
     <>
-      <SEOHead 
+      <SEOHead
+        breadcrumbs={[
+          { name: "Home", url: window.location.origin },
+          { name: "PDF to Word", url: `${window.location.origin}/pdf-to-word` },
+        ]}
         title={seoData.title}
         description={seoData.metaDescription}
-        keywords={(seoData as any).keywords || ""}
-        canonicalUrl="https://pdfo.io/pdf-to-word"
+        keywords={
+          (seoData as any).keywords ||
+          "pdf to word, convert pdf to docx, editable pdf"
+        }
+        canonicalUrl={`${window.location.origin}/pdf-to-word`}
+        faqs={seoData.faqs}
       />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back to Tools */}
-        <div className="mb-8">
-          <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm" data-testid="link-back-home">
-            ← Back to Tools
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
+        {/* Navigation */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back to Tools
           </Link>
         </div>
 
-        {/* Tool Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4" role="img" aria-label="PDF to Word conversion tool">
-            <i className="fas fa-file-word" aria-hidden="true"></i>
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
+            <FileText className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">PDF to Word</h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Convert your PDF to editable Word document format
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            {seoData.h1}
+          </h1>
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg leading-relaxed">
+            {seoData.shortIntro}
           </p>
-          
-          {/* Features */}
-          <div className="flex justify-center gap-6 mt-6 text-sm">
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Editable Output
+
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm font-medium">
+            <div className="flex items-center text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full">
+              <Zap className="w-4 h-4 mr-2" /> Editable Output
             </div>
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              OCR Support
-            </div>
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Free to Use
+            <div className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
+              <ScanText className="w-4 h-4 mr-2" /> OCR Support
             </div>
           </div>
         </div>
@@ -117,111 +154,137 @@ export default function PDFToWord() {
           <FileUpload
             onFilesSelected={handleFilesSelected}
             acceptMultiple={false}
+            accept=".pdf"
+            title="Drag & Drop PDF"
+            className="max-w-2xl mx-auto"
           />
         ) : (
-          <>
-            {/* File Info Card */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3 flex-1">
-                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
-                    <i className="fas fa-file-pdf text-xl"></i>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-gray-900 dark:text-white truncate">{file.name}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      Size: {(file.size / 1024).toFixed(2)} KB
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100">
-                        <i className="fas fa-file-word mr-1"></i>
-                        Ready to Convert
-                      </span>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {!convertedFile ? (
+              <div className="max-w-xl mx-auto bg-card border rounded-xl shadow-sm p-6 sm:p-8">
+                {/* File Info */}
+                <div className="flex items-center justify-between mb-8 pb-6 border-b">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400">
+                      <FileText className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground truncate max-w-[180px] sm:max-w-xs">
+                        {file.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        {(file.size / 1024).toFixed(2)} KB
+                      </p>
                     </div>
                   </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={resetTool}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <i className="fas fa-times"></i>
+                  </Button>
                 </div>
-                <button
-                  onClick={() => {
-                    setFile(null);
-                    setConvertedFile(null);
-                  }}
-                  className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  title="Remove file"
-                  data-testid="button-remove-file"
-                >
-                  <i className="fas fa-times text-xl"></i>
-                </button>
-              </div>
-            </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Conversion Options</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">OCR (Optical Character Recognition)</Label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Enable for scanned PDFs or images with text
-                    </p>
+                {/* Options */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+                    <div className="space-y-0.5">
+                      <Label className="text-base flex items-center gap-2">
+                        <ScanText className="w-4 h-4 text-blue-600" /> OCR
+                        (Scanned PDF)
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Extract text from images using AI
+                      </p>
+                    </div>
+                    <Switch
+                      checked={ocrEnabled}
+                      onCheckedChange={setOcrEnabled}
+                    />
                   </div>
-                  <Switch
-                    checked={ocrEnabled}
-                    onCheckedChange={setOcrEnabled}
-                  />
+
+                  <Button
+                    onClick={handleConvert}
+                    disabled={isProcessing}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md h-12 text-lg"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                        Converting...
+                      </>
+                    ) : (
+                      "Convert to Word"
+                    )}
+                  </Button>
                 </div>
               </div>
-              
-              <div className="mt-6">
-                <Button
-                  onClick={handleConvert}
-                  disabled={isProcessing}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  {isProcessing ? "Converting..." : "Convert to Word"}
-                </Button>
-              </div>
-              
-              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  <i className="fas fa-info-circle mr-2"></i>
-                  The converted document will be saved as a .docx file that you can edit in Microsoft Word.
+            ) : (
+              /* Success View */
+              <div className="max-w-2xl mx-auto bg-card border rounded-xl shadow-sm p-8 text-center animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                </div>
+
+                <h2 className="text-2xl font-bold mb-2">
+                  Conversion Complete!
+                </h2>
+                <p className="text-muted-foreground mb-8">
+                  Your PDF has been converted to an editable Word document.
                 </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    onClick={handleDownload}
+                    size="lg"
+                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg font-semibold w-full sm:w-auto h-12"
+                  >
+                    <Download className="w-5 h-5 mr-2" />
+                    Download Word Doc
+                  </Button>
+
+                  <Button
+                    onClick={resetTool}
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto h-12"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Convert Another
+                  </Button>
+                </div>
+
+                {/* Buy Me Coffee */}
+                <div className="mt-8 pt-6 border-t">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Saved you time?
+                  </p>
+                  <a
+                    href="https://www.buymeacoffee.com/kuhulabsq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-black bg-[#FFDD00] hover:bg-[#FFDD00]/90 rounded-full shadow-sm hover:shadow transition-transform hover:scale-105"
+                  >
+                    <Coffee className="h-4 w-4 mr-2" />
+                    Buy me a coffee
+                  </a>
+                </div>
               </div>
-            </div>
-            
-            <ProgressBar 
-              progress={progress} 
-              isVisible={isProcessing} 
+            )}
+
+            <ProgressBar
+              progress={progress}
+              isVisible={isProcessing}
               color="blue"
-              className="mt-6"
+              className="fixed top-0 left-0 right-0 z-50 h-1"
             />
-            
-            {/* Download Button */}
-            {convertedFile && !isProcessing && (
-              <div className="text-center space-y-4 mt-6">
-                <Button
-                  onClick={handleDownload}
-                  size="lg"
-                  className="bg-green-500 hover:bg-green-600 text-white px-8"
-                >
-                  <i className="fas fa-download mr-2"></i>
-                  Download Word Document
-                </Button>
-                <BuyMeCoffeeButton />
-              </div>
-            )}
-            
-            {!convertedFile && !isProcessing && (
-              <div className="text-center mt-6">
-                <BuyMeCoffeeButton />
-              </div>
-            )}
-          </>
+          </div>
         )}
       </div>
 
-      <ToolSEOContent 
+      <ToolSEOContent
         intro={seoData.intro}
         howItWorks={seoData.howItWorks}
         benefits={seoData.benefits}
