@@ -219,7 +219,6 @@ export default function MergePDF() {
                     files={files}
                     onFilesChange={handleFilesReorder}
                     title="" 
-                    allowPageReorder={false}
                   />
 
                   <div className="mt-4 flex justify-center pb-2">
@@ -309,7 +308,7 @@ export default function MergePDF() {
             <ProgressBar
               progress={progress}
               isVisible={isProcessing}
-              color="blue"
+              indicatorColor="bg-blue-600"
               className="fixed top-0 left-0 right-0 z-50 h-1"
             />
           </div>

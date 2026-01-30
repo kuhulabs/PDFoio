@@ -1,221 +1,734 @@
 export const TOOL_SEO = {
   // --- 1. PDF MANIPULATION ---
   merge: {
-    title: "Merge PDF - Combine PDF Files Online for Free | PDFo",
+    title: "Merge PDF Online – Combine Multiple PDF Files Instantly | PDFo",
     h1: "Merge PDF Files Online",
+
     metaDescription:
-      "Combine multiple PDF files into one document easily. Fast, secure, and free online PDF joiner. No software installation required.",
+      "Combine multiple PDF files into one document quickly and securely. No email signup, no watermarks, and generous limits for everyday use. Free online PDF merger.",
+
     shortIntro:
-      "Combine multiple PDF documents into a single file in seconds with our professional PDF merger.",
+      "Combine multiple PDF documents into a single, well-organized file in just a few clicks.",
+
     intro:
-      "Merge PDF is a high-performance online tool designed to combine PDF files into one organized document. Whether you need to merge business reports, combine academic certificates, or organize scanned receipts, our PDF joiner maintains original quality and formatting.",
+      "Merge PDF is a fast and reliable online tool designed to combine multiple PDF files into one organized document. Whether you're merging business reports, academic certificates, or scanned receipts, PDFo ensures your original quality, layout, and formatting remain intact.",
+
+    keywords: [
+      "merge pdf online free",
+      "combine pdf files",
+      "pdf merger",
+      "merge pdf without email",
+      "combine pdf files into one",
+      "pdf joiner online",
+      "join pdf documents",
+      "concatenate pdf files"
+    ],
+
+    longTailKeywords: [
+      "how to merge pdf files online",
+      "merge multiple pdf into one",
+      "combine pdf documents without losing quality",
+      "merge pdf files on iphone",
+      "merge pdf files on android"
+    ],
+
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "PDFo Merge PDF",
+      "description":
+        "Free online PDF merger to combine multiple PDF files into one document securely.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "url": "https://pdfo.com/merge",
+      "publisher": {
+        "@type": "Organization",
+        "name": "PDFo",
+        "url": "https://pdfo.com"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Merge multiple PDF files",
+        "No watermarks",
+        "Drag and drop interface",
+        "Secure SSL encryption",
+        "Automatic file deletion"
+      ]
+    },
+
+    breadcrumb: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://pdfo.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "PDF Tools",
+          "item": "https://pdfo.com/tools"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Merge PDF"
+        }
+      ]
+    },
+
+    featuredSnippet: {
+      question: "How do I merge PDF files online?",
+      steps: [
+        "Upload your PDF files to PDFo",
+        "Arrange them in your preferred order using drag and drop",
+        "Click 'Merge PDF' and download the combined file"
+      ]
+    },
+
     howItWorks: [
-      "Select or drag and drop the PDF files you want to merge",
-      "Rearrange thumbnails to set your preferred page order",
-      "Click the 'Merge PDF' button to start the process",
-      "Download your combined high-quality PDF instantly",
+      "Upload or drag and drop the PDF files you want to merge",
+      "Rearrange page thumbnails to set the correct order",
+      "Click the 'Merge PDF' button to start processing",
+      "Download your merged PDF file instantly"
     ],
+
     benefits: [
-      "Secure SSL encryption",
-      "Automatic file deletion after 1 hour",
+      "Secure SSL encryption for all uploads",
+      "Automatic file deletion after processing",
       "Easy drag-and-drop reordering",
-      "Maintains original resolution",
+      "Preserves original text and image quality",
+      "Works smoothly on desktop and mobile devices",
+      "No account or email signup required"
     ],
+
     faqs: [
       {
-        question: "How many PDFs can I merge?",
+        question: "How many PDF files can I merge?",
         answer:
-          "You can merge multiple files simultaneously within our standard size limits.",
+          "You can merge multiple PDF files in one go. The tool is designed to support common personal and professional use cases efficiently."
       },
       {
-        question: "Is my data safe?",
+        question: "Is my data safe when using PDFo?",
         answer:
-          "Yes, all files are encrypted and deleted automatically after processing.",
+          "Yes. All file transfers are protected with SSL encryption, and files are automatically deleted from our servers after processing."
       },
+      {
+        question: "Can I merge PDFs on my phone?",
+        answer:
+          "Yes. PDFo works perfectly in mobile browsers on both iPhone and Android. Simply upload, arrange, and merge your files."
+      },
+      {
+        question: "Can I merge password-protected PDFs?",
+        answer:
+          "If a PDF is protected, you’ll need to unlock it first using our Unlock PDF tool before merging."
+      },
+      {
+        question: "Will merging PDFs affect quality?",
+        answer:
+          "No. PDFo preserves the original resolution, text clarity, and formatting of all merged pages."
+      }
     ],
+
+    comparisons: [
+      {
+        question: "PDFo vs paid PDF merger tools",
+        answer:
+          "PDFo allows you to merge PDFs online for free without watermarks or mandatory signups, while many traditional tools require a paid subscription for the same functionality.",
+        lastUpdated: "2026-01-30"
+      }
+    ],
+
     relatedTools: [
-      { name: "Split PDF", path: "/split" },
-      { name: "Reorder Pages", path: "/reorder" },
-    ],
+      { key: "split", name: "Split PDF", path: "/split" },
+      { key: "reorder", name: "Reorder Pages", path: "/reorder" },
+      { key: "compress", name: "Compress PDF", path: "/compress" }
+    ]
   },
   split: {
-    title: "Split PDF - Extract Pages from PDF Online | PDFo",
-    h1: "Split PDF Files Instantly",
-    metaDescription:
-      "Separate PDF pages or extract specific ranges into a new document. High-precision PDF splitter and page extractor for free. Fast and secure.",
-    shortIntro:
-      "Divide your PDF into individual pages or extract specific sections easily with our precise splitting tool.",
-    intro:
-      "The Split PDF tool by PDFo gives you the flexibility to break down large documents into smaller, more manageable files. Whether you need to extract a single important page, a specific range of chapters, or turn every single page into a standalone PDF, our high-speed processor handles it without compromising quality.",
-    howItWorks: [
-      "Upload the PDF document you wish to split from your device.",
-      "Select specific pages using the visual interface or enter a custom page range.",
-      "Preview the split points to ensure accuracy.",
-      "Click 'Split PDF' and download your extracted files as a single ZIP or individual documents.",
-    ],
-    benefits: [
-      "Precise page-level extraction for clean documents",
-      "Batch splitting support for high-volume tasks",
-      "Interactive visual page selector for easy identification",
-      "Secure client-side processing to protect your privacy",
-    ],
-    faqs: [
+  title: "Split PDF Online – Extract Pages from PDF Instantly | PDFo",
+  h1: "Split PDF Files Online",
+
+  metaDescription:
+    "Split PDF pages or extract specific page ranges quickly and securely. No signup, no watermarks, and smooth performance for everyday use. Free online PDF splitter.",
+
+  shortIntro:
+    "Easily split PDF files into individual pages or extract selected sections in just a few clicks.",
+
+  intro:
+    "Split PDF by PDFo is a fast and flexible online tool that helps you break large PDF documents into smaller, more manageable files. Whether you need to extract a single important page, split a document by page ranges, or separate every page into its own PDF, PDFo preserves the original layout and quality throughout the process.",
+
+  keywords: [
+    "split pdf online free",
+    "extract pages from pdf",
+    "pdf splitter",
+    "separate pdf pages",
+    "split pdf into multiple files",
+    "pdf page extractor",
+    "divide pdf online",
+    "break pdf into pages"
+  ],
+
+  longTailKeywords: [
+    "how to split pdf into separate pages",
+    "extract specific pages from pdf",
+    "split large pdf into smaller files",
+    "split pdf by page range online",
+    "split pdf on mac online"
+  ],
+
+  schema: {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PDFo Split PDF",
+    "description":
+      "Free online PDF splitter to extract pages or split PDF files into multiple documents securely.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "url": "https://pdfo.com/split",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PDFo",
+      "url": "https://pdfo.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Extract specific pages",
+      "Split PDFs by page range",
+      "Visual page preview",
+      "ZIP or individual file download",
+      "Secure processing"
+    ]
+  },
+
+  breadcrumb: {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
       {
-        question: "How do I extract specific pages from a PDF?",
-        answer:
-          "Upload your file to our Split PDF tool, click on the thumbnails of the pages you want to keep, and hit the split button. You will get a new PDF containing only those pages.",
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://pdfo.com"
       },
       {
-        question: "Can I split a large PDF into individual pages?",
-        answer:
-          "Yes, you can choose the 'Split all' option which will instantly turn every page of your document into a separate PDF file.",
+        "@type": "ListItem",
+        "position": 2,
+        "name": "PDF Tools",
+        "item": "https://pdfo.com/tools"
       },
       {
-        question: "Is it possible to split password-protected PDFs?",
-        answer:
-          "If the file is encrypted, you must first use our 'Unlock PDF' tool to remove the password before our splitter can process the pages.",
-      },
-    ],
-    relatedTools: [
-      { name: "Delete Pages", path: "/delete-pages" },
-      { name: "Merge PDF", path: "/merge" },
-      { name: "Reorder Pages", path: "/reorder" },
-    ],
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Split PDF"
+      }
+    ]
+  },
+
+  featuredSnippet: {
+    question: "How do I split a PDF online?",
+    steps: [
+      "Upload your PDF file to PDFo",
+      "Select specific pages or define a page range",
+      "Click 'Split PDF' and download the result"
+    ]
+  },
+
+  howItWorks: [
+    "Upload the PDF document you want to split from your device",
+    "Select pages visually or enter a custom page range",
+    "Preview your selection to confirm accuracy",
+    "Click 'Split PDF' and download the extracted files"
+  ],
+
+  benefits: [
+    "Precise page-level extraction without quality loss",
+    "Visual page preview for accurate selection",
+    "Download results as ZIP or individual PDFs",
+    "Secure file handling with automatic deletion",
+    "Works smoothly on desktop and mobile devices",
+    "No account or signup required"
+  ],
+
+  faqs: [
+    {
+      question: "How can I extract specific pages from a PDF?",
+      answer:
+        "Upload your PDF, select the page thumbnails you want to keep, and click 'Split PDF'. You’ll receive a new file containing only those pages."
+    },
+    {
+      question: "Can I split a PDF into individual pages?",
+      answer:
+        "Yes. You can choose the option to split all pages, and each page will be saved as a separate PDF file."
+    },
+    {
+      question: "Can I split password-protected PDFs?",
+      answer:
+        "Protected PDFs must be unlocked first using our Unlock PDF tool before they can be split."
+    },
+    {
+      question: "Does splitting a PDF affect quality?",
+      answer:
+        "No. Splitting does not change the resolution, text clarity, or formatting of the original pages."
+    }
+  ],
+
+  comparisons: [
+    {
+      question: "PDFo vs other PDF splitting tools",
+      answer:
+        "PDFo lets you split PDFs online without watermarks or mandatory registration, while many tools limit free usage or require subscriptions.",
+      lastUpdated: "2026-01-30"
+    }
+  ],
+
+  relatedTools: [
+    { key: "delete-pages", name: "Delete Pages", path: "/delete-pages" },
+    { key: "merge", name: "Merge PDF", path: "/merge" },
+    { key: "reorder", name: "Reorder Pages", path: "/reorder" }
+  ]
   },
   compress: {
-    title: "Compress PDF - Reduce PDF File Size Online for Free | PDFo",
-    h1: "Compress PDF Online",
-    metaDescription:
-      "Reduce PDF file size without losing quality. Shrink large PDF documents for email (Gmail/Outlook) while maintaining high resolution. Fast and free.",
-    shortIntro:
-      "Make your PDF files significantly smaller for easier sharing and lightning-fast uploads.",
-    intro:
-      "Our Compress PDF tool uses advanced optimization algorithms to shrink large documents without sacrificing readability or sharp text. By intelligently reducing the size of images and embedding fonts more efficiently, PDFo helps you bypass email attachment limits and save storage space. It is the perfect solution for preparing web-ready PDFs in seconds.",
-    howItWorks: [
-      "Upload the large PDF file you wish to optimize from your computer or mobile.",
-      "Select your desired compression level (Basic or Strong compression).",
-      "Click the 'Compress' button and watch the file size reduce in real-time.",
-      "Download your optimized, smaller PDF that is ready for sharing.",
-    ],
-    benefits: [
-      "Significant file size reduction—up to 90% smaller",
-      "Maintains sharp text and high-quality image clarity",
-      "Perfect for Gmail, Outlook, and online form submissions",
-      "Zero loss of document structure, links, or metadata",
-    ],
-    faqs: [
+  title: "Compress PDF Online – Reduce PDF File Size Easily | PDFo",
+  h1: "Compress PDF Online",
+
+  metaDescription:
+    "Reduce PDF file size quickly while preserving text clarity and layout. Ideal for sharing and email attachments. No signup, no watermarks.",
+
+  shortIntro:
+    "Make your PDF files smaller and easier to share without compromising readability.",
+
+  intro:
+    "Compress PDF by PDFo is a fast and reliable online tool that helps reduce PDF file size while maintaining clear text and readable images. By optimizing images and internal resources, PDFo makes your documents easier to upload, email, and store—perfect for everyday personal and professional use.",
+
+  keywords: [
+    "compress pdf online free",
+    "reduce pdf file size",
+    "pdf compressor",
+    "shrink pdf",
+    "make pdf smaller",
+    "compress pdf for email",
+    "reduce pdf size without losing quality",
+    "compress pdf online"
+  ],
+
+  longTailKeywords: [
+    "how to reduce pdf file size for email",
+    "compress pdf for gmail attachment",
+    "compress pdf without noticeable quality loss",
+    "reduce large pdf file size online",
+    "compress pdf on mobile"
+  ],
+
+  schema: {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PDFo Compress PDF",
+    "description":
+      "Free online PDF compression tool to reduce file size while preserving readability and layout.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "url": "https://pdfo.com/compress",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PDFo",
+      "url": "https://pdfo.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Reduce PDF file size",
+      "Multiple compression levels",
+      "Text clarity preservation",
+      "Optimized for sharing and email",
+      "Secure processing"
+    ]
+  },
+
+  breadcrumb: {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
       {
-        question:
-          "How can I reduce the MB size of a PDF without losing quality?",
-        answer:
-          "Our tool uses 'Smart Compression' which targets metadata and image data that isn't necessary for viewing. This reduces the MB size significantly while keeping the text perfectly crisp.",
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://pdfo.com"
       },
       {
-        question: "Is there a limit to how many files I can compress?",
-        answer:
-          "You can compress files up to 25MB for free, which is the standard limit for most major email providers like Gmail.",
+        "@type": "ListItem",
+        "position": 2,
+        "name": "PDF Tools",
+        "item": "https://pdfo.com/tools"
       },
       {
-        question: "Will my compressed PDF be compatible with all devices?",
-        answer:
-          "Yes, the optimized PDF follows standard formatting and can be opened on any PDF reader, smartphone, or computer.",
-      },
-    ],
-    relatedTools: [
-      { name: "Merge PDF", path: "/merge" },
-      { name: "Split PDF", path: "/split" },
-      { name: "PDF to JPG", path: "/pdf-to-jpg" },
-    ],
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Compress PDF"
+      }
+    ]
+  },
+
+  featuredSnippet: {
+    question: "How do I compress a PDF online?",
+    steps: [
+      "Upload your PDF file to PDFo",
+      "Choose a compression level based on your needs",
+      "Click 'Compress PDF' and download the optimized file"
+    ]
+  },
+
+  howItWorks: [
+    "Upload the PDF file you want to compress from your device",
+    "Select a compression level suited for sharing or storage",
+    "Start compression with one click",
+    "Download the optimized PDF file instantly"
+  ],
+
+  benefits: [
+    "Reduced file size for faster uploads and downloads",
+    "Preserves text clarity and document structure",
+    "Suitable for email attachments and online forms",
+    "Secure SSL-encrypted processing",
+    "Works on desktop, tablet, and mobile devices",
+    "No account or signup required"
+  ],
+
+  faqs: [
+    {
+      question: "Will compressing a PDF affect its quality?",
+      answer:
+        "Compression is designed to reduce file size while keeping text clear and pages readable. Minor image adjustments may occur depending on the selected level."
+    },
+    {
+      question: "Can I compress PDFs for email attachments?",
+      answer:
+        "Yes. Compressing your PDF makes it easier to share via email and upload to websites with size limits."
+    },
+    {
+      question: "Is there a limit to how many PDFs I can compress?",
+      answer:
+        "You can compress multiple PDF files for everyday personal and professional use without creating an account."
+    },
+    {
+      question: "Does PDFo work on mobile devices?",
+      answer:
+        "Yes. You can compress PDFs directly from your mobile browser on both iPhone and Android devices."
+    }
+  ],
+
+  comparisons: [
+    {
+      question: "PDFo vs paid PDF compression tools",
+      answer:
+        "PDFo allows you to compress PDFs online without watermarks or mandatory subscriptions, while many traditional tools require paid plans for similar features.",
+      lastUpdated: "2026-01-30"
+    }
+  ],
+
+  relatedTools: [
+    { key: "merge", name: "Merge PDF", path: "/merge" },
+    { key: "split", name: "Split PDF", path: "/split" },
+    { key: "pdf-to-jpg", name: "PDF to JPG", path: "/pdf-to-jpg" }
+  ]
   },
   rotate: {
-    title: "Rotate PDF - Rotate PDF Pages Permanently Online | PDFo",
-    h1: "Rotate PDF Pages Online",
-    metaDescription:
-      "Rotate PDF pages clockwise or counter-clockwise permanently for free. Fix sideways or upside-down PDF orientation issues instantly. Fast and secure.",
-    shortIntro:
-      "Fix upside-down or sideways PDF pages in seconds and save them permanently.",
-    intro:
-      "The Rotate PDF tool by PDFo is the easiest way to fix orientation issues in your documents. Whether you have a sideways scan or an upside-down document, our tool allows you to rotate individual pages or the entire document 90, 180, or 270 degrees. Unlike simple viewers, PDFo saves these changes permanently so your file looks perfect on every device.",
-    howItWorks: [
-      "Upload your PDF file from your computer, tablet, or smartphone.",
-      "Use the rotation buttons to turn individual pages or the whole document clockwise or counter-clockwise.",
-      "Click the 'Save Changes' button to apply the new orientation permanently.",
-      "Download your corrected, high-quality PDF file instantly.",
-    ],
-    benefits: [
-      "Permanent rotation saved directly into the PDF file",
-      "Real-time visual preview of every page thumbnail",
-      "One-click fix for the entire document or specific pages",
-      "Completely fast, free, and works in any web browser",
-    ],
-    faqs: [
+  title: "Rotate PDF Online – Fix PDF Page Orientation Instantly | PDFo",
+  h1: "Rotate PDF Pages Online",
+
+  metaDescription:
+    "Rotate PDF pages permanently to fix sideways or upside-down documents. Supports individual or all pages. No signup, no watermarks.",
+
+  shortIntro:
+    "Fix sideways or upside-down PDF pages and save the correct orientation permanently.",
+
+  intro:
+    "Rotate PDF by PDFo is a simple and reliable online tool that helps you correct page orientation issues in PDF documents. Whether a scan is sideways or pages are upside down, you can rotate individual pages or the entire document by common angles. All changes are saved directly into the PDF, ensuring the file displays correctly on every device.",
+
+  keywords: [
+    "rotate pdf online free",
+    "rotate pdf pages",
+    "fix pdf orientation",
+    "rotate pdf permanently",
+    "turn pdf pages",
+    "rotate pdf clockwise",
+    "flip pdf pages",
+    "rotate scanned pdf"
+  ],
+
+  longTailKeywords: [
+    "how to rotate pdf pages permanently",
+    "rotate single page in pdf online",
+    "fix upside down pdf online",
+    "rotate pdf 90 degrees online",
+    "rotate pdf on mac online"
+  ],
+
+  schema: {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PDFo Rotate PDF",
+    "description":
+      "Free online PDF rotation tool to permanently fix page orientation issues.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "url": "https://pdfo.com/rotate",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PDFo",
+      "url": "https://pdfo.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Permanent PDF rotation",
+      "Rotate individual or all pages",
+      "Multiple rotation angles",
+      "Real-time page preview",
+      "No quality loss"
+    ]
+  },
+
+  breadcrumb: {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
       {
-        question: "How do I permanently rotate a PDF?",
-        answer:
-          "Simply upload your PDF to our Rotate tool, click the rotation icons to set the correct orientation, and download the file. The new position will be saved permanently, so it won't revert when opened in other readers.",
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://pdfo.com"
       },
       {
-        question: "Can I rotate just one page in a PDF document?",
-        answer:
-          "Yes! Our visual editor allows you to select and rotate specific pages individually without affecting the rest of the document.",
+        "@type": "ListItem",
+        "position": 2,
+        "name": "PDF Tools",
+        "item": "https://pdfo.com/tools"
       },
       {
-        question: "Is it safe to upload my documents to PDFo?",
-        answer:
-          "Absolutely. We use SSL encryption to secure your data, and all files are automatically deleted from our servers within one hour of processing.",
-      },
-    ],
-    relatedTools: [
-      { name: "Merge PDF", path: "/merge" },
-      { name: "Split PDF", path: "/split" },
-      { name: "Reorder Pages", path: "/reorder" },
-    ],
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Rotate PDF"
+      }
+    ]
+  },
+
+  featuredSnippet: {
+    question: "How do I permanently rotate a PDF online?",
+    steps: [
+      "Upload your PDF file to PDFo",
+      "Rotate pages by the required angle",
+      "Save changes and download the updated PDF"
+    ]
+  },
+
+  howItWorks: [
+    "Upload your PDF file from desktop or mobile",
+    "Rotate individual pages or the entire document using on-screen controls",
+    "Preview the new orientation before saving",
+    "Download the corrected PDF with permanent rotation applied"
+  ],
+
+  benefits: [
+    "Rotation is saved permanently in the PDF file",
+    "Real-time thumbnail preview for accurate adjustments",
+    "Supports rotating single pages or entire documents",
+    "Preserves original quality and file size",
+    "Works smoothly on desktop and mobile browsers",
+    "No account or signup required"
+  ],
+
+  faqs: [
+    {
+      question: "Is PDF rotation saved permanently?",
+      answer:
+        "Yes. Once you save and download the file, the new orientation is permanently embedded in the PDF."
+    },
+    {
+      question: "Can I rotate only one page in a PDF?",
+      answer:
+        "Yes. You can select and rotate individual pages without affecting the rest of the document."
+    },
+    {
+      question: "Does rotating a PDF affect quality?",
+      answer:
+        "No. Rotation only changes page orientation and does not impact text clarity, images, or file size."
+    },
+    {
+      question: "Is it safe to rotate PDFs online with PDFo?",
+      answer:
+        "Yes. Files are processed securely and automatically deleted after processing."
+    }
+  ],
+
+  relatedTools: [
+    { key: "merge", name: "Merge PDF", path: "/merge" },
+    { key: "split", name: "Split PDF", path: "/split" },
+    { key: "reorder", name: "Reorder Pages", path: "/reorder" }
+  ]
   },
   reorder: {
-    title: "Reorder PDF Pages - Rearrange PDF Pages Online | PDFo",
-    h1: "Rearrange PDF Pages Online",
-    metaDescription:
-      "Change the sequence of PDF pages with a simple drag-and-drop interface. Organize, sort, and rearrange your PDF documents online for free. Fast and secure.",
-    shortIntro:
-      "Organize your PDF pages exactly the way you want with our intuitive sorting tool.",
-    intro:
-      "Reorder PDF Pages gives you full professional control over your document's flow. Our visual interface allows you to see every page as a thumbnail, making it effortless to fix the order of scanned documents, presentations, or multi-part reports. Simply drag and drop to move a page and create the perfect sequence in seconds.",
-    howItWorks: [
-      "Upload your PDF document from your device.",
-      "Drag and drop the page thumbnails to rearrange them into your preferred order.",
-      "Click the 'Apply Changes' or 'Save' button to lock in the new sequence.",
-      "Download your perfectly organized PDF file instantly.",
-    ],
-    benefits: [
-      "Intuitive drag-and-drop UI for effortless sorting",
-      "Live visual preview of every page before saving",
-      "Lightning-fast organization even for large documents",
-      "Secure processing with 100% data privacy",
-    ],
-    faqs: [
-      {
-        question: "Can I move multiple pages at once?",
-        answer:
-          "Currently, you can drag and drop individual pages to any position. For large documents, our visual grid makes it easy to quickly relocate any page.",
-      },
-      {
-        question: "Will the page content be affected by reordering?",
-        answer:
-          "No, only the sequence of the pages is changed. The text, images, and formatting within each page remain exactly as they were.",
-      },
-      {
-        question: "Is there a limit to the number of pages I can rearrange?",
-        answer:
-          "PDFo handles standard documents smoothly. For exceptionally large files, we ensure the processing remains fast and responsive in your browser.",
-      },
-    ],
-    relatedTools: [
-      { name: "Merge PDF", path: "/merge" },
-      { name: "Delete Pages", path: "/delete-pages" },
-      { name: "Split PDF", path: "/split" },
-    ],
+  title: "Reorder PDF Pages Online – Rearrange PDF Pages Easily | PDFo",
+  h1: "Rearrange PDF Pages Online",
+
+  metaDescription:
+    "Reorder PDF pages using a simple drag-and-drop interface. Rearrange page sequence quickly while preserving original quality. No signup required.",
+
+  shortIntro:
+    "Rearrange and organize PDF pages exactly the way you need with an intuitive drag-and-drop tool.",
+
+  intro:
+    "Reorder PDF Pages by PDFo gives you full control over the flow of your document. Using a visual thumbnail interface, you can easily rearrange pages in scanned documents, presentations, or reports. Simply drag and drop pages into the correct order and save the updated PDF without affecting quality or formatting.",
+
+  keywords: [
+    "reorder pdf pages online",
+    "rearrange pdf pages",
+    "sort pdf pages",
+    "change pdf page order",
+    "reorganize pdf pages",
+    "pdf page organizer",
+    "shuffle pdf pages",
+    "move pdf pages"
+  ],
+
+  longTailKeywords: [
+    "how to reorder pages in pdf online",
+    "rearrange pdf pages without software",
+    "change order of pages in pdf",
+    "drag and drop pdf page organizer",
+    "reorder pdf pages on mac"
+  ],
+
+  schema: {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PDFo Reorder PDF Pages",
+    "description":
+      "Free online PDF page reordering tool to rearrange page sequence without quality loss.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "url": "https://pdfo.com/reorder",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PDFo",
+      "url": "https://pdfo.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Drag-and-drop page reordering",
+      "Visual page thumbnails",
+      "Real-time preview",
+      "Preserves original quality",
+      "Mobile-friendly interface"
+    ]
   },
-  "delete-pages": {
+
+  breadcrumb: {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://pdfo.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "PDF Tools",
+        "item": "https://pdfo.com/tools"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Reorder PDF"
+      }
+    ]
+  },
+
+  featuredSnippet: {
+    question: "How do I rearrange pages in a PDF online?",
+    steps: [
+      "Upload your PDF file to PDFo",
+      "Drag and drop page thumbnails to set the desired order",
+      "Save changes and download the reordered PDF"
+    ]
+  },
+
+  howItWorks: [
+    "Upload your PDF document from your computer or mobile device",
+    "Drag and drop page thumbnails into the correct sequence",
+    "Preview the new page order before saving",
+    "Download your reorganized PDF file instantly"
+  ],
+
+  benefits: [
+    "Simple drag-and-drop page organization",
+    "Live visual preview before saving changes",
+    "Reorders pages without affecting content or quality",
+    "Secure processing with automatic file deletion",
+    "Works on desktop and mobile browsers",
+    "No account or signup required"
+  ],
+
+  faqs: [
+    {
+      question: "Does reordering pages affect PDF quality?",
+      answer:
+        "No. Reordering only changes the page sequence. Text, images, formatting, and file size remain unchanged."
+    },
+    {
+      question: "Can I reorder PDF pages on my phone?",
+      answer:
+        "Yes. PDFo works in mobile browsers on both iPhone and Android with touch-friendly controls."
+    },
+    {
+      question: "Is it safe to upload PDFs for reordering?",
+      answer:
+        "Yes. Files are processed securely and deleted automatically after processing."
+    }
+  ],
+
+  comparisons: [
+    {
+      question: "PDFo vs desktop PDF software",
+      answer:
+        "PDFo lets you reorder PDF pages online without installing software, while many desktop tools require paid licenses.",
+      lastUpdated: "2026-01-30"
+    }
+  ],
+
+  relatedTools: [
+    { key: "merge", name: "Merge PDF", path: "/merge" },
+    { key: "delete-pages", name: "Delete Pages", path: "/delete-pages" },
+    { key: "split", name: "Split PDF", path: "/split" }
+  ]
+}
+
+
+    "delete-pages": {
     title: "Delete PDF Pages - Remove Unwanted Pages from PDF Online | PDFo",
     h1: "Remove PDF Pages Online",
     metaDescription:
@@ -259,7 +772,7 @@ export const TOOL_SEO = {
       { name: "Remove Blank Pages", path: "/remove-blank-pages" },
     ],
   },
-  "remove-blank-pages": {
+    "remove-blank-pages": {
     title: "Remove Blank Pages - Automatically Clean Up Your PDF Online | PDFo",
     h1: "Remove Blank PDF Pages Instantly",
     metaDescription:
@@ -303,7 +816,7 @@ export const TOOL_SEO = {
       { name: "Compress PDF", path: "/compress" },
     ],
   },
-  "page-numbers": {
+    "page-numbers": {
     title: "Add Page Numbers to PDF - Number PDF Pages Online for Free | PDFo",
     h1: "Add PDF Page Numbers Online",
     metaDescription:
@@ -347,7 +860,7 @@ export const TOOL_SEO = {
       { name: "Edit Metadata", path: "/metadata" },
     ],
   },
-  watermark: {
+    watermark: {
     title: "Watermark PDF - Add Text or Image Watermarks to PDF Online | PDFo",
     h1: "Add Watermark to PDF Online",
     metaDescription:
@@ -391,7 +904,7 @@ export const TOOL_SEO = {
       { name: "Edit Metadata", path: "/metadata" },
     ],
   },
-  metadata: {
+    metadata: {
     title: "Edit PDF Metadata - Change PDF Properties Online for Free | PDFo",
     h1: "Edit PDF Metadata & Properties",
     metaDescription:
@@ -437,7 +950,7 @@ export const TOOL_SEO = {
   },
 
   // --- 2. CONVERSION FROM PDF ---
-  "pdf-to-word": {
+    "pdf-to-word": {
     title: "PDF to Word Converter - Convert PDF to Editable DOCX Online | PDFo",
     h1: "Convert PDF to Word Online",
     metaDescription:
@@ -481,7 +994,7 @@ export const TOOL_SEO = {
       { name: "Word to PDF", path: "/word-to-pdf" },
     ],
   },
-  "pdf-to-excel": {
+    "pdf-to-excel": {
     title: "PDF to Excel Converter - Extract PDF Tables to XLSX Online | PDFo",
     h1: "Convert PDF to Excel Online",
     metaDescription:
@@ -525,7 +1038,7 @@ export const TOOL_SEO = {
       { name: "Excel to PDF", path: "/excel-to-pdf" },
     ],
   },
-  "pdf-to-ppt": {
+    "pdf-to-ppt": {
     title:
       "PDF to PPT Converter - Convert PDF to PowerPoint Slides Online | PDFo",
     h1: "Convert PDF to PowerPoint (PPTX)",
@@ -570,7 +1083,7 @@ export const TOOL_SEO = {
       { name: "Compress PDF", path: "/compress" },
     ],
   },
-  "pdf-to-jpg": {
+    "pdf-to-jpg": {
     title: "PDF to JPG - Convert PDF Pages to High-Quality Images | PDFo",
     h1: "Convert PDF to JPG Online",
     metaDescription:
@@ -614,7 +1127,7 @@ export const TOOL_SEO = {
       { name: "PDF to TIFF", path: "/pdf-to-tiff" },
     ],
   },
-  "pdf-to-png": {
+    "pdf-to-png": {
     title: "PDF to PNG - Convert PDF to PNG Online for Free | PDFo",
     h1: "Convert PDF to PNG Online",
     metaDescription:
@@ -658,7 +1171,7 @@ export const TOOL_SEO = {
       { name: "PDF to TIFF", path: "/pdf-to-tiff" },
     ],
   },
-  "pdf-to-tiff": {
+    "pdf-to-tiff": {
     title: "PDF to TIFF Converter - Convert PDF to TIFF Online for Free | PDFo",
     h1: "Convert PDF to TIFF Online",
     metaDescription:
@@ -702,7 +1215,7 @@ export const TOOL_SEO = {
       { name: "PDF to Word", path: "/pdf-to-word" },
     ],
   },
-  "pdf-to-txt": {
+    "pdf-to-txt": {
     title: "PDF to TXT - Extract Plain Text from PDF Online for Free | PDFo",
     h1: "Extract Text from PDF Online",
     metaDescription:
@@ -746,7 +1259,7 @@ export const TOOL_SEO = {
       { name: "Summarize PDF", path: "/summarize" },
     ],
   },
-  "pdf-to-json": {
+    "pdf-to-json": {
     title: "PDF to JSON - Convert PDF to Structured Data Online | PDFo",
     h1: "PDF to JSON Converter",
     metaDescription:
@@ -792,7 +1305,7 @@ export const TOOL_SEO = {
   },
 
   // --- 3. CONVERSION TO PDF ---
-  "word-to-pdf": {
+    "word-to-pdf": {
     title: "Word to PDF Converter - Convert DOCX to PDF Online for Free | PDFo",
     h1: "Convert Word to PDF Online",
     metaDescription:
@@ -836,7 +1349,7 @@ export const TOOL_SEO = {
       { name: "PDF to Word", path: "/pdf-to-word" },
     ],
   },
-  "excel-to-pdf": {
+    "excel-to-pdf": {
     title: "Excel to PDF - Convert XLSX to PDF Online for Free | PDFo",
     h1: "Convert Excel to PDF Online",
     metaDescription:
@@ -880,7 +1393,7 @@ export const TOOL_SEO = {
       { name: "Merge PDF", path: "/merge" },
     ],
   },
-  "png-to-pdf": {
+    "png-to-pdf": {
     title: "PNG to PDF - Convert PNG Images to PDF Online for Free | PDFo",
     h1: "Convert PNG to PDF Online",
     metaDescription:
@@ -925,7 +1438,7 @@ export const TOOL_SEO = {
       { name: "Merge PDF", path: "/merge" },
     ],
   },
-  "images-to-pdf": {
+    "images-to-pdf": {
     title: "Images to PDF - Convert JPG, PNG & Photos to PDF Online | PDFo",
     h1: "Convert Images to PDF Online",
     metaDescription:
