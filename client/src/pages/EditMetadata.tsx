@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea"; // Assuming you have this, otherwise Input is fine
 import { SEOHead } from "@/components/SEOHead";
 import { TOOL_SEO } from "@/seo/seo";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
@@ -19,20 +18,21 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
-import { Edit, RefreshCw, Download, FileText } from "lucide-react";
-
-const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://pdfo.io';
-
-const METADATA_FIELDS = [
-  { key: "title", label: "Title", placeholder: "Document title" },
-  { key: "author", label: "Author", placeholder: "Author name" },
-  { key: "subject", label: "Subject", placeholder: "Document subject" },
-  { key: "keywords", label: "Keywords", placeholder: "keyword1, keyword2" },
-] as const;
+import {
+  ArrowLeft,
+  FileText,
+  User,
+  Tag,
+  BookOpen,
+  Save,
+  Download,
+  RefreshCw,
+  CheckCircle,
+  Coffee,
+} from "lucide-react";
 
 export default function EditMetadata() {
   const seoData = TOOL_SEO["metadata"];
-  
   const [file, setFile] = useState<File | null>(null);
   const [metadata, setMetadata] = useState<PDFMetadata>({
     title: "",
@@ -40,328 +40,315 @@ export default function EditMetadata() {
     subject: "",
     keywords: "",
   });
-  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [updatedBlob, setUpdatedBlob] = useState<Blob | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  
   const { toast } = useToast();
 
-  // Scroll to top on mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
   }, []);
 
-  // Reset function
-  const handleReset = useCallback(() => {
-    setFile(null);
-    setMetadata({ title: "", author: "", subject: "", keywords: "" });
-    setUpdatedBlob(null);
-    setProgress(0);
-    setIsProcessing(false);
-    setIsLoadingMetadata(false);
-    setShowSuccess(false);
-  }, []);
-
-  // Handle file selection
-  const handleFilesSelected = useCallback(async (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     const selectedFile = files[0];
+    if (!selectedFile) return;
+
     setFile(selectedFile);
     setUpdatedBlob(null);
-    setProgress(0);
-    setIsLoadingMetadata(true);
 
     try {
       const existingMetadata = await getPDFMetadata(selectedFile);
       setMetadata(existingMetadata);
-    } catch (error) {
-      console.error('Error loading metadata:', error);
+    } catch (e) {
+      console.error("Error reading metadata", e);
       toast({
-        title: "Warning",
-        description: "Could not read existing metadata. You can still add new metadata.",
+        title: "Metadata Read Error",
+        description:
+          "Could not read existing metadata, but you can still set new values.",
+        variant: "default",
       });
-      // Don't reset - allow user to add new metadata
-    } finally {
-      setIsLoadingMetadata(false);
     }
-  }, [toast]);
+  };
 
-  // Download handler
-  const handleDownload = useCallback(() => {
+  const handleDownload = () => {
     if (updatedBlob) {
-      const filename = `PDFo_${file?.name.replace('.pdf', '')}_metadata.pdf`;
-      downloadBlob(updatedBlob, filename);
+      downloadBlob(updatedBlob, `PDFo_Metadata_${Date.now()}.pdf`);
     }
-  }, [updatedBlob, file]);
+  };
 
-  // Update metadata
-  const handleUpdateMetadata = useCallback(async () => {
+  const handleUpdateMetadata = async () => {
     if (!file) return;
-
-    // Validation - at least one field should be filled
-    const hasData = Object.values(metadata).some(val => val.trim() !== "");
-    if (!hasData) {
-      toast({
-        title: "Validation Error",
-        description: "Please fill at least one metadata field.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsProcessing(true);
-    setProgress(0);
+    setProgress(20);
 
     try {
-      setProgress(30);
       const blob = await editPDFMetadata(file, metadata);
-      
-      setProgress(90);
-      setUpdatedBlob(blob);
       setProgress(100);
+      setUpdatedBlob(blob);
 
-      // Track analytics (non-blocking)
-      try {
-        await trackToolUsage("Edit Metadata", "manipulation", 1);
-      } catch (analyticsError) {
-        console.warn('Analytics tracking failed:', analyticsError);
-      }
-
-      // Show success
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
+      await trackToolUsage("Edit Metadata", "manipulation", 1);
 
       toast({
-        title: "Success! ✓",
-        description: "PDF metadata updated successfully.",
+        title: "Success!",
+        description: "PDF properties updated successfully.",
       });
-
     } catch (error) {
-      console.error('Error updating metadata:', error);
+      console.error(error);
       toast({
-        title: "Error",
-        description: "Failed to update metadata. Please try again.",
+        title: "Update Failed",
+        description:
+          "Failed to update PDF metadata. Is the file password protected?",
         variant: "destructive",
       });
       setProgress(0);
     } finally {
       setIsProcessing(false);
-      setTimeout(() => setProgress(0), 500);
     }
-  }, [file, metadata, toast]);
+  };
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      // Download: Ctrl/Cmd + S
-      if ((e.ctrlKey || e.metaKey) && e.key === 's' && updatedBlob) {
-        e.preventDefault();
-        handleDownload();
-      }
-      
-      // Update: Ctrl/Cmd + Enter
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && file && !isProcessing) {
-        e.preventDefault();
-        handleUpdateMetadata();
-      }
-      
-      // Reset: Escape
-      if (e.key === 'Escape' && !isProcessing) {
-        handleReset();
-      }
-    };
+  const resetTool = () => {
+    setFile(null);
+    setMetadata({ title: "", author: "", subject: "", keywords: "" });
+    setUpdatedBlob(null);
+    setProgress(0);
+  };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [updatedBlob, file, isProcessing, handleDownload, handleUpdateMetadata, handleReset]);
+  // Helper to render input fields with icons
+  const renderField = (
+    key: keyof PDFMetadata,
+    label: string,
+    icon: React.ReactNode,
+    placeholder: string,
+    isTextArea = false,
+  ) => (
+    <div className="space-y-2">
+      <Label
+        htmlFor={key}
+        className="text-sm font-medium flex items-center gap-2"
+      >
+        {icon} {label}
+      </Label>
+      {isTextArea ? (
+        <Textarea
+          id={key}
+          value={metadata[key] || ""}
+          onChange={(e) =>
+            setMetadata((prev) => ({ ...prev, [key]: e.target.value }))
+          }
+          placeholder={placeholder}
+          className="min-h-[80px] resize-none"
+        />
+      ) : (
+        <Input
+          id={key}
+          value={metadata[key] || ""}
+          onChange={(e) =>
+            setMetadata((prev) => ({ ...prev, [key]: e.target.value }))
+          }
+          placeholder={placeholder}
+          className="h-10"
+        />
+      )}
+    </div>
+  );
 
   return (
     <>
       <SEOHead
+        breadcrumbs={[
+          { name: "Home", url: window.location.origin },
+          { name: "Edit Metadata", url: `${window.location.origin}/metadata` },
+        ]}
         title={seoData.title}
         description={seoData.metaDescription}
-        keywords="edit pdf metadata, change pdf properties, pdf author, pdf title"
-        canonicalUrl={`${SITE_URL}/metadata`}
+        keywords="edit pdf metadata, change pdf author, pdf title editor, pdf properties"
+        canonicalUrl={`${window.location.origin}/metadata`}
         faqs={seoData.faqs}
-        breadcrumbs={[
-          { name: "Home", url: SITE_URL },
-          { name: "Edit Metadata", url: `${SITE_URL}/metadata` },
-        ]}
       />
 
-      {/* Success Toast */}
-      {showSuccess && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-in z-50">
-          ✓ Metadata updated successfully!
-        </div>
-      )}
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back Button */}
-        <div className="mb-8">
-          <Link href="/">
-            <a className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors inline-flex items-center gap-2">
-              <span>←</span>
-              <span>Back to Tools</span>
-            </a>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
+        {/* Navigation */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back to Tools
           </Link>
         </div>
 
         {/* Header */}
-        <header className="text-center mb-10">
-          <div className="w-16 h-16 bg-cyan-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4 shadow-lg shadow-cyan-500/20">
-            <Edit className="h-8 w-8" />
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
+            <FileText className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {seoData.h1}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg leading-relaxed">
             {seoData.shortIntro}
           </p>
-        </header>
 
-        {/* Main Content */}
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm font-medium">
+            <div className="flex items-center text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full">
+              <i className="fas fa-bolt mr-2"></i> Instant Update
+            </div>
+            <div className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
+              <i className="fas fa-shield-alt mr-2"></i> Browser-based
+            </div>
+          </div>
+        </div>
+
+        {/* Main Interface */}
         {!file ? (
-          <FileUpload 
-            onFilesSelected={handleFilesSelected} 
+          <FileUpload
+            onFilesSelected={handleFilesSelected}
+            accept=".pdf"
             acceptMultiple={false}
+            className="max-w-2xl mx-auto"
           />
         ) : (
-          <>
-            {/* Reset Button */}
-            <div className="flex justify-center mb-6">
-              <Button
-                variant="outline"
-                onClick={handleReset}
-                disabled={isProcessing || isLoadingMetadata}
-                className="gap-2"
-              >
-                <RefreshCw className="h-4 w-4" />
-                Change File
-              </Button>
-            </div>
-
-            {/* Loading Metadata */}
-            {isLoadingMetadata && (
-              <Card className="max-w-2xl mx-auto p-8">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Loading metadata...
-                  </p>
-                </div>
-              </Card>
-            )}
-
-            {/* Metadata Form */}
-            {!isLoadingMetadata && (
-              <Card className="max-w-2xl mx-auto p-6 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <FileText className="h-6 w-6 text-cyan-500" />
-                  <h3 className="text-xl font-semibold">PDF Metadata</h3>
-                </div>
-
-                <div className="space-y-5">
-                  {METADATA_FIELDS.map(({ key, label, placeholder }) => (
-                    <div key={key} className="space-y-2">
-                      <Label 
-                        htmlFor={key}
-                        className="text-sm font-medium"
-                      >
-                        {label}
-                      </Label>
-                      <Input
-                        id={key}
-                        value={metadata[key] || ""}
-                        onChange={(e) =>
-                          setMetadata((prev) => ({
-                            ...prev,
-                            [key]: e.target.value,
-                          }))
-                        }
-                        placeholder={placeholder}
-                        disabled={isProcessing}
-                        className="w-full"
-                      />
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Show Form or Result */}
+            {!updatedBlob ? (
+              <div className="max-w-2xl mx-auto bg-card border rounded-xl shadow-sm p-6 sm:p-8">
+                <div className="flex items-center justify-between mb-6 pb-6 border-b">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
+                      <i className="fas fa-file-pdf text-red-600 dark:text-red-400"></i>
                     </div>
-                  ))}
+                    <div>
+                      <h3 className="font-semibold text-foreground truncate max-w-[200px] sm:max-w-xs">
+                        {file.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        Ready to edit
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={resetTool}
+                    className="text-muted-foreground"
+                  >
+                    Change File
+                  </Button>
                 </div>
 
-                <div className="mt-6 space-y-3">
+                <div className="grid gap-6">
+                  {renderField(
+                    "title",
+                    "Title",
+                    <BookOpen className="w-4 h-4 text-cyan-500" />,
+                    "e.g. Q4 Financial Report",
+                  )}
+
+                  {renderField(
+                    "author",
+                    "Author",
+                    <User className="w-4 h-4 text-cyan-500" />,
+                    "e.g. John Doe",
+                  )}
+
+                  {renderField(
+                    "subject",
+                    "Subject / Description",
+                    <FileText className="w-4 h-4 text-cyan-500" />,
+                    "e.g. Annual report for stakeholders",
+                    true, // Textarea
+                  )}
+
+                  {renderField(
+                    "keywords",
+                    "Keywords (Comma separated)",
+                    <Tag className="w-4 h-4 text-cyan-500" />,
+                    "e.g. finance, report, 2024, confidential",
+                  )}
+                </div>
+
+                <div className="mt-8 pt-4 border-t flex flex-col sm:flex-row gap-4">
                   <Button
                     onClick={handleUpdateMetadata}
                     disabled={isProcessing}
-                    className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-6"
-                    size="lg"
+                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white shadow-md h-11"
                   >
                     {isProcessing ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                        Updating Metadata...
+                        <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                        Processing...
                       </>
                     ) : (
-                      "Update Metadata"
+                      <>
+                        <Save className="w-4 h-4 mr-2" /> Update Metadata
+                      </>
                     )}
                   </Button>
-                  
-                  {!isProcessing && (
-                    <p className="text-xs text-center text-gray-500 dark:text-gray-400">
-                      Press Ctrl+Enter to update
-                    </p>
-                  )}
                 </div>
-              </Card>
-            )}
+              </div>
+            ) : (
+              /* Success View */
+              <div className="max-w-2xl mx-auto bg-card border rounded-xl shadow-sm p-8 text-center animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                </div>
 
-            {/* Progress Bar */}
-            <ProgressBar
-              progress={progress}
-              isVisible={isProcessing}
-              indicatorColor="bg-cyan-500"
-              className="mt-6"
-            />
+                <h2 className="text-2xl font-bold mb-2">Metadata Updated!</h2>
+                <p className="text-muted-foreground mb-8">
+                  Your PDF properties have been successfully saved.
+                </p>
 
-            {/* Download Section */}
-            {updatedBlob && !isProcessing && (
-              <div className="text-center mt-8 space-y-4">
-                <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={handleDownload}
                     size="lg"
-                    className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg gap-2"
+                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg font-semibold w-full sm:w-auto"
                   >
-                    <Download className="h-5 w-5" />
-                    Download Updated PDF
+                    <Download className="w-5 h-5 mr-2" />
+                    Download PDF
                   </Button>
-                  
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Press Ctrl+S to download
+
+                  <Button
+                    onClick={resetTool}
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Edit Another
+                  </Button>
+                </div>
+
+                {/* Buy Me Coffee */}
+                <div className="mt-8 pt-6 border-t">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Found this helpful?
                   </p>
-                </div>
-
-                <div className="pt-4">
-                  <BuyMeCoffeeButton />
+                  <a
+                    href="https://www.buymeacoffee.com/kuhulabsq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-black bg-[#FFDD00] hover:bg-[#FFDD00]/90 rounded-full shadow-sm hover:shadow transition-transform hover:scale-105"
+                  >
+                    <Coffee className="h-4 w-4 mr-2" />
+                    Buy me a coffee
+                  </a>
                 </div>
               </div>
             )}
 
-            {/* Coffee Button (when not processing) */}
-            {!isProcessing && !updatedBlob && (
-              <div className="text-center mt-8">
-                <BuyMeCoffeeButton />
-              </div>
-            )}
-          </>
+            <ProgressBar
+              progress={progress}
+              isVisible={isProcessing}
+              color="cyan"
+              className="fixed top-0 left-0 right-0 z-50 h-1"
+            />
+          </div>
         )}
       </div>
 
-      {/* SEO Content */}
-      <ToolSEOContent 
-        pageTitle={seoData.h1}
-        {...seoData} 
-      />
-      
+      <ToolSEOContent {...seoData} />
       <ToolFooter />
     </>
   );

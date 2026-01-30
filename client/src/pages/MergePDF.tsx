@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { DocumentsList } from "@/components/DocumentsList";
@@ -12,12 +12,11 @@ import {
   Coffee,
   RefreshCw,
   ArrowLeft,
-  Merge,
+  Layers, // ✅ FIXED: Imported 'Layers' correctly (Merge ki jagah)
   Files,
   CheckCircle,
   Zap,
   Shield,
-  Plus,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -166,7 +165,8 @@ export default function MergePDF() {
         {/* Header Section */}
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
-            <Merge className="w-8 h-8" />
+            {/* ✅ FIXED: Using Layers icon to match Home Page */}
+            <Layers className="w-8 h-8" />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {seoData.h1}
@@ -218,7 +218,7 @@ export default function MergePDF() {
                   <DocumentsList
                     files={files}
                     onFilesChange={handleFilesReorder}
-                    title="" // Removing title from inner component as we handled it above
+                    title="" 
                     allowPageReorder={false}
                   />
 
@@ -247,7 +247,8 @@ export default function MergePDF() {
                       </>
                     ) : (
                       <>
-                        <Merge className="w-4 h-4 mr-2" /> Merge {files.length}{" "}
+                        {/* ✅ FIXED: Button icon also updated to Layers */}
+                        <Layers className="w-4 h-4 mr-2" /> Merge {files.length}{" "}
                         PDFs
                       </>
                     )}

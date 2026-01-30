@@ -1,352 +1,289 @@
-import { TOOL_SEO } from "@/seo/seo";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
 import { convertExcelToPDF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { FileSpreadsheet, Download, RefreshCw, CheckCircle2, X } from "lucide-react";
-
-const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://pdfo.io';
+import { TOOL_SEO } from "@/seo/seo";
+import {
+  ArrowLeft,
+  FileSpreadsheet,
+  FileText,
+  Download,
+  RefreshCw,
+  CheckCircle,
+  Coffee,
+  Shield,
+  Zap,
+} from "lucide-react";
 
 export default function ExcelToPDF() {
-  const seoData = TOOL_SEO['excel-to-pdf'];
-  
+  const seoData = TOOL_SEO["excel-to-pdf"];
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  
   const { toast } = useToast();
 
-  // Scroll to top on mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
   }, []);
 
-  // Reset function
-  const handleReset = useCallback(() => {
-    setFile(null);
-    setConvertedFile(null);
-    setProgress(0);
-    setIsProcessing(false);
-    setShowSuccess(false);
-  }, []);
-
-  // File validation
-  const isValidExcelFile = (file: File): boolean => {
-    const validExtensions = ['.xlsx', '.xls'];
-    const fileName = file.name.toLowerCase();
-    return validExtensions.some(ext => fileName.endsWith(ext));
-  };
-
-  // Handle file selection
-  const handleFilesSelected = useCallback((files: File[]) => {
+  const handleFilesSelected = (files: File[]) => {
     const selectedFile = files[0];
-    
-    if (!isValidExcelFile(selectedFile)) {
+    if (
+      selectedFile &&
+      (selectedFile.name.endsWith(".xlsx") ||
+        selectedFile.name.endsWith(".xls"))
+    ) {
+      setFile(selectedFile);
+      setConvertedFile(null);
+      setProgress(0);
+    } else {
       toast({
         title: "Invalid file format",
         description: "Please select an Excel spreadsheet (.xlsx or .xls file).",
         variant: "destructive",
       });
-      return;
     }
+  };
 
-    setFile(selectedFile);
-    setConvertedFile(null);
-    setProgress(0);
-  }, [toast]);
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    // Use original filename but change extension
+    const fileName = file
+      ? file.name.replace(/\.[^/.]+$/, "") + ".pdf"
+      : "PDFo_Converted.pdf";
+    downloadBlob(convertedFile, fileName);
+  };
 
-  // Download handler
-  const handleDownload = useCallback(() => {
-    if (convertedFile) {
-      const filename = `${file?.name.replace(/\.(xlsx?|xls)$/i, '')}_converted.pdf`;
-      downloadBlob(convertedFile, filename);
-    }
-  }, [convertedFile, file]);
-
-  // Convert Excel to PDF
-  const handleConvert = useCallback(async () => {
+  const handleConvert = async () => {
     if (!file) return;
-    
+
     setIsProcessing(true);
-    setProgress(0);
-
+    setProgress(10);
     try {
-      setProgress(25);
+      // Simulation of progress steps since conversion happens in one go
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => Math.min(prev + 5, 90));
+      }, 200);
+
       const pdfBlob = await convertExcelToPDF(file);
-      
-      setProgress(90);
-      setConvertedFile(pdfBlob);
+
+      clearInterval(progressInterval);
       setProgress(100);
-      
-      // Track analytics (non-blocking)
-      try {
-        await trackToolUsage("Excel to PDF", "conversion", 1);
-      } catch (analyticsError) {
-        console.warn('Analytics tracking failed:', analyticsError);
-      }
+      setConvertedFile(pdfBlob);
 
-      // Show success
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
-      
+      await trackToolUsage("Excel to PDF", "conversion", 1);
+
       toast({
-        title: "Success! ✓",
-        description: "Excel spreadsheet converted to PDF successfully.",
+        title: "Success!",
+        description: "Spreadsheet converted successfully.",
       });
-
     } catch (error) {
-      console.error('Conversion error:', error);
+      console.error(error);
       toast({
-        title: "Error",
-        description: "Failed to convert Excel to PDF. Please try again.",
+        title: "Conversion Failed",
+        description:
+          "Could not convert this Excel file. Complex formatting might not be supported in the browser.",
         variant: "destructive",
       });
       setProgress(0);
     } finally {
       setIsProcessing(false);
-      setTimeout(() => setProgress(0), 500);
     }
-  }, [file, toast]);
+  };
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      // Download: Ctrl/Cmd + S
-      if ((e.ctrlKey || e.metaKey) && e.key === 's' && convertedFile) {
-        e.preventDefault();
-        handleDownload();
-      }
-      
-      // Convert: Ctrl/Cmd + Enter
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && file && !isProcessing) {
-        e.preventDefault();
-        handleConvert();
-      }
-      
-      // Reset: Escape
-      if (e.key === 'Escape' && !isProcessing) {
-        handleReset();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [convertedFile, file, isProcessing, handleDownload, handleConvert, handleReset]);
+  const resetTool = () => {
+    setFile(null);
+    setConvertedFile(null);
+    setProgress(0);
+  };
 
   return (
     <>
-      <SEOHead 
+      <SEOHead
+        breadcrumbs={[
+          { name: "Home", url: window.location.origin },
+          {
+            name: "Excel to PDF",
+            url: `${window.location.origin}/excel-to-pdf`,
+          },
+        ]}
         title={seoData.title}
         description={seoData.metaDescription}
-        keywords="excel to pdf, convert excel to pdf, xlsx to pdf, spreadsheet to pdf"
-        canonicalUrl={`${SITE_URL}/excel-to-pdf`}
+        keywords={
+          (seoData as any).keywords ||
+          "excel to pdf, xlsx to pdf, convert excel to pdf online"
+        }
+        canonicalUrl={`${window.location.origin}/excel-to-pdf`}
         faqs={seoData.faqs}
-        breadcrumbs={[
-          { name: "Home", url: SITE_URL },
-          { name: "Excel to PDF", url: `${SITE_URL}/excel-to-pdf` },
-        ]}
       />
 
-      {/* Success Toast */}
-      {showSuccess && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-in z-50">
-          ✓ Excel converted successfully!
-        </div>
-      )}
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back Button */}
-        <div className="mb-8">
-          <Link href="/">
-            <a className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors inline-flex items-center gap-2">
-              <span>←</span>
-              <span>Back to Tools</span>
-            </a>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
+        {/* Navigation */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back to Tools
           </Link>
         </div>
 
         {/* Header */}
-        <header className="text-center mb-8">
-          <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4 shadow-lg">
-            <FileSpreadsheet className="h-8 w-8" />
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
+            <FileSpreadsheet className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Excel to PDF Converter
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            {seoData.h1}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto leading-relaxed">
-            Convert Excel spreadsheets to PDF format instantly
+          <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg leading-relaxed">
+            {seoData.shortIntro}
           </p>
-          
-          {/* Features */}
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-6 text-sm">
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              Table Formatting
+
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm font-medium">
+            <div className="flex items-center text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full">
+              <Zap className="w-4 h-4 mr-2" /> Format Preservation
             </div>
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              Data Preservation
-            </div>
-            <div className="flex items-center text-green-600 dark:text-green-400">
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              Free to Use
+            <div className="flex items-center text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full">
+              <Shield className="w-4 h-4 mr-2" /> Private Processing
             </div>
           </div>
-        </header>
+        </div>
 
-        {/* Main Content */}
         {!file ? (
           <FileUpload
             onFilesSelected={handleFilesSelected}
             acceptMultiple={false}
             accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-            title="Drag and drop Excel spreadsheet here"
-            subtitle="or click to select a .xlsx or .xls file"
+            title="Drag & Drop Excel File"
+            subtitle="Supports .xlsx and .xls"
+            className="max-w-2xl mx-auto"
           />
         ) : (
-          <>
-            {/* Reset Button */}
-            <div className="flex justify-center mb-6">
-              <Button
-                variant="outline"
-                onClick={handleReset}
-                disabled={isProcessing}
-                className="gap-2"
-              >
-                <RefreshCw className="h-4 w-4" />
-                Change File
-              </Button>
-            </div>
-
-            {/* File Info Card */}
-            <div className="bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 border-2 border-emerald-200 dark:border-emerald-700 rounded-lg p-4 mb-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3 flex-1">
-                  <div className="w-12 h-12 bg-emerald-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
-                    <FileSpreadsheet className="h-6 w-6" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-gray-900 dark:text-white truncate">
-                      {file.name}
-                    </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      Size: {(file.size / 1024).toFixed(2)} KB
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-100 gap-1">
-                        <CheckCircle2 className="h-3 w-3" />
-                        Ready to Convert
-                      </span>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Show Process View or Success View */}
+            {!convertedFile ? (
+              <div className="max-w-xl mx-auto bg-card border rounded-xl shadow-sm p-6 sm:p-8">
+                {/* File Info */}
+                <div className="flex items-center justify-between mb-8 pb-6 border-b">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/20 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                      <FileSpreadsheet className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground truncate max-w-[180px] sm:max-w-xs">
+                        {file.name}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        {(file.size / 1024).toFixed(2)} KB
+                      </p>
                     </div>
                   </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={resetTool}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <i className="fas fa-times"></i>
+                  </Button>
                 </div>
-                <button
-                  onClick={handleReset}
-                  disabled={isProcessing}
-                  className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors disabled:opacity-50"
-                  title="Remove file"
-                  aria-label="Remove file"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
 
-            {/* Convert Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Ready to Convert
-              </h3>
-              
-              <div className="space-y-4">
-                <Button
-                  onClick={handleConvert}
-                  disabled={isProcessing}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-6"
-                  size="lg"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Converting...
-                    </>
-                  ) : (
-                    "Convert to PDF"
-                  )}
-                </Button>
+                <div className="space-y-4">
+                  <Button
+                    onClick={handleConvert}
+                    disabled={isProcessing}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md h-12 text-lg"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                        Converting...
+                      </>
+                    ) : (
+                      "Convert to PDF"
+                    )}
+                  </Button>
 
-                {!isProcessing && (
-                  <p className="text-xs text-center text-gray-500 dark:text-gray-400">
-                    Press Ctrl+Enter to convert
-                  </p>
-                )}
+                  <div className="text-xs text-center text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                    <i className="fas fa-info-circle mr-1"></i>
+                    Tables and formatting will be preserved.
+                  </div>
+                </div>
               </div>
-              
-              <div className="mt-4 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                <p className="text-sm text-emerald-700 dark:text-emerald-300 flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                  <span>
-                    Your Excel spreadsheet will be converted to PDF preserving tables and data formatting.
-                  </span>
+            ) : (
+              /* Success View */
+              <div className="max-w-2xl mx-auto bg-card border rounded-xl shadow-sm p-8 text-center animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                </div>
+
+                <h2 className="text-2xl font-bold mb-2">
+                  Conversion Complete!
+                </h2>
+                <p className="text-muted-foreground mb-8">
+                  Your Excel sheet has been successfully converted to PDF.
                 </p>
-              </div>
-            </div>
-            
-            {/* Progress Bar */}
-            <ProgressBar 
-              progress={progress} 
-              isVisible={isProcessing} 
-              color="emerald"
-              className="mt-6"
-            />
-            
-            {/* Download Section */}
-            {convertedFile && !isProcessing && (
-              <div className="text-center space-y-4 mt-8">
-                <div className="space-y-3">
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={handleDownload}
                     size="lg"
-                    className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg gap-2"
+                    className="bg-green-600 hover:bg-green-700 text-white shadow-lg font-semibold w-full sm:w-auto h-12"
                   >
-                    <Download className="h-5 w-5" />
+                    <Download className="w-5 h-5 mr-2" />
                     Download PDF
                   </Button>
 
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Press Ctrl+S to download
-                  </p>
+                  <Button
+                    onClick={resetTool}
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto h-12"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Convert Another
+                  </Button>
                 </div>
 
-                <div className="pt-4">
-                  <BuyMeCoffeeButton />
+                {/* Buy Me Coffee */}
+                <div className="mt-8 pt-6 border-t">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Saved you time?
+                  </p>
+                  <a
+                    href="https://www.buymeacoffee.com/kuhulabsq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-6 py-2 text-sm font-medium text-black bg-[#FFDD00] hover:bg-[#FFDD00]/90 rounded-full shadow-sm hover:shadow transition-transform hover:scale-105"
+                  >
+                    <Coffee className="h-4 w-4 mr-2" />
+                    Buy me a coffee
+                  </a>
                 </div>
               </div>
             )}
-            
-            {/* Coffee Button (when idle) */}
-            {!convertedFile && !isProcessing && (
-              <div className="text-center mt-6">
-                <BuyMeCoffeeButton />
-              </div>
-            )}
-          </>
+
+            <ProgressBar
+              progress={progress}
+              isVisible={isProcessing}
+              color="emerald"
+              className="fixed top-0 left-0 right-0 z-50 h-1"
+            />
+          </div>
         )}
       </div>
 
-      {/* SEO Content */}
-      <ToolSEOContent 
-        pageTitle="Excel to PDF Converter"
+      <ToolSEOContent
         intro={seoData.intro}
         howItWorks={seoData.howItWorks}
         benefits={seoData.benefits}

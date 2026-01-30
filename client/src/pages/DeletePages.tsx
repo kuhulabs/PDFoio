@@ -1,12 +1,9 @@
-// 1. FIXED: 'import' must be lowercase
-import React, { useState, useEffect, useCallback } from "react";
-import { TOOL_SEO } from "@/seo/seo";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { DeletePDFGrid } from "@/components/DeletePDFGrid";
+import { DeletePDFGrid } from "@/components/DeletePDFGrid"; // Component we will fix next
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
@@ -17,96 +14,107 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
-// 2. FIXED: Added 'Download' icon and 'ArrowLeft'
-import { Trash2, RefreshCw, Download, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { TOOL_SEO } from "@/seo/seo";
+import {
+  ArrowLeft,
+  Trash2,
+  Download,
+  RefreshCw,
+  CheckCircle,
+  Coffee,
+  AlertCircle,
+  Zap,
+  Shield,
+} from "lucide-react";
 
 interface PDFPage {
   id: string;
   pageNumber: number;
   deleted: boolean;
+  originalIndex: number; // Added to track reordering
 }
 
-const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://pdfo.io';
-
 export default function DeletePages() {
-  const seoData = TOOL_SEO["delete-pages"];
-  
+  const seoData = TOOL_SEO["delete-pages"] ||
+    TOOL_SEO["delete"] || {
+      title: "Delete PDF Pages",
+      h1: "Delete PDF Pages",
+      shortIntro: "Remove unwanted pages from your PDF securely.",
+      metaDescription: "Delete pages from PDF online for free.",
+      faqs: [],
+    };
+
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
-  const [isLoadingPages, setIsLoadingPages] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isLoadingPages, setIsLoadingPages] = useState(false);
   const [progress, setProgress] = useState(0);
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
-  
   const { toast } = useToast();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
   }, []);
 
-  // Cleanup blob to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      if (processedBlob) URL.revokeObjectURL(URL.createObjectURL(processedBlob));
-    };
-  }, [processedBlob]);
-
-  const handleReset = useCallback(() => {
-    setFile(null);
-    setPages([]);
-    setProcessedBlob(null);
-    setProgress(0);
-    setIsProcessing(false);
-  }, []);
-
-  const handleFilesSelected = useCallback(async (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     const selectedFile = files[0];
+    if (!selectedFile) return;
+
     setFile(selectedFile);
     setProcessedBlob(null);
-    setPages([]);
     setIsLoadingPages(true);
+    setPages([]);
 
     try {
       const realPages = await generateRealPDFPages(selectedFile);
-      // Initialize all pages as NOT deleted
-      setPages(realPages.map((p: any) => ({ ...p, deleted: false })));
+      setPages(
+        realPages.map((p: any, index: number) => ({
+          ...p,
+          deleted: false,
+          originalIndex: index,
+        })),
+      );
     } catch (error) {
-      console.error('Error loading PDF:', error);
+      console.error(error);
       toast({
-        title: "Error",
-        description: "Failed to parse PDF. Please try another file.",
+        title: "Error loading PDF",
+        description:
+          "Could not load the pages. Is the file password protected?",
         variant: "destructive",
       });
-      handleReset();
+      setFile(null);
     } finally {
       setIsLoadingPages(false);
     }
-  }, [toast, handleReset]);
+  };
 
-  // 3. IMPROVED: Just updates the UI state (Visual Selection), doesn't process yet
-  const togglePageDeletion = useCallback((pageNumber: number) => {
-    setPages(prev => prev.map(p => 
-      p.pageNumber === pageNumber ? { ...p, deleted: !p.deleted } : p
-    ));
-    // Clear previous result if user changes selection
-    if (processedBlob) setProcessedBlob(null);
-  }, [processedBlob]);
+  // ✅ IMPROVED: Toggle by ID is safer than pageNumber during reordering
+  const togglePageSelection = (id: string) => {
+    setPages((currentPages) =>
+      currentPages.map((p) =>
+        p.id === id ? { ...p, deleted: !p.deleted } : p,
+      ),
+    );
+  };
 
-  // 4. NEW: The actual processing happens here when user clicks "Remove Pages"
-  const executeDelete = async () => {
+  // ✅ NEW: Handle Reordering if user drags pages
+  const handlePagesChange = (newPages: PDFPage[]) => {
+    setPages(newPages);
+  };
+
+  const handleProcessDelete = async () => {
     if (!file) return;
 
-    // Calculate pages to KEEP (Logic: All pages - Deleted pages)
+    // Filter pages that are NOT deleted
+    // Use originalIndex to ensure we pick the correct page from the source PDF
     const pagesToKeep = pages
       .filter((p) => !p.deleted)
-      .map((p) => p.pageNumber - 1); // PDF-lib uses 0-based index
+      .map((p) => p.originalIndex); // Use original index for pdf-lib
 
-    const pagesToDeleteCount = pages.length - pagesToKeep.length;
-
-    if (pagesToDeleteCount === 0) {
+    if (pagesToKeep.length === pages.length) {
       toast({
         title: "No pages selected",
-        description: "Please select at least one page to remove.",
+        description: "Select pages to delete first.",
         variant: "destructive",
       });
       return;
@@ -114,34 +122,28 @@ export default function DeletePages() {
 
     if (pagesToKeep.length === 0) {
       toast({
-        title: "Invalid Operation",
-        description: "You cannot delete all pages. The PDF must have at least one page.",
+        title: "Error",
+        description: "You cannot delete all pages.",
         variant: "destructive",
       });
       return;
     }
 
     setIsProcessing(true);
-    setProgress(10);
+    setProgress(20);
 
     try {
+      // Pass pagesToKeep indices
       const blob = await deletePDFPages(file, pagesToKeep);
       setProgress(100);
       setProcessedBlob(blob);
-
       await trackToolUsage("Delete Pages", "manipulation", 1);
-
-      toast({
-        title: "Pages Removed Successfully",
-        description: `Removed ${pagesToDeleteCount} pages from your document.`,
-        className: "bg-green-50 border-green-200 dark:bg-green-900/30",
-      });
-
+      toast({ title: "Success!", description: "Pages removed successfully." });
     } catch (error) {
-      console.error('Processing failed:', error);
+      console.error(error);
       toast({
-        title: "Processing Failed",
-        description: "An error occurred while deleting pages.",
+        title: "Failed",
+        description: "Could not process PDF.",
         variant: "destructive",
       });
       setProgress(0);
@@ -150,148 +152,141 @@ export default function DeletePages() {
     }
   };
 
-  const handleDownload = useCallback(() => {
-    if (processedBlob && file) {
-      const deletedCount = pages.filter(p => p.deleted).length;
-      const filename = `PDFo_${file.name.replace('.pdf', '')}_edited.pdf`;
-      downloadBlob(processedBlob, filename);
-    }
-  }, [processedBlob, pages, file]);
+  const resetTool = () => {
+    setFile(null);
+    setPages([]);
+    setProcessedBlob(null);
+    setProgress(0);
+  };
 
-  // Derived state for UI feedback
-  const selectedCount = pages.filter(p => p.deleted).length;
+  const selectedCount = pages.filter((p) => p.deleted).length;
 
   return (
     <>
       <SEOHead
         title={seoData.title}
         description={seoData.metaDescription}
-        keywords="delete pdf pages, remove pdf pages, pdf page remover"
-        canonicalUrl={`${SITE_URL}/delete-pages`}
-        faqs={seoData.faqs}
-        breadcrumbs={[
-          { name: "Home", url: SITE_URL },
-          { name: "Delete Pages", url: `${SITE_URL}/delete-pages` },
-        ]}
+        canonicalUrl={`${window.location.origin}/delete-pages`}
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <Link href="/">
-            <a className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Tools
-            </a>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-primary flex items-center text-sm transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Tools
           </Link>
         </div>
 
-        <header className="text-center mb-8">
-          <div className="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4 shadow-lg shadow-red-500/20">
-            <Trash2 className="h-8 w-8" />
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Trash2 className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-            {seoData.h1}
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">{seoData.h1}</h1>
+          <p className="text-muted-foreground max-w-xl mx-auto">
             {seoData.shortIntro}
           </p>
-        </header>
+        </div>
 
         {!file ? (
           <FileUpload
             onFilesSelected={handleFilesSelected}
             acceptMultiple={false}
-            title="Upload PDF to Remove Pages"
+            accept=".pdf"
+            className="max-w-2xl mx-auto"
           />
         ) : (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            
-            {/* Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-6 bg-card p-4 rounded-xl border shadow-sm">
-                <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-muted-foreground">Selected for deletion:</span>
-                    <span className="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-md font-bold text-sm">
-                        {selectedCount} pages
-                    </span>
+            {!processedBlob ? (
+              <>
+                <div className="flex flex-col sm:flex-row justify-between items-center mb-6 bg-card border p-4 rounded-xl shadow-sm gap-4">
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <AlertCircle className="w-4 h-4 mr-2 text-primary" />
+                    <span>Tap pages to mark for deletion</span>
+                  </div>
+                  <span className="text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-600 px-3 py-1 rounded-full">
+                    {selectedCount} selected
+                  </span>
                 </div>
-                <Button variant="ghost" size="sm" onClick={handleReset} className="text-muted-foreground hover:text-red-500">
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Change File
-                </Button>
-            </div>
 
-            {isLoadingPages ? (
-              <div className="text-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
-                <p className="text-muted-foreground">Analyzing PDF structure...</p>
-              </div>
+                {isLoadingPages ? (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+                    <p className="text-muted-foreground">Loading pages...</p>
+                  </div>
+                ) : (
+                  <div className="mb-8">
+                    {/* The Grid Component */}
+                    <DeletePDFGrid
+                      file={file}
+                      pages={pages}
+                      // 👇 Passing strict props to sync state
+                      onUpdatePages={handlePagesChange}
+                      onToggleDelete={togglePageSelection}
+                      isProcessing={isProcessing}
+                    />
+                  </div>
+                )}
+
+                {/* Floating Action Bar */}
+                <div className="sticky bottom-6 z-50 flex justify-center">
+                  <div className="bg-background/80 backdrop-blur-md border rounded-full shadow-2xl p-2 flex gap-3 px-6">
+                    <Button
+                      variant="ghost"
+                      onClick={resetTool}
+                      disabled={isProcessing}
+                      className="rounded-full"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleProcessDelete}
+                      disabled={selectedCount === 0 || isProcessing}
+                      className="rounded-full bg-red-600 hover:bg-red-700 text-white min-w-[180px]"
+                    >
+                      {isProcessing
+                        ? "Processing..."
+                        : `Remove ${selectedCount} Pages`}
+                    </Button>
+                  </div>
+                </div>
+              </>
             ) : (
-               /* Note: Ensure DeletePDFGrid accepts 'onTogglePage' instead of 'onDelete' 
-                  to reflect that it's just a selection change, not an immediate delete.
-                  If your component strictly requires 'onDelete', pass togglePageDeletion there.
-               */
-              <DeletePDFGrid
-                file={file}
-                pages={pages}
-                onDelete={(updatedPages) => {
-                    // Adapter: If grid returns full array, we sync it. 
-                    // Ideally, Grid should just emit the clicked page ID.
-                    setPages(updatedPages);
-                    if (processedBlob) setProcessedBlob(null);
-                }} 
-                isProcessing={isProcessing}
-              />
+              <div className="bg-card border rounded-xl shadow-sm p-8 max-w-2xl mx-auto text-center">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600" />
+                </div>
+                <h2 className="text-2xl font-bold mb-2">Done!</h2>
+                <p className="text-muted-foreground mb-8">
+                  Removed {selectedCount} pages successfully.
+                </p>
+                <div className="flex justify-center gap-4">
+                  <Button
+                    onClick={() =>
+                      downloadBlob(processedBlob, `PDFo_Edited.pdf`)
+                    }
+                    size="lg"
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <Download className="w-4 h-4 mr-2" /> Download
+                  </Button>
+                  <Button variant="outline" size="lg" onClick={resetTool}>
+                    <RefreshCw className="w-4 h-4 mr-2" /> Start Over
+                  </Button>
+                </div>
+              </div>
             )}
-
             <ProgressBar
               progress={progress}
               isVisible={isProcessing}
-              indicatorColor="bg-red-500"
-              className="mt-6"
+              color="red"
+              className="fixed top-0 left-0 right-0 z-50 h-1"
             />
-
-            {/* Sticky Action Footer */}
-            <div className="sticky bottom-4 z-40 mt-8 flex justify-center">
-                <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-2 pr-3 rounded-full shadow-2xl border border-gray-200 dark:border-gray-700 flex items-center gap-3">
-                    {processedBlob ? (
-                        <Button
-                            onClick={handleDownload}
-                            size="lg"
-                            className="rounded-full bg-green-600 hover:bg-green-700 text-white px-8"
-                        >
-                            <Download className="w-5 h-5 mr-2" />
-                            Download Modified PDF
-                        </Button>
-                    ) : (
-                        <Button
-                            onClick={executeDelete}
-                            disabled={selectedCount === 0 || isProcessing}
-                            size="lg"
-                            className="rounded-full bg-red-600 hover:bg-red-700 text-white px-8 transition-all"
-                        >
-                            {isProcessing ? 'Processing...' : `Remove ${selectedCount} Selected Page${selectedCount !== 1 ? 's' : ''}`}
-                        </Button>
-                    )}
-                </div>
-            </div>
-
-            {processedBlob && !isProcessing && (
-                <div className="mt-8 text-center">
-                    <BuyMeCoffeeButton />
-                </div>
-            )}
           </div>
         )}
       </div>
-
-      <ToolSEOContent
-        intro={seoData.intro}
-        howItWorks={seoData.howItWorks}
-        benefits={seoData.benefits}
-        faqs={seoData.faqs}
-        relatedTools={seoData.relatedTools}
-      />
-
+      <ToolSEOContent {...seoData} />
       <ToolFooter />
     </>
   );

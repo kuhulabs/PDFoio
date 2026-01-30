@@ -12,7 +12,7 @@ import { ToolSEOContent } from "@/components/ToolSEOContent";
 import { TOOL_SEO } from "@/seo/seo";
 import {
   ArrowLeft,
-  FileText,
+  FileType, // ✅ FIXED: Using 'FileType' to match Home Page
   File as FileIcon,
   Download,
   RefreshCw,
@@ -137,7 +137,8 @@ export default function WordToPDF() {
         {/* Header */}
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
-            <FileText className="w-8 h-8" />
+            {/* ✅ FIXED: Using FileType icon */}
+            <FileType className="w-8 h-8" />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {seoData.h1}
@@ -190,7 +191,7 @@ export default function WordToPDF() {
                     onClick={resetTool}
                     className="text-muted-foreground hover:text-destructive"
                   >
-                    <i className="fas fa-times"></i>
+                    <RefreshCw className="w-4 h-4" />
                   </Button>
                 </div>
 
@@ -202,7 +203,7 @@ export default function WordToPDF() {
                   >
                     {isProcessing ? (
                       <>
-                        <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />{" "}
                         Converting...
                       </>
                     ) : (

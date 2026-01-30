@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { ReorderPDFGrid } from "@/components/ReorderPDFGrid"; // Assuming this handles the drag-and-drop UI
+import { ReorderPDFGrid } from "@/components/ReorderPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
-import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
 import {
@@ -203,9 +202,9 @@ export default function ReorderPages() {
             {!reorderedBlob ? (
               <>
                 {/* File Info & Actions */}
-                <div className="flex items-center justify-between mb-6 bg-card border p-4 rounded-xl shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400">
+                <div className="flex flex-col sm:flex-row items-center justify-between mb-6 bg-card border p-4 rounded-xl shadow-sm gap-4">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
                       <FileText className="w-5 h-5" />
                     </div>
                     <div className="overflow-hidden">
@@ -213,23 +212,23 @@ export default function ReorderPages() {
                         {file.name}
                       </h3>
                       <p className="text-xs text-muted-foreground">
-                        {pages.length} Pages
+                        {pages.length} Pages • Drag to rearrange
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 w-full sm:w-auto">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={resetTool}
-                      className="text-muted-foreground"
+                      className="text-muted-foreground flex-1 sm:flex-none"
                     >
                       Cancel
                     </Button>
                     <Button
                       onClick={handleApplyReorder}
                       disabled={!hasChanges || isProcessing}
-                      className="bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
+                      className="bg-purple-600 hover:bg-purple-700 text-white shadow-sm flex-1 sm:flex-none"
                     >
                       {isProcessing ? "Processing..." : "Save Order"}
                     </Button>
@@ -240,7 +239,8 @@ export default function ReorderPages() {
                 <ReorderPDFGrid
                   file={file}
                   pages={pages}
-                  onPagesChange={handlePagesChange}
+                  // FIX: Changed from onPagesChange to onReorder to match the component prop
+                  onReorder={handlePagesChange}
                   isProcessing={isProcessing}
                 />
               </>

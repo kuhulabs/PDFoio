@@ -22,19 +22,18 @@ import { ToolSEOContent } from "@/components/ToolSEOContent";
 import { TOOL_SEO } from "@/seo/seo";
 import {
   ArrowLeft,
-  Image as ImageIcon,
+  Images, // ✅ FIXED: Using 'Images' (Multiple) to match Home Page
   FileText,
   Download,
   RefreshCw,
   CheckCircle,
   Coffee,
-  Layers,
   Zap,
   ChevronDown,
   ChevronUp,
   FileArchive,
   FileImage,
-  Ghost, // For transparency icon
+  Ghost,
 } from "lucide-react";
 
 export default function PDFToPNG() {
@@ -84,7 +83,6 @@ export default function PDFToPNG() {
     try {
       const options: ImageConversionOptions = { transparentBackground };
 
-      // Simulate progress
       const interval = setInterval(
         () => setProgress((prev) => Math.min(prev + 5, 90)),
         500,
@@ -155,7 +153,8 @@ export default function PDFToPNG() {
         {/* Header */}
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
-            <ImageIcon className="w-8 h-8" />
+            {/* ✅ FIXED: Using Images icon (Multiple) */}
+            <Images className="w-8 h-8" />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {seoData.h1}
@@ -207,7 +206,7 @@ export default function PDFToPNG() {
                     onClick={resetTool}
                     className="text-muted-foreground hover:text-destructive"
                   >
-                    <i className="fas fa-times"></i>
+                    <RefreshCw className="w-4 h-4" />
                   </Button>
                 </div>
 
@@ -236,7 +235,7 @@ export default function PDFToPNG() {
                   >
                     {isProcessing ? (
                       <>
-                        <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />{" "}
                         Converting...
                       </>
                     ) : (
@@ -291,7 +290,8 @@ export default function PDFToPNG() {
                 >
                   <CollapsibleTrigger className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-2 font-semibold">
-                      <ImageIcon className="w-5 h-5 text-emerald-500" />
+                      {/* ✅ FIXED: Using Images icon here too */}
+                      <Images className="w-5 h-5 text-emerald-500" />
                       Download Individual Pages
                     </div>
                     {isIndividualOpen ? (

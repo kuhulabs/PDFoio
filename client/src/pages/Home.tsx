@@ -1,27 +1,52 @@
-// 1. FIXED: 'import' must be lowercase
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "wouter";
-// 2. FIXED: Imported specific icons to replace FontAwesome classes
-import { 
-  Coffee, Shield, Zap, Smartphone, 
-  Bot, Layers, Scissors, ArrowUpDown, Trash2, RotateCw, 
-  ListOrdered, Stamp, FileText, Lock, Unlock, Minimize2, 
-  Wand2, Image as ImageIcon, FileType, FileSpreadsheet, 
-  Presentation, FileCode, FileJson, Images, LayoutTemplate
+// 1. All icons imported from lucide-react (Matches your other pages)
+import {
+  Coffee,
+  Shield,
+  Zap,
+  Smartphone,
+  Bot,
+  Layers,
+  Scissors,
+  ArrowUpDown,
+  Trash2,
+  RotateCw,
+  ListOrdered,
+  Stamp,
+  FileText,
+  Lock,
+  Unlock,
+  Minimize2,
+  Wand2,
+  Image as ImageIcon,
+  FileType,
+  FileSpreadsheet,
+  Presentation,
+  FileCode,
+  Images,
+  LayoutTemplate,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MainFooter } from "@/components/MainFooter";
 import { SEOHead } from "@/components/SEOHead";
 import heroBg from "@assets/hero_bg_1768974463459.webp";
 
-// 3. UPDATED: Interface now accepts a React Component for the icon instead of a class string
+// 2. Updated Interface to accept React Component for Icon
 interface Tool {
   name: string;
   path: string;
   description: string;
   iconBg: string;
-  Icon: React.ElementType; // Changed from faIcon string to Component
-  category: "ai" | "organize" | "edit" | "security" | "optimize" | "from_pdf" | "to_pdf";
+  Icon: React.ElementType;
+  category:
+    | "ai"
+    | "organize"
+    | "edit"
+    | "security"
+    | "optimize"
+    | "from_pdf"
+    | "to_pdf";
 }
 
 const CATEGORIES = [
@@ -36,42 +61,49 @@ const CATEGORIES = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'pdf' | 'other'>('pdf');
+  const [activeTab, setActiveTab] = useState<"pdf" | "other">("pdf");
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const homeSEO = {
     title: "PDFo - Free Online PDF Tools | Merge, Split, Convert & AI PDF Tool",
-    description: "Free online PDF tools for professionals and businesses. Securely merge, split, and convert PDF documents with ease.",
-    keywords: "pdf tools, merge pdf, split pdf, ai pdf tool, ai pdf summarize, pdf summary ai, pdf converter, compress pdf, free pdf tools online, professional pdf editor, online document tools",
+    description:
+      "Free online PDF tools for professionals and businesses. Securely merge, split, and convert PDF documents with ease.",
+    keywords:
+      "pdf tools, merge pdf, split pdf, ai pdf tool, ai pdf summarize, pdf summary ai, pdf converter, compress pdf, free pdf tools online, professional pdf editor, online document tools",
     image: heroBg,
     structuredData: {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "PDFo",
-      "description": "Free online PDF tools for professionals and businesses. Securely merge, split, and convert PDF documents with ease.",
-      "url": typeof window !== 'undefined' ? window.location.origin : '',
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Any",
-      "offers": {
+      name: "PDFo",
+      description:
+        "Free online PDF tools for professionals and businesses. Securely merge, split, and convert PDF documents with ease.",
+      url: typeof window !== "undefined" ? window.location.origin : "",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any",
+      offers: {
         "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
+        price: "0",
+        priceCurrency: "USD",
       },
-      "featureList": [
+      featureList: [
         "AI PDF Tool & Summarization",
         "Merge PDF files",
-        "Split PDF documents", 
+        "Split PDF documents",
         "Convert PDF to Word/Excel/PowerPoint",
         "Convert images to PDF",
         "Compress PDF files",
         "Add watermarks and page numbers",
         "Edit PDF metadata",
-        "Password protect PDFs"
-      ]
-    }
+        "Password protect PDFs",
+      ],
+    },
   };
 
-  // 4. FIXED: Mapped all tools to Lucide icons (Design looks identical but works without FontAwesome)
+  // 3. Icons mapped consistently with your specific tool pages
   const tools: Tool[] = [
     {
       name: "AI PDF Summarise",
@@ -79,7 +111,7 @@ export default function Home() {
       description: "Get key insights from your PDF using AI",
       iconBg: "bg-violet-600",
       Icon: Bot,
-      category: "ai"
+      category: "ai",
     },
     {
       name: "Merge PDF",
@@ -87,31 +119,31 @@ export default function Home() {
       description: "Combine multiple PDF files into one document",
       iconBg: "bg-blue-500",
       Icon: Layers,
-      category: "organize"
+      category: "organize",
     },
     {
       name: "Split PDF",
-      path: "/split", 
+      path: "/split",
       description: "Extract pages or split PDF into multiple files",
       iconBg: "bg-green-500",
       Icon: Scissors,
-      category: "organize"
+      category: "organize",
     },
     {
       name: "Reorder Pages",
       path: "/reorder",
       description: "Rearrange pages in your PDF document",
-      iconBg: "bg-purple-500", 
-      Icon: ArrowUpDown,
-      category: "organize"
+      iconBg: "bg-purple-500",
+      Icon: ArrowUpDown, // Matches ReorderPages.tsx
+      category: "organize",
     },
     {
       name: "Delete Pages",
       path: "/delete-pages",
       description: "Remove unwanted pages from PDF",
       iconBg: "bg-red-500",
-      Icon: Trash2,
-      category: "organize"
+      Icon: Trash2, // Matches DeletePages.tsx
+      category: "organize",
     },
     {
       name: "Rotate PDF",
@@ -119,7 +151,7 @@ export default function Home() {
       description: "Rotate PDF pages by 90, 180, or 270 degrees",
       iconBg: "bg-orange-500",
       Icon: RotateCw,
-      category: "organize"
+      category: "organize",
     },
     {
       name: "Page Numbers",
@@ -127,7 +159,7 @@ export default function Home() {
       description: "Add page numbers to your PDF document",
       iconBg: "bg-indigo-500",
       Icon: ListOrdered,
-      category: "edit"
+      category: "edit",
     },
     {
       name: "Watermark PDF",
@@ -135,7 +167,7 @@ export default function Home() {
       description: "Add text or image watermarks to your PDF",
       iconBg: "bg-teal-500",
       Icon: Stamp,
-      category: "edit"
+      category: "edit",
     },
     {
       name: "Edit Metadata",
@@ -143,7 +175,7 @@ export default function Home() {
       description: "Change PDF title, author, and other metadata",
       iconBg: "bg-cyan-500",
       Icon: FileText,
-      category: "edit"
+      category: "edit",
     },
     {
       name: "Lock PDF",
@@ -151,15 +183,15 @@ export default function Home() {
       description: "Password protect your PDF document",
       iconBg: "bg-yellow-500",
       Icon: Lock,
-      category: "security"
+      category: "security",
     },
     {
       name: "Unlock PDF",
-      path: "/unlock", 
+      path: "/unlock",
       description: "Remove password protection from PDF",
       iconBg: "bg-pink-500",
       Icon: Unlock,
-      category: "security"
+      category: "security",
     },
     {
       name: "Compress PDF",
@@ -167,7 +199,7 @@ export default function Home() {
       description: "Reduce PDF file size efficiently",
       iconBg: "bg-gray-500",
       Icon: Minimize2,
-      category: "optimize"
+      category: "optimize",
     },
     {
       name: "PDF Optimizer",
@@ -175,23 +207,23 @@ export default function Home() {
       description: "Optimize PDF to reduce size without quality loss",
       iconBg: "bg-orange-500",
       Icon: Wand2,
-      category: "optimize"
+      category: "optimize",
     },
     {
       name: "PDF to JPG",
       path: "/pdf-to-jpg",
       description: "Convert PDF pages to high-quality JPG images",
       iconBg: "bg-rose-500",
-      Icon: ImageIcon,
-      category: "from_pdf"
+      Icon: ImageIcon, // Matches PDFToJPG.tsx
+      category: "from_pdf",
     },
     {
       name: "PDF to PNG",
-      path: "/pdf-to-png", 
+      path: "/pdf-to-png",
       description: "Convert PDF pages to PNG images with transparency",
       iconBg: "bg-emerald-500",
       Icon: Images,
-      category: "from_pdf"
+      category: "from_pdf",
     },
     {
       name: "PDF to Word",
@@ -199,7 +231,7 @@ export default function Home() {
       description: "Convert PDF to editable Word document",
       iconBg: "bg-blue-600",
       Icon: FileType,
-      category: "from_pdf"
+      category: "from_pdf",
     },
     {
       name: "PDF to Excel",
@@ -207,7 +239,7 @@ export default function Home() {
       description: "Extract tables and data to Excel spreadsheet",
       iconBg: "bg-green-600",
       Icon: FileSpreadsheet,
-      category: "from_pdf"
+      category: "from_pdf",
     },
     {
       name: "PDF to PPT",
@@ -215,7 +247,7 @@ export default function Home() {
       description: "Convert PDF pages to PowerPoint slides",
       iconBg: "bg-orange-600",
       Icon: Presentation,
-      category: "from_pdf"
+      category: "from_pdf",
     },
     {
       name: "PDF to TXT",
@@ -223,7 +255,7 @@ export default function Home() {
       description: "Extract plain text content from PDF",
       iconBg: "bg-slate-500",
       Icon: FileText,
-      category: "from_pdf"
+      category: "from_pdf",
     },
     {
       name: "PDF to JSON",
@@ -231,7 +263,7 @@ export default function Home() {
       description: "Convert PDF structure to JSON format",
       iconBg: "bg-amber-600",
       Icon: FileCode,
-      category: "from_pdf"
+      category: "from_pdf",
     },
     {
       name: "Images to PDF",
@@ -239,7 +271,7 @@ export default function Home() {
       description: "Convert JPG, PNG, and more to a single PDF document",
       iconBg: "bg-lime-500",
       Icon: Images,
-      category: "to_pdf"
+      category: "to_pdf",
     },
     {
       name: "PNG to PDF",
@@ -247,7 +279,7 @@ export default function Home() {
       description: "Convert PNG images to PDF",
       iconBg: "bg-emerald-600",
       Icon: ImageIcon,
-      category: "to_pdf"
+      category: "to_pdf",
     },
     {
       name: "Word to PDF",
@@ -255,7 +287,7 @@ export default function Home() {
       description: "Convert Word documents to PDF format",
       iconBg: "bg-sky-600",
       Icon: FileType,
-      category: "to_pdf"
+      category: "to_pdf",
     },
     {
       name: "Excel to PDF",
@@ -263,18 +295,18 @@ export default function Home() {
       description: "Convert Excel spreadsheets to PDF format",
       iconBg: "bg-emerald-600",
       Icon: FileSpreadsheet,
-      category: "to_pdf"
-    }
+      category: "to_pdf",
+    },
   ];
 
   const filteredTools = useMemo(() => {
     if (activeCategory === "all") return tools;
-    return tools.filter(tool => tool.category === activeCategory);
+    return tools.filter((tool) => tool.category === activeCategory);
   }, [activeCategory, tools]);
 
   const scrollToTools = () => {
-    document.getElementById('tools-section')?.scrollIntoView({ 
-      behavior: 'smooth' 
+    document.getElementById("tools-section")?.scrollIntoView({
+      behavior: "smooth",
     });
   };
 
@@ -284,16 +316,19 @@ export default function Home() {
         title={homeSEO.title}
         description={homeSEO.description}
         keywords={homeSEO.keywords}
-        canonicalUrl={typeof window !== 'undefined' ? window.location.origin : ''}
+        canonicalUrl={
+          typeof window !== "undefined" ? window.location.origin : ""
+        }
         structuredData={homeSEO.structuredData}
       />
+
       {/* Hero Section */}
-      <section 
-        className="hero-bg py-12 lg:py-16 relative overflow-hidden bg-gray-900" // Added fallback bg color
+      <section
+        className="hero-bg py-12 lg:py-16 relative overflow-hidden bg-gray-900"
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${heroBg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -304,10 +339,12 @@ export default function Home() {
             Made Simple
           </h2>
           <p className="text-lg text-gray-100 mb-8 max-w-3xl mx-auto">
-            Merge, split, convert, and edit your PDF files with our comprehensive suite of professional tools and AI PDF Tool. Fast, secure, and completely free.
+            Merge, split, convert, and edit your PDF files with our
+            comprehensive suite of professional tools and AI PDF Tool. Fast,
+            secure, and completely free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
+            <Button
               asChild
               size="lg"
               className="bg-violet-600 text-white hover:bg-violet-700 px-8 py-3 text-lg rounded-lg font-medium"
@@ -317,18 +354,21 @@ export default function Home() {
                 AI PDF Summarise
               </Link>
             </Button>
-            <Button 
-              onClick={scrollToTools} 
+            <Button
+              onClick={scrollToTools}
               size="lg"
               variant="outline"
               className="border-blue-500 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-8 py-3 text-lg rounded-lg font-medium"
             >
               Explore Tools
             </Button>
-            <Button asChild className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 min-h-12 px-8 rounded-lg font-medium">
-              <a 
-                href="https://www.buymeacoffee.com/kuhulabsq" 
-                target="_blank" 
+            <Button
+              asChild
+              className="bg-yellow-400 text-gray-900 hover:bg-yellow-300 min-h-12 px-8 rounded-lg font-medium"
+            >
+              <a
+                href="https://www.buymeacoffee.com/kuhulabsq"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center"
               >
@@ -345,19 +385,22 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              {activeTab === 'pdf' ? 'Choose Your PDF Tool' : 'Choose Your Tool'}
+              {activeTab === "pdf"
+                ? "Choose Your PDF Tool"
+                : "Choose Your Tool"}
             </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Select from our comprehensive suite of PDF manipulation tools designed for professionals and individuals alike.
+              Select from our comprehensive suite of PDF manipulation tools
+              designed for professionals and individuals alike.
             </p>
           </div>
 
           <div className="flex justify-center mb-8">
             <div className="inline-flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
               <button
-                onClick={() => setActiveTab('pdf')}
+                onClick={() => setActiveTab("pdf")}
                 className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                  activeTab === 'pdf'
+                  activeTab === "pdf"
                     ? "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
                     : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                 }`}
@@ -366,9 +409,9 @@ export default function Home() {
                 PDF Tools
               </button>
               <button
-                onClick={() => setActiveTab('other')}
+                onClick={() => setActiveTab("other")}
                 className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                  activeTab === 'other'
+                  activeTab === "other"
                     ? "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
                     : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                 }`}
@@ -380,7 +423,7 @@ export default function Home() {
           </div>
 
           <div className={`transition-all duration-300 ease-in-out`}>
-            {activeTab === 'pdf' ? (
+            {activeTab === "pdf" ? (
               <div className="space-y-8">
                 {/* Categories Tabs */}
                 <div className="flex justify-start sm:justify-center overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
@@ -401,25 +444,29 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* 5. UPDATED: Grid Rendering 
-                   Replaced the <i> tag with <tool.Icon />
-                   Design is maintained (sizes, colors, layout)
-                */}
+                {/* Grid Rendering */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   {filteredTools.map((tool) => (
                     <Link key={tool.path} href={tool.path}>
                       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group">
                         <div className="flex items-center">
-                          <div className={`w-14 h-14 ${tool.iconBg} rounded-xl flex items-center justify-center text-white mr-5 group-hover:scale-105 transition-transform`} role="img" aria-label={`${tool.name} tool`}>
-                            {/* Render Lucide Icon instead of FontAwesome class */}
-                            <tool.Icon className="w-6 h-6" /> 
+                          <div
+                            className={`w-14 h-14 ${tool.iconBg} rounded-xl flex items-center justify-center text-white mr-5 group-hover:scale-105 transition-transform`}
+                            role="img"
+                            aria-label={`${tool.name} tool`}
+                          >
+                            {/* Rendering the React Component Icon */}
+                            <tool.Icon className="w-6 h-6" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">{tool.name}</h3>
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm line-clamp-2">{tool.description}</p>
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                              {tool.name}
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm line-clamp-2">
+                              {tool.description}
+                            </p>
                           </div>
                           <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            {/* Replaced chevron icon for consistency */}
                             <LayoutTemplate className="w-5 h-5 text-gray-300 rotate-90" />
                           </div>
                         </div>
@@ -433,9 +480,15 @@ export default function Home() {
                 <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Zap className="h-10 w-10 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Coming Soon</h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">New utility tools are currently in development.</p>
-                <p className="text-blue-600 dark:text-blue-400 font-medium tracking-wider uppercase text-sm">Development Mode</p>
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                  Coming Soon
+                </h3>
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
+                  New utility tools are currently in development.
+                </p>
+                <p className="text-blue-600 dark:text-blue-400 font-medium tracking-wider uppercase text-sm">
+                  Development Mode
+                </p>
               </div>
             )}
           </div>
@@ -446,32 +499,47 @@ export default function Home() {
       <section className="py-16 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Why Choose PDFo?</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Why Choose PDFo?
+            </h2>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Secure & Private</h3>
-              <p className="text-gray-600 dark:text-gray-300">Your files are processed securely and deleted automatically after processing.</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Secure & Private
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Your files are processed securely and deleted automatically
+                after processing.
+              </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Lightning Fast</h3>
-              <p className="text-gray-600 dark:text-gray-300">Process your PDF files in seconds with our optimized algorithms.</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Lightning Fast
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Process your PDF files in seconds with our optimized algorithms.
+              </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-violet-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Smartphone className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Works Everywhere</h3>
-              <p className="text-gray-600 dark:text-gray-300">Access our tools from any device, anywhere, anytime.</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Works Everywhere
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Access our tools from any device, anywhere, anytime.
+              </p>
             </div>
           </div>
         </div>

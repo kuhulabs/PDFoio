@@ -18,7 +18,7 @@ import { ToolSEOContent } from "@/components/ToolSEOContent";
 import { TOOL_SEO } from "@/seo/seo";
 import {
   ArrowLeft,
-  FileText,
+  FileType, // ✅ FIXED: Using 'FileType' to match Home Page
   Download,
   RefreshCw,
   CheckCircle,
@@ -131,7 +131,8 @@ export default function PDFToWord() {
         {/* Header */}
         <div className="text-center mb-10">
           <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
-            <FileText className="w-8 h-8" />
+            {/* ✅ FIXED: Using FileType icon */}
+            <FileType className="w-8 h-8" />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {seoData.h1}
@@ -166,7 +167,8 @@ export default function PDFToWord() {
                 <div className="flex items-center justify-between mb-8 pb-6 border-b">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400">
-                      <FileText className="w-6 h-6" />
+                      {/* ✅ FIXED: Using FileType here too */}
+                      <FileType className="w-6 h-6" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground truncate max-w-[180px] sm:max-w-xs">
@@ -183,7 +185,7 @@ export default function PDFToWord() {
                     onClick={resetTool}
                     className="text-muted-foreground hover:text-destructive"
                   >
-                    <i className="fas fa-times"></i>
+                    <RefreshCw className="w-4 h-4" />
                   </Button>
                 </div>
 
@@ -212,7 +214,7 @@ export default function PDFToWord() {
                   >
                     {isProcessing ? (
                       <>
-                        <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />{" "}
                         Converting...
                       </>
                     ) : (
