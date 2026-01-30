@@ -202,14 +202,6 @@ export default function Home() {
       category: "optimize",
     },
     {
-      name: "PDF Optimizer",
-      path: "/compress-optimizer",
-      description: "Optimize PDF to reduce size without quality loss",
-      iconBg: "bg-orange-500",
-      Icon: Wand2,
-      category: "optimize",
-    },
-    {
       name: "PDF to JPG",
       path: "/pdf-to-jpg",
       description: "Convert PDF pages to high-quality JPG images",
