@@ -403,7 +403,7 @@ export default function CompressPDF() {
             <ProgressBar
               progress={progress}
               isVisible={isProcessing}
-              color="blue"
+              indicatorColor="bg-blue-600"
               className="mt-6"
             />
           </div>

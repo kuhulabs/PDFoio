@@ -331,7 +331,7 @@ export default function UnlockPDF() {
             <ProgressBar
               progress={progress}
               isVisible={isProcessing}
-              color="pink"
+              indicatorColor="bg-pink-600"
               className="fixed top-0 left-0 right-0 z-50 h-1"
             />
           </div>
