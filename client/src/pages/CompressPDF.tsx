@@ -42,11 +42,11 @@ export default function CompressPDF() {
     const selectedFile = files[0];
     if (!selectedFile) return;
 
-    // Check for max size (e.g. 50MB) before uploading
-    if (selectedFile.size > 50 * 1024 * 1024) {
+    // Check for max size (10MB) before uploading
+    if (selectedFile.size > 10 * 1024 * 1024) {
       toast({
         title: "File too large",
-        description: "Please upload a file smaller than 50MB for compression.",
+        description: "Please upload a file smaller than 10MB for compression.",
         variant: "destructive",
       });
       return;
@@ -209,10 +209,10 @@ export default function CompressPDF() {
 
         {/* Main Interface */}
         {!file ? (
-          <FileUpload
+            <FileUpload
             onFilesSelected={handleFilesSelected}
             accept=".pdf"
-            maxSize={50 * 1024 * 1024} // 50MB Match Server Limit
+            maxSize={10 * 1024 * 1024} // 10MB Limit
             acceptMultiple={false}
             className="max-w-2xl mx-auto"
           />

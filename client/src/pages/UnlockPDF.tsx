@@ -42,7 +42,16 @@ export default function UnlockPDF() {
   }, []);
 
   const handleFilesSelected = (files: File[]) => {
-    setFile(files[0]);
+    const selectedFile = files[0];
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please upload a file smaller than 10MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setFile(selectedFile);
     setConvertedFile(null);
     setPassword("");
     setProgress(0);
@@ -180,7 +189,7 @@ export default function UnlockPDF() {
           <FileUpload
             onFilesSelected={handleFilesSelected}
             acceptMultiple={false}
-            maxSize={50 * 1024 * 1024}
+            maxSize={10 * 1024 * 1024} // 10MB limit
             accept=".pdf"
             className="max-w-2xl mx-auto"
           />
