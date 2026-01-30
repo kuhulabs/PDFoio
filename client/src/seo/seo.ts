@@ -725,10 +725,8 @@ export const TOOL_SEO = {
     { key: "delete-pages", name: "Delete Pages", path: "/delete-pages" },
     { key: "split", name: "Split PDF", path: "/split" }
   ]
-}
-
-
-    "delete-pages": {
+  },
+  "delete-pages": {
     title: "Delete PDF Pages - Remove Unwanted Pages from PDF Online | PDFo",
     h1: "Remove PDF Pages Online",
     metaDescription:
