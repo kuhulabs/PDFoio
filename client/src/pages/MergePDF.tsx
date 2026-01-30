@@ -103,10 +103,13 @@ export default function MergePDF() {
         description: `Successfully merged ${files.length} PDF files.`,
       });
     } catch (error) {
-      console.error(error);
+      console.error('Merge failed:', error);
+      const errorMessage = error instanceof Error ? error.message : "Could not merge the PDF files.";
       toast({
         title: "Merge Failed",
-        description: "Could not merge the PDF files. Please try again.",
+        description: errorMessage.includes("Failed to process") 
+          ? errorMessage 
+          : "Could not merge the PDF files. Please check if all files are valid PDFs and try again.",
         variant: "destructive",
       });
       setProgress(0);

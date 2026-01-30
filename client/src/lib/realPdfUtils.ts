@@ -77,21 +77,36 @@ export async function mergePDFs(
   files: File[], 
   onProgress?: (current: number, total: number) => void
 ): Promise<Blob> {
+  console.log('mergePDFs - Starting merge with', files.length, 'files');
   const mergedPdf = await PDFDocument.create();
   
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
+    console.log(`mergePDFs - Processing file ${i + 1}/${files.length}: ${file.name}`);
     onProgress?.(i, files.length);
     
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer);
-    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-    copiedPages.forEach((page) => mergedPdf.addPage(page));
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      console.log(`mergePDFs - File ${file.name} loaded, size: ${arrayBuffer.byteLength} bytes`);
+      
+      // Try to load with ignoreEncryption option for password-protected PDFs
+      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      console.log(`mergePDFs - PDF ${file.name} has ${pdf.getPageCount()} pages`);
+      
+      const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+      copiedPages.forEach((page) => mergedPdf.addPage(page));
+      console.log(`mergePDFs - Copied ${copiedPages.length} pages from ${file.name}`);
+    } catch (fileError) {
+      console.error(`mergePDFs - Error processing file ${file.name}:`, fileError);
+      throw new Error(`Failed to process "${file.name}": ${fileError instanceof Error ? fileError.message : 'Unknown error'}`);
+    }
   }
   
   onProgress?.(files.length, files.length);
   
+  console.log('mergePDFs - All files processed, saving merged PDF');
   const pdfBytes = await mergedPdf.save();
+  console.log('mergePDFs - Merged PDF saved, size:', pdfBytes.length, 'bytes');
   return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
@@ -913,8 +928,7 @@ export async function convertPDFToImages(file: File, format: 'jpg' | 'png' | 'ti
     
     await page.render({ 
       canvasContext: ctx, 
-      viewport,
-      enableWebGL: true
+      viewport
     }).promise;
     
     const imageBlob = await new Promise<Blob>((resolve) => {
