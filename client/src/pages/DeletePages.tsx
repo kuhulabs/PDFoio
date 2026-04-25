@@ -35,8 +35,7 @@ interface PDFPage {
 }
 
 export default function DeletePages() {
-  const seoData = TOOL_SEO["delete-pages"] ||
-    TOOL_SEO["delete"] || {
+  const seoData = TOOL_SEO["delete-pages"] || {
       title: "Delete PDF Pages",
       h1: "Delete PDF Pages",
       shortIntro: "Remove unwanted pages from your PDF securely.",

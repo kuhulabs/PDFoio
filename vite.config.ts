@@ -30,6 +30,22 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("pdfjs-dist")) return "pdfjs-vendor";
+            if (id.includes("pdf-lib")) return "pdflib-vendor";
+            if (id.includes("xlsx")) return "xlsx-vendor";
+            if (id.includes("jszip")) return "jszip-vendor";
+            if (id.includes("pptxgenjs")) return "pptx-vendor";
+            if (id.includes("mammoth")) return "mammoth-vendor";
+            if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
+            if (id.includes("react") || id.includes("wouter") || id.includes("@tanstack")) return "react-vendor";
+          }
+        },
+      },
+    },
   },
   server: {
     fs: {

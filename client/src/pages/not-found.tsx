@@ -2,10 +2,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { FileQuestion, Home, ArrowLeft } from "lucide-react";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-4">
+    <>
+      <SEOHead
+        title="404 - Page Not Found | PDFo"
+        description="The page you requested could not be found."
+        canonicalUrl={`${window.location.origin}/404`}
+        noIndex={true}
+      />
+      <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-4">
       <div className="max-w-md w-full text-center space-y-6">
         {/* Animated Icon */}
         <div className="w-24 h-24 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
@@ -51,6 +59,7 @@ export default function NotFound() {
           <p>Error Code: 404</p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
