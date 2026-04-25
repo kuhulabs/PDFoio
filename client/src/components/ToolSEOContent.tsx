@@ -174,27 +174,28 @@ export const ToolSEOContent = memo(function ToolSEOContent({
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list">
               {relatedTools.map((tool, index) => (
                 <li key={index}>
-                  <Link href={tool.path}>
-                    <a className="block no-underline group">
-                      <Card className="hover-elevate cursor-pointer border-none shadow-sm bg-muted/50 transition-all hover:bg-muted hover:shadow-md">
-                        <CardContent className="p-4 flex items-center justify-between">
-                          <div className="flex-1">
-                            <span className="font-medium text-foreground group-hover:text-primary transition-colors">
-                              {tool.name}
-                            </span>
-                            {tool.description && (
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {tool.description}
-                              </p>
-                            )}
-                          </div>
-                          <ArrowRight 
-                            className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" 
-                            aria-hidden="true"
-                          />
-                        </CardContent>
-                      </Card>
-                    </a>
+                  <Link
+                    href={tool.path}
+                    className="block no-underline group"
+                  >
+                    <Card className="hover-elevate cursor-pointer border-none shadow-sm bg-muted/50 transition-all hover:bg-muted hover:shadow-md">
+                      <CardContent className="p-4 flex items-center justify-between">
+                        <div className="flex-1">
+                          <span className="font-medium text-foreground group-hover:text-primary transition-colors">
+                            {tool.name}
+                          </span>
+                          {tool.description && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {tool.description}
+                            </p>
+                          )}
+                        </div>
+                        <ArrowRight
+                          className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity"
+                          aria-hidden="true"
+                        />
+                      </CardContent>
+                    </Card>
                   </Link>
                 </li>
               ))}
