@@ -10,6 +10,7 @@ interface ProgressBarProps {
    * or a raw CSS color string if you modify the style logic.
    */
   indicatorColor?: string; 
+  color?: string;
   className?: string;
   showLabel?: boolean;
 }
@@ -18,9 +19,11 @@ export function ProgressBar({
   progress, 
   isVisible, 
   indicatorColor = "bg-primary", // Default to primary theme color
+  color,
   className,
   showLabel = false
 }: ProgressBarProps) {
+  const resolvedIndicatorColor = color ? `bg-${color}-500` : indicatorColor;
   
   // LOGIC: Use opacity/height for smooth transition instead of returning null
   return (
@@ -41,7 +44,7 @@ export function ProgressBar({
               "w-full h-2 transition-all",
               // MAGIC: This targets the inner Radix/Shadcn Indicator div
               // We use [&>*] to apply the background color to the direct child
-              `[&>*]:${indicatorColor}` 
+              `[&>*]:${resolvedIndicatorColor}` 
             )} 
           />
         </div>

@@ -66,8 +66,10 @@ export default function PageNumbers() {
       // Default settings: Bottom Center, Size 12
       const blob = await addPageNumbers(file, {
         position: "bottom-center",
-        startFrom: 1,
+        format: "{n}",
+        fontFamily: "Helvetica",
         fontSize: 12,
+        color: "#000000",
       });
 
       clearInterval(interval);
@@ -100,7 +102,17 @@ export default function PageNumbers() {
 
   return (
     <>
-      <SEOHead title={seoData.title} description={seoData.metaDescription} />
+      <SEOHead
+        title={seoData.title}
+        description={seoData.metaDescription}
+        keywords="add page numbers to pdf, pdf pagination online, number pdf pages"
+        canonicalUrl={`${window.location.origin}/page-numbers`}
+        breadcrumbs={[
+          { name: "Home", url: window.location.origin },
+          { name: "Page Numbers", url: `${window.location.origin}/page-numbers` },
+        ]}
+        faqs={seoData.faqs}
+      />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-[60vh]">
         {/* Navigation */}

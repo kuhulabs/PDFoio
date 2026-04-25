@@ -40,11 +40,11 @@ export const TOOL_SEO = {
         "Free online PDF merger to combine multiple PDF files into one document securely.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/merge",
+      url: "https://pdfo.io/merge",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -68,13 +68,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -192,11 +192,11 @@ export const TOOL_SEO = {
         "Free online PDF splitter to extract pages or split PDF files into multiple documents securely.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/split",
+      url: "https://pdfo.io/split",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -220,13 +220,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -340,11 +340,11 @@ export const TOOL_SEO = {
         "Free online PDF compression tool to reduce file size while preserving readability and layout.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/compress",
+      url: "https://pdfo.io/compress",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -368,13 +368,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -488,11 +488,11 @@ export const TOOL_SEO = {
         "Free online PDF rotation tool to permanently fix page orientation issues.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/rotate",
+      url: "https://pdfo.io/rotate",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -516,13 +516,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -626,11 +626,11 @@ export const TOOL_SEO = {
         "Free online PDF page reordering tool to rearrange page sequence without quality loss.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/reorder",
+      url: "https://pdfo.io/reorder",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -654,13 +654,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -768,11 +768,11 @@ export const TOOL_SEO = {
         "Free online PDF page deletion tool to remove unwanted pages from PDF documents securely.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/delete-pages",
+      url: "https://pdfo.io/delete-pages",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -796,13 +796,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -924,11 +924,11 @@ export const TOOL_SEO = {
         "Free online AI-powered tool to automatically detect and remove blank pages from PDF documents.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/remove-blank-pages",
+      url: "https://pdfo.io/remove-blank-pages",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -952,13 +952,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -1077,11 +1077,11 @@ export const TOOL_SEO = {
         "Free online tool to add customizable page numbers to PDF documents with full control over position, font, and style.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/page-numbers",
+      url: "https://pdfo.io/page-numbers",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -1105,13 +1105,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -1230,11 +1230,11 @@ export const TOOL_SEO = {
         "Free online tool to add customizable text or image watermarks to PDF documents for protection and branding.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/watermark",
+      url: "https://pdfo.io/watermark",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -1258,13 +1258,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -1383,11 +1383,11 @@ export const TOOL_SEO = {
         "Free online tool to edit and update PDF metadata including title, author, subject, and keywords for better organization and SEO.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/metadata",
+      url: "https://pdfo.io/metadata",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -1411,13 +1411,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -1533,11 +1533,11 @@ export const TOOL_SEO = {
         "Free online PDF to Word converter with OCR technology to convert PDF files to editable DOCX documents.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/pdf-to-word",
+      url: "https://pdfo.io/pdf-to-word",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -1561,13 +1561,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -1681,11 +1681,11 @@ export const TOOL_SEO = {
         "Free online PDF to Excel converter to extract tables and data from PDF files to XLSX spreadsheets.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/pdf-to-excel",
+      url: "https://pdfo.io/pdf-to-excel",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -1709,13 +1709,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -1874,11 +1874,11 @@ export const TOOL_SEO = {
         "Free online PDF to JPG converter to transform PDF pages into high-quality JPEG images.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/pdf-to-jpg",
+      url: "https://pdfo.io/pdf-to-jpg",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -1902,13 +1902,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -2022,11 +2022,11 @@ export const TOOL_SEO = {
         "Free online PDF to PNG converter with transparency support for lossless image conversion.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/pdf-to-png",
+      url: "https://pdfo.io/pdf-to-png",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -2050,13 +2050,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -2170,11 +2170,11 @@ export const TOOL_SEO = {
         "Free online PDF to TIFF converter for professional archiving and high-quality printing.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/pdf-to-tiff",
+      url: "https://pdfo.io/pdf-to-tiff",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -2198,13 +2198,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -2318,11 +2318,11 @@ export const TOOL_SEO = {
         "Free online tool to extract plain text from PDF files with high accuracy and OCR support.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/pdf-to-txt",
+      url: "https://pdfo.io/pdf-to-txt",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -2346,13 +2346,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -2466,11 +2466,11 @@ export const TOOL_SEO = {
         "Free online tool to convert PDF documents into structured JSON data for developers and automation.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/pdf-to-json",
+      url: "https://pdfo.io/pdf-to-json",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -2494,13 +2494,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -2616,11 +2616,11 @@ export const TOOL_SEO = {
         "Free online Word to PDF converter to transform DOC and DOCX files into professional PDF documents.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/word-to-pdf",
+      url: "https://pdfo.io/word-to-pdf",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -2644,13 +2644,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -2764,11 +2764,11 @@ export const TOOL_SEO = {
         "Free online Excel to PDF converter to transform XLS and XLSX spreadsheets into professional PDF documents.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/excel-to-pdf",
+      url: "https://pdfo.io/excel-to-pdf",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -2792,13 +2792,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -2912,11 +2912,11 @@ export const TOOL_SEO = {
         "Free online PNG to PDF converter with transparency support and batch conversion capabilities.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/png-to-pdf",
+      url: "https://pdfo.io/png-to-pdf",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -2940,13 +2940,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -3060,11 +3060,11 @@ export const TOOL_SEO = {
         "Free online tool to convert JPG, PNG, TIFF, and BMP images into professional PDF documents.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/images-to-pdf",
+      url: "https://pdfo.io/images-to-pdf",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -3088,13 +3088,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -3210,11 +3210,11 @@ export const TOOL_SEO = {
         "Free online tool to unlock password-protected PDFs and remove printing, copying, and editing restrictions.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/unlock",
+      url: "https://pdfo.io/unlock",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -3238,13 +3238,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -3358,11 +3358,11 @@ export const TOOL_SEO = {
         "Free online tool to password protect PDFs with AES-256 encryption and prevent unauthorized access.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/lock",
+      url: "https://pdfo.io/lock",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -3386,13 +3386,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",
@@ -3506,11 +3506,11 @@ export const TOOL_SEO = {
         "Free AI-powered tool to summarize PDF documents and extract key insights, bullet points, and executive summaries.",
       applicationCategory: "UtilityApplication",
       operatingSystem: "Web Browser",
-      url: "https://pdfo.com/summarize",
+      url: "https://pdfo.io/summarize",
       publisher: {
         "@type": "Organization",
         name: "PDFo",
-        url: "https://pdfo.com",
+        url: "https://pdfo.io",
       },
       offers: {
         "@type": "Offer",
@@ -3534,13 +3534,13 @@ export const TOOL_SEO = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://pdfo.com",
+          item: "https://pdfo.io",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "PDF Tools",
-          item: "https://pdfo.com/tools",
+          item: "https://pdfo.io/tools",
         },
         {
           "@type": "ListItem",

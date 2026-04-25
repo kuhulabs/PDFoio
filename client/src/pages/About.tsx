@@ -31,6 +31,8 @@ export default function About() {
           ]}  
           title="About PDFo - Simple, Secure & Free PDF Tools"
           description="PDFo helps individuals and businesses work with PDFs easily using fast, secure, and privacy-first online tools. No sign-up, no watermarks, 100% free."
+          keywords="about pdfo, free pdf tools, secure pdf tools"
+          canonicalUrl={`${window.location.origin}/about`}
         />
 
         {/* 1. Hero Section */}

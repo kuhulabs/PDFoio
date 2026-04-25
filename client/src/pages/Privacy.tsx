@@ -8,6 +8,12 @@ export default function Privacy() {
         <SEOHead 
           title="Privacy Policy | PDFo"
           description="Privacy Policy for PDFo - Your privacy is our priority."
+          canonicalUrl={`${window.location.origin}/privacy`}
+          keywords="pdfo privacy policy, pdf privacy, secure file processing"
+          breadcrumbs={[
+            { name: "Home", url: window.location.origin },
+            { name: "Privacy", url: `${window.location.origin}/privacy` },
+          ]}
         />
         
         <div className="container px-4 mx-auto py-12 max-w-4xl">
