@@ -1,8 +1,11 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
-import * as pdfjsLib from 'pdfjs-dist';
 // FIXED: Use centralized PDF worker initialization
-import { initializePDFJS } from './pdf-worker-config';
-import JSZip from 'jszip';
+import { getPdfjsLib } from './pdfjs-loader';
+
+const isDev = import.meta.env.DEV;
+const debugLog = (...args: unknown[]) => {
+  if (isDev) console.log(...args);
+};
 
 // Real PDF processing utilities using pdf-lib
 export interface PDFPage {
@@ -77,25 +80,25 @@ export async function mergePDFs(
   files: File[], 
   onProgress?: (current: number, total: number) => void
 ): Promise<Blob> {
-  console.log('mergePDFs - Starting merge with', files.length, 'files');
+  debugLog('mergePDFs - Starting merge with', files.length, 'files');
   const mergedPdf = await PDFDocument.create();
   
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    console.log(`mergePDFs - Processing file ${i + 1}/${files.length}: ${file.name}`);
+    debugLog(`mergePDFs - Processing file ${i + 1}/${files.length}: ${file.name}`);
     onProgress?.(i, files.length);
     
     try {
       const arrayBuffer = await file.arrayBuffer();
-      console.log(`mergePDFs - File ${file.name} loaded, size: ${arrayBuffer.byteLength} bytes`);
+      debugLog(`mergePDFs - File ${file.name} loaded, size: ${arrayBuffer.byteLength} bytes`);
       
       // Try to load with ignoreEncryption option for password-protected PDFs
       const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-      console.log(`mergePDFs - PDF ${file.name} has ${pdf.getPageCount()} pages`);
+      debugLog(`mergePDFs - PDF ${file.name} has ${pdf.getPageCount()} pages`);
       
       const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
       copiedPages.forEach((page) => mergedPdf.addPage(page));
-      console.log(`mergePDFs - Copied ${copiedPages.length} pages from ${file.name}`);
+      debugLog(`mergePDFs - Copied ${copiedPages.length} pages from ${file.name}`);
     } catch (fileError) {
       console.error(`mergePDFs - Error processing file ${file.name}:`, fileError);
       throw new Error(`Failed to process "${file.name}": ${fileError instanceof Error ? fileError.message : 'Unknown error'}`);
@@ -104,9 +107,9 @@ export async function mergePDFs(
   
   onProgress?.(files.length, files.length);
   
-  console.log('mergePDFs - All files processed, saving merged PDF');
+  debugLog('mergePDFs - All files processed, saving merged PDF');
   const pdfBytes = await mergedPdf.save();
-  console.log('mergePDFs - Merged PDF saved, size:', pdfBytes.length, 'bytes');
+  debugLog('mergePDFs - Merged PDF saved, size:', pdfBytes.length, 'bytes');
   return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
@@ -275,13 +278,13 @@ export async function addPageNumbers(file: File, settings: PageNumberSettings): 
       .replace('{total}', totalPages.toString())
       .replace('{page}', pageNumber.toString());
     
-    console.log(`Page ${pageNumber}: Adding text "${text}"`);
+    debugLog(`Page ${pageNumber}: Adding text "${text}"`);
     
     // CRITICAL FIX: Handle rotated pages
     // Save original rotation and temporarily reset to 0 for accurate coordinate placement
     const originalRotation = page.getRotation();
     const rotationAngle = originalRotation.angle;
-    console.log(`Page ${pageNumber}: Rotation = ${rotationAngle}°`);
+    debugLog(`Page ${pageNumber}: Rotation = ${rotationAngle}°`);
     
     // Temporarily reset rotation for accurate drawing
     if (rotationAngle !== 0) {
@@ -292,7 +295,7 @@ export async function addPageNumbers(file: File, settings: PageNumberSettings): 
     const textHeight = settings.fontSize;
     const { width, height } = page.getSize();
     
-    console.log(`Page ${pageNumber}: Size = ${width}x${height}`);
+    debugLog(`Page ${pageNumber}: Size = ${width}x${height}`);
     
     const padding = settings.padding || 4;
     let x: number, y: number;
@@ -329,7 +332,7 @@ export async function addPageNumbers(file: File, settings: PageNumberSettings): 
         y = margin;
     }
     
-    console.log(`Page ${pageNumber}: Drawing at x=${x}, y=${y}`);
+    debugLog(`Page ${pageNumber}: Drawing at x=${x}, y=${y}`);
     
     // Draw background if enabled
     if (settings.showBackground && settings.backgroundColor) {
@@ -362,18 +365,18 @@ export async function addPageNumbers(file: File, settings: PageNumberSettings): 
     // Restore original rotation
     if (rotationAngle !== 0) {
       page.setRotation(originalRotation);
-      console.log(`Page ${pageNumber}: Restored rotation to ${rotationAngle}°`);
+      debugLog(`Page ${pageNumber}: Restored rotation to ${rotationAngle}°`);
     }
   });
   
   const pdfBytes = await pdf.save();
-  console.log('addPageNumbers - PDF saved, size:', pdfBytes.length, 'bytes');
+  debugLog('addPageNumbers - PDF saved, size:', pdfBytes.length, 'bytes');
   
   // Verify the PDF was modified correctly by reloading it
   try {
     const verifyPdf = await PDFDocument.load(pdfBytes);
     const verifyPages = verifyPdf.getPages();
-    console.log('addPageNumbers - Verification: PDF has', verifyPages.length, 'pages');
+    debugLog('addPageNumbers - Verification: PDF has', verifyPages.length, 'pages');
   } catch (e) {
     console.error('addPageNumbers - Failed to verify PDF:', e);
   }
@@ -387,12 +390,11 @@ export async function getPDFPageCount(file: File): Promise<number> {
     // PRODUCTION: Getting PDF page count
     
     // FIXED: Use centralized PDF.js worker initialization
-    initializePDFJS();
-    
+      
     const arrayBuffer = await file.arrayBuffer();
     
     // Use PDF.js for reliable page counting
-    const loadingTask = pdfjsLib.getDocument({ 
+    const loadingTask = (await getPdfjsLib()).getDocument({ 
       data: arrayBuffer,
       verbosity: 0 
     });
@@ -413,8 +415,7 @@ export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
     // PRODUCTION: Generating PDF page objects
     
     // FIXED: Use centralized PDF.js worker initialization
-    initializePDFJS();
-    
+      
     const pageCount = await getPDFPageCount(file);
     
     if (pageCount === 0) {
@@ -486,11 +487,11 @@ function parseHexColor(hex: string) {
 
 // Add watermark to PDF - Text only with rotation and font support
 export async function addWatermarkToPDF(file: File, settings: WatermarkSettings): Promise<Blob> {
-  console.log('addWatermarkToPDF - Starting with settings:', settings);
+  debugLog('addWatermarkToPDF - Starting with settings:', settings);
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   const pages = pdf.getPages();
-  console.log('addWatermarkToPDF - Loaded PDF with', pages.length, 'pages');
+  debugLog('addWatermarkToPDF - Loaded PDF with', pages.length, 'pages');
   
   if (settings.type === 'text' && settings.text) {
     // Select font based on font family setting
@@ -516,23 +517,23 @@ export async function addWatermarkToPDF(file: File, settings: WatermarkSettings)
         default:
           font = await pdf.embedFont(StandardFonts.HelveticaBold);
       }
-      console.log('addWatermarkToPDF - Font embedded:', settings.fontFamily);
+      debugLog('addWatermarkToPDF - Font embedded:', settings.fontFamily);
     } catch (error) {
       console.error('addWatermarkToPDF - Font error, using default:', error);
       font = await pdf.embedFont(StandardFonts.HelveticaBold);
     }
     
     const color = settings.color ? parseHexColor(settings.color) : rgb(0, 0, 0);
-    console.log('addWatermarkToPDF - Color:', settings.color);
+    debugLog('addWatermarkToPDF - Color:', settings.color);
     
     pages.forEach((page, index) => {
       const pageNumber = index + 1;
-      console.log(`Page ${pageNumber}: Adding watermark "${settings.text}"`);
+      debugLog(`Page ${pageNumber}: Adding watermark "${settings.text}"`);
       
       // CRITICAL FIX: Handle rotated pages (same as page numbers)
       const originalRotation = page.getRotation();
       const rotationAngle = originalRotation.angle;
-      console.log(`Page ${pageNumber}: Rotation = ${rotationAngle}°`);
+      debugLog(`Page ${pageNumber}: Rotation = ${rotationAngle}°`);
       
       // Temporarily reset rotation for accurate drawing
       if (rotationAngle !== 0) {
@@ -566,7 +567,7 @@ export async function addWatermarkToPDF(file: File, settings: WatermarkSettings)
           y = centerY - textHeight / 2;
       }
       
-      console.log(`Page ${pageNumber}: Drawing watermark at x=${x}, y=${y}, rotation=${settings.rotation}°`);
+      debugLog(`Page ${pageNumber}: Drawing watermark at x=${x}, y=${y}, rotation=${settings.rotation}°`);
       
       page.drawText(settings.text!, {
         x, y,
@@ -580,19 +581,19 @@ export async function addWatermarkToPDF(file: File, settings: WatermarkSettings)
       // Restore original rotation
       if (rotationAngle !== 0) {
         page.setRotation(originalRotation);
-        console.log(`Page ${pageNumber}: Restored rotation to ${rotationAngle}°`);
+        debugLog(`Page ${pageNumber}: Restored rotation to ${rotationAngle}°`);
       }
     });
   }
   
   const pdfBytes = await pdf.save();
-  console.log('addWatermarkToPDF - PDF saved, size:', pdfBytes.length, 'bytes');
+  debugLog('addWatermarkToPDF - PDF saved, size:', pdfBytes.length, 'bytes');
   
   // Verify the PDF was modified correctly
   try {
     const verifyPdf = await PDFDocument.load(pdfBytes);
     const verifyPages = verifyPdf.getPages();
-    console.log('addWatermarkToPDF - Verification: PDF has', verifyPages.length, 'pages');
+    debugLog('addWatermarkToPDF - Verification: PDF has', verifyPages.length, 'pages');
   } catch (e) {
     console.error('addWatermarkToPDF - Failed to verify PDF:', e);
   }
@@ -602,8 +603,8 @@ export async function addWatermarkToPDF(file: File, settings: WatermarkSettings)
 
 // Password protect PDF with enhanced security simulation
 export async function lockPDF(file: File, password: string): Promise<Blob> {
-  console.log('lockPDF - Starting password protection');
-  console.log('lockPDF - File:', file.name, 'Size:', file.size);
+  debugLog('lockPDF - Starting password protection');
+  debugLog('lockPDF - File:', file.name, 'Size:', file.size);
   
   // Validate password first
   if (!password || password.length < 3) {
@@ -611,14 +612,14 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
     throw new Error('Password must be at least 3 characters long');
   }
   
-  console.log('lockPDF - Password validated, length:', password.length);
+  debugLog('lockPDF - Password validated, length:', password.length);
   
   try {
     const arrayBuffer = await file.arrayBuffer();
-    console.log('lockPDF - File loaded, array buffer size:', arrayBuffer.byteLength);
+    debugLog('lockPDF - File loaded, array buffer size:', arrayBuffer.byteLength);
     
     const pdf = await PDFDocument.load(arrayBuffer);
-    console.log('lockPDF - PDF loaded successfully');
+    debugLog('lockPDF - PDF loaded successfully');
   
   // Enhanced password protection simulation
   // Create a hash-like representation of the password
@@ -639,7 +640,7 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
   pdf.setCreator('PDFo Password Protection v2.0');
   pdf.setProducer('PDFo Secure PDF Engine');
   
-  console.log('lockPDF - Adding security watermarks to', pdf.getPageCount(), 'pages');
+  debugLog('lockPDF - Adding security watermarks to', pdf.getPageCount(), 'pages');
   
   // Add enhanced security watermarks to all pages (NO EMOJIS - WinAnsi encoding doesn't support them)
   const pages = pdf.getPages();
@@ -707,7 +708,7 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
     });
   }
   
-  console.log('lockPDF - Watermarks added successfully');
+  debugLog('lockPDF - Watermarks added successfully');
   
     // Save with enhanced security settings
     const pdfBytes = await pdf.save({
@@ -715,7 +716,7 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
       addDefaultPage: false,
     });
     
-    console.log('lockPDF - PDF saved successfully, size:', pdfBytes.length, 'bytes');
+    debugLog('lockPDF - PDF saved successfully, size:', pdfBytes.length, 'bytes');
     return new Blob([pdfBytes], { type: 'application/pdf' });
   } catch (error) {
     console.error('lockPDF - Error during PDF processing:', error);
@@ -728,23 +729,23 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
 
 // Remove password from PDF (simulated)
 export async function unlockPDF(file: File, password: string): Promise<Blob> {
-  console.log('unlockPDF - Starting unlock process');
-  console.log('unlockPDF - File:', file.name, 'Size:', file.size);
-  console.log('unlockPDF - Password length:', password.length);
+  debugLog('unlockPDF - Starting unlock process');
+  debugLog('unlockPDF - File:', file.name, 'Size:', file.size);
+  debugLog('unlockPDF - Password length:', password.length);
   
   try {
     const arrayBuffer = await file.arrayBuffer();
-    console.log('unlockPDF - File loaded, array buffer size:', arrayBuffer.byteLength);
+    debugLog('unlockPDF - File loaded, array buffer size:', arrayBuffer.byteLength);
     
     const pdf = await PDFDocument.load(arrayBuffer);
-    console.log('unlockPDF - PDF loaded successfully, pages:', pdf.getPageCount());
+    debugLog('unlockPDF - PDF loaded successfully, pages:', pdf.getPageCount());
     
     // Check if PDF appears to be locked (has security metadata)
     const subject = pdf.getSubject();
     const keywords = pdf.getKeywords();
     
-    console.log('unlockPDF - PDF subject:', subject);
-    console.log('unlockPDF - PDF keywords:', keywords);
+    debugLog('unlockPDF - PDF subject:', subject);
+    debugLog('unlockPDF - PDF keywords:', keywords);
     
     // Simulate password verification
     if (subject && subject.includes('ENCRYPTED')) {
@@ -754,7 +755,7 @@ export async function unlockPDF(file: File, password: string): Promise<Blob> {
         const storedToken = tokenMatch[1];
         const providedHash = btoa(password + 'PDFo-SECURITY-SALT-2024').substring(0, 16);
         
-        console.log('unlockPDF - Verifying password...');
+        debugLog('unlockPDF - Verifying password...');
         
         // Simple verification - in real scenario, this would verify against encryption
         if (!storedToken.includes(providedHash.substring(0, 8))) {
@@ -762,10 +763,10 @@ export async function unlockPDF(file: File, password: string): Promise<Blob> {
           throw new Error('Incorrect password - authentication failed');
         }
         
-        console.log('unlockPDF - Password verified successfully');
+        debugLog('unlockPDF - Password verified successfully');
       }
     } else {
-      console.log('unlockPDF - PDF does not appear to be locked (no encryption metadata found)');
+      debugLog('unlockPDF - PDF does not appear to be locked (no encryption metadata found)');
     }
     
     // Clear password-related metadata
@@ -781,7 +782,7 @@ export async function unlockPDF(file: File, password: string): Promise<Blob> {
     pdf.setCreator('PDFo Unlock Tool');
     
     const pdfBytes = await pdf.save();
-    console.log('unlockPDF - PDF unlocked successfully, size:', pdfBytes.length, 'bytes');
+    debugLog('unlockPDF - PDF unlocked successfully, size:', pdfBytes.length, 'bytes');
     return new Blob([pdfBytes], { type: 'application/pdf' });
   } catch (error) {
     console.error('unlockPDF - Error:', error);
@@ -883,6 +884,8 @@ export async function compressPDF(file: File, level: CompressionLevel): Promise<
 
 // Helper to create ZIP from blobs
 async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> {
+  const JSZipModule = await import('jszip');
+  const JSZip = JSZipModule.default;
   const zip = new JSZip();
   blobs.forEach((blob, i) => {
     zip.file(`page-${i + 1}.${format}`, blob);
@@ -892,9 +895,8 @@ async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> 
 
 // Convert PDF to images (JPG/PNG/TIFF)
 export async function convertPDFToImages(file: File, format: 'jpg' | 'png' | 'tiff', options: ImageConversionOptions = {}): Promise<{ zipBlob: Blob; images: Blob[]; pageCount: number }> {
-  initializePDFJS();
   const arrayBuffer = await file.arrayBuffer();
-  const loadingTask = pdfjsLib.getDocument({ 
+  const loadingTask = (await getPdfjsLib()).getDocument({ 
     data: arrayBuffer,
     useWorkerFetch: true,
     isEvalSupported: true,
@@ -958,9 +960,8 @@ export async function convertPDFToWord(file: File, options: DocumentConversionOp
   // PRODUCTION: Starting PDF to Word conversion
   
   try {
-    initializePDFJS();
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const arrayBuffer = await file.arrayBuffer();
+    const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
     
     let textContent = '';
     let htmlContent = '<html><head><meta charset="utf-8"><title>Converted from PDF</title></head><body>';
@@ -1095,9 +1096,8 @@ export async function convertPDFToExcel(file: File, options: DocumentConversionO
     // Import XLSX dynamically
     const XLSX = await import('xlsx');
     
-    initializePDFJS();
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const arrayBuffer = await file.arrayBuffer();
+    const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
     
     const workbook = XLSX.utils.book_new();
     const worksheetData: any[][] = [];
@@ -1207,9 +1207,8 @@ export async function convertPDFToPPT(file: File): Promise<Blob> {
     pptx.company = 'PDFo';
     pptx.title = `Converted from ${file.name}`;
     
-    initializePDFJS();
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const arrayBuffer = await file.arrayBuffer();
+    const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
     
     // PRODUCTION: Processing pages for PowerPoint
     
@@ -1321,9 +1320,8 @@ export async function convertPDFToTIFF(file: File): Promise<Blob> {
   // PRODUCTION: Starting PDF to TIFF conversion
   
   try {
-    initializePDFJS();
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const arrayBuffer = await file.arrayBuffer();
+    const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
     
     const images: Blob[] = [];
     
@@ -1364,9 +1362,8 @@ export async function convertPDFToTIFF(file: File): Promise<Blob> {
 
 // Convert PDF to plain text
 export async function convertPDFToTXT(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
-  initializePDFJS();
   const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
   let textContent = '';
   const lineEnding = options.lineEndingStyle === 'windows' ? '\r\n' : 
@@ -1395,9 +1392,8 @@ export async function convertPDFToTXT(file: File, options: DocumentConversionOpt
 
 // Convert PDF to JSON
 export async function convertPDFToJSON(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
-  initializePDFJS();
   const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
   const data: any = {
     metadata: {
@@ -1707,10 +1703,8 @@ export async function convertExcelToPDF(file: File): Promise<Blob> {
 
 // Extract Images from PDF with real image extraction
 export async function extractImagesFromPDF(file: File): Promise<{ images: { url: string; name: string; index: number }[], zipBlob: Blob }> {
-  await initializePDFJS();
-  const pdfjsLib = (window as any).pdfjsLib;
   const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
   const extractedImages: { url: string; name: string; index: number }[] = [];
   const imageBlobs: { blob: Blob; name: string }[] = [];
@@ -1759,6 +1753,8 @@ export async function extractImagesFromPDF(file: File): Promise<{ images: { url:
   }
   
   // Create ZIP file with all images
+  const JSZipModule = await import('jszip');
+  const JSZip = JSZipModule.default;
   const zip = new JSZip();
   
   for (const imageBlob of imageBlobs) {
@@ -1772,10 +1768,8 @@ export async function extractImagesFromPDF(file: File): Promise<{ images: { url:
 
 // Detect blank pages in PDF
 export async function detectBlankPages(file: File): Promise<number[]> {
-  await initializePDFJS();
-  const pdfjsLib = (window as any).pdfjsLib;
   const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
   const blankPages: number[] = [];
   

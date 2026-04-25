@@ -26,6 +26,12 @@ export default function ApiPage() {
         <SEOHead 
           title="PDFo API – PDF Processing API (Coming Soon)"
           description="PDFo API is coming soon. Powerful PDF processing APIs for developers. Request early access today."
+          canonicalUrl={`${window.location.origin}/api`}
+          keywords="pdf api, pdf processing api, developer pdf api"
+          breadcrumbs={[
+            { name: "Home", url: window.location.origin },
+            { name: "API", url: `${window.location.origin}/api` },
+          ]}
         />
 
         {/* Hero Section */}

@@ -129,7 +129,7 @@ export default function RemoveBlankPages() {
         title={seoData.title}
         description={seoData.metaDescription}
         keywords={(seoData as any).keywords || ""}
-        canonicalUrl="https://pdfo.io/remove-blank-pages"
+        canonicalUrl={`${window.location.origin}/remove-blank-pages`}
       />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}

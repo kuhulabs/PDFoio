@@ -30,7 +30,7 @@ import {
 interface PDFPage {
   id: string;
   pageNumber: number;
-  originalIndex: number;
+  originalIndex?: number;
 }
 
 export default function ReorderPages() {
@@ -96,7 +96,7 @@ export default function ReorderPages() {
     setIsProcessing(true);
     setProgress(10);
     try {
-      const newOrder = pages.map((page) => page.originalIndex);
+      const newOrder = pages.map((page, index) => page.originalIndex ?? index);
 
       const interval = setInterval(
         () => setProgress((prev) => Math.min(prev + 10, 90)),

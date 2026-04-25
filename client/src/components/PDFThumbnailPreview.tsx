@@ -56,6 +56,7 @@ export function PDFThumbnailPreview({
       setThumbnails([]);
       setLoading(false);
       setUseSimplePreview(false);
+      setThumbnails([]);
       return;
     }
 
@@ -74,6 +75,7 @@ export function PDFThumbnailPreview({
       setLoading(true);
       setProgress({ completed: 0, total: files.length });
       setUseSimplePreview(false);
+      setThumbnails([]);
 
       try {
         const generated = await generateMultiplePDFThumbnails(
@@ -82,6 +84,24 @@ export function PDFThumbnailPreview({
             if (!signal.aborted) {
               setProgress({ completed, total });
             }
+          },
+          (thumbnail) => {
+            if (signal.aborted) return;
+
+            if (thumbnail.thumbnailUrl) {
+              thumbnailUrlsRef.current.add(thumbnail.thumbnailUrl);
+            }
+
+            setThumbnails((prev) => {
+              const existingIndex = prev.findIndex((t) => t.file === thumbnail.file);
+              if (existingIndex === -1) {
+                return [...prev, thumbnail];
+              }
+
+              const next = [...prev];
+              next[existingIndex] = thumbnail;
+              return next;
+            });
           },
         );
 

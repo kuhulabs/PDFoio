@@ -1,13 +1,10 @@
-import * as pdfjsLib from "pdfjs-dist";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import { initializePDFJS } from "./pdf-worker-config";
-
-// Initialize worker ONCE
-initializePDFJS();
+import pLimit from "p-limit";
+import { getPdfjsLib } from "./pdfjs-loader";
 
 export interface PDFThumbnail {
   file: File;
-  thumbnailUrl: string;
+  thumbnailUrl: string | null;
   pageCount: number;
   error?: string;
 }
@@ -22,12 +19,7 @@ export async function generatePDFThumbnail(
 ): Promise<PDFThumbnail> {
 
   try {
-
-    // Worker fallback safety
-    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-      const version = "3.4.120";
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.js`;
-    }
+    const pdfjsLib = await getPdfjsLib();
 
     const arrayBuffer = await file.arrayBuffer();
 
@@ -126,23 +118,25 @@ export async function generatePDFThumbnail(
 
 export async function generateMultiplePDFThumbnails(
   files: File[],
-  onProgress?: (completed: number, total: number) => void
+  onProgress?: (completed: number, total: number) => void,
+  onItemGenerated?: (thumbnail: PDFThumbnail, index: number) => void,
 ): Promise<PDFThumbnail[]> {
 
   let completed = 0;
+  const limit = pLimit(2);
 
-  const tasks = files.map(async (file) => {
+  const tasks = files.map((file, index) =>
+    limit(async () => {
+      const result = await generatePDFThumbnail(file);
 
-    const result = await generatePDFThumbnail(file);
+      completed++;
+      onProgress?.(completed, files.length);
+      onItemGenerated?.(result, index);
 
-    completed++;
+      return result;
+    }),
+  );
 
-    onProgress?.(completed, files.length);
-
-    return result;
-  });
-
-  // PARALLEL PROCESSING (FAST)
   return Promise.all(tasks);
 }
 
@@ -156,11 +150,7 @@ export async function getPDFInfo(
 ): Promise<{ pageCount: number; title?: string }> {
 
   try {
-
-    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-      const version = "3.4.120";
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.js`;
-    }
+    const pdfjsLib = await getPdfjsLib();
 
     const buffer = await file.arrayBuffer();
 

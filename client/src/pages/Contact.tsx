@@ -35,6 +35,8 @@ export default function Contact() {
           ]}
           title="Contact PDFo Support | Kuhu Labs"
           description="Get in touch with the PDFo team. Support, API inquiries, and feedback. Proudly built by Kuhu Labs in India."
+          keywords="contact pdfo, pdfo support, pdf tool help"
+          canonicalUrl={`${window.location.origin}/contact`}
         />
 
         {/* 1. Hero Section */}

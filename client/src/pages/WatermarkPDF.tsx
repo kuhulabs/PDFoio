@@ -276,7 +276,7 @@ export default function WatermarkPDF() {
                         <Label>Watermark Text</Label>
                         <Select
                           value={
-                            TEXT_PRESETS.includes(settings.text)
+                            TEXT_PRESETS.includes(settings.text ?? "")
                               ? settings.text
                               : "custom"
                           }
@@ -303,7 +303,7 @@ export default function WatermarkPDF() {
                           </SelectContent>
                         </Select>
 
-                        {(!TEXT_PRESETS.includes(settings.text) ||
+                        {(!TEXT_PRESETS.includes(settings.text ?? "") ||
                           settings.text === "") && (
                           <Input
                             value={settings.text}
@@ -527,16 +527,16 @@ export default function WatermarkPDF() {
                               style={{
                                 opacity: settings.opacity,
                                 transform: `rotate(${settings.rotation}deg)`,
-                                justifyContent: settings.position.includes(
+                                justifyContent: (settings.position ?? "center").includes(
                                   "left",
                                 )
                                   ? "flex-start"
-                                  : settings.position.includes("right")
+                                  : (settings.position ?? "center").includes("right")
                                     ? "flex-end"
                                     : "center",
-                                alignItems: settings.position.includes("top")
+                                alignItems: (settings.position ?? "center").includes("top")
                                   ? "flex-start"
-                                  : settings.position.includes("bottom")
+                                  : (settings.position ?? "center").includes("bottom")
                                     ? "flex-end"
                                     : "center",
                                 padding: "2rem",

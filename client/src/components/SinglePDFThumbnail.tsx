@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import * as pdfjsLib from "pdfjs-dist";
+import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 import pLimit from "p-limit";
-import "../lib/pdf-worker-config";
+import { getPdfjsLib } from "@/lib/pdfjs-loader";
 
 export interface PDFThumbnail {
   file: File;
@@ -41,8 +41,8 @@ export async function generatePDFThumbnail(
   signal?: AbortSignal,
 ): Promise<PDFThumbnail> {
   let canvas: HTMLCanvasElement | null = null;
-  let pdf: pdfjsLib.PDFDocumentProxy | null = null;
-  let page: pdfjsLib.PDFPageProxy | null = null;
+  let pdf: PDFDocumentProxy | null = null;
+  let page: PDFPageProxy | null = null;
 
   try {
     // Check if aborted
@@ -96,6 +96,8 @@ export async function generatePDFThumbnail(
       throw new PDFThumbnailError("Generation aborted");
     }
 
+    const pdfjsLib = await getPdfjsLib();
+
     const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
       // Optimize for thumbnails
@@ -103,9 +105,6 @@ export async function generatePDFThumbnail(
       cMapPacked: true,
       standardFontDataUrl:
         "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/standard_fonts/",
-      // Disable text layer for thumbnails
-      disableTextLayer: true,
-      disableAnnotationLayer: true,
     });
 
     pdf = await loadingTask.promise;
