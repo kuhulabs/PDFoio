@@ -21,9 +21,17 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     
-    <!-- Fonts: using the system font stack for instant FCP — no network round
-         trip. JetBrains Mono is declared via @font-face in index.css and only
-         loads on demand when an element actually uses font-mono. -->
+    <!-- Fonts: system stack covers FCP instantly. Inter is preloaded below
+         (with font-display: swap) so the heading swaps to brand type once
+         the woff2 lands, without ever blocking LCP. JetBrains Mono is
+         declared via @font-face in index.css and loads on demand. -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2"
+      crossorigin
+    >
 
     <!-- Preload the LCP hero background so the browser starts fetching it
          before the JS bundle parses. imagesrcset + imagesizes must mirror
