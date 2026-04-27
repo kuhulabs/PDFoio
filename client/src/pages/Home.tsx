@@ -30,10 +30,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { MainFooter } from "@/components/MainFooter";
 import { SEOHead } from "@/components/SEOHead";
-import heroBg from "@assets/hero_bg_1768974463459.webp";
-import heroBg768 from "@assets/hero_bg_768.webp";
-import heroBg1280 from "@assets/hero_bg_1280.webp";
-import heroBg1768 from "@assets/hero_bg_1768.webp";
+// Hero variants are served from /public/assets/ so the URLs are stable in
+// dev and production. This lets the <link rel="preload"> in index.html
+// match the <img> src exactly and avoids a double-fetch.
+const heroBg = "/assets/hero_bg_1280.webp";
+const heroBg768 = "/assets/hero_bg_768.webp";
+const heroBg1280 = "/assets/hero_bg_1280.webp";
+const heroBg1768 = "/assets/hero_bg_1768.webp";
 
 // 2. Updated Interface to accept React Component for Icon
 interface Tool {

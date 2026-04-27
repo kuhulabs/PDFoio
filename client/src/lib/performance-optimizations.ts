@@ -153,7 +153,7 @@ export class PDFPerformanceOptimizer {
   }
 
   static async initializeOptimizedWorker() {
-    initializePDFJS();
+    await initializePDFJS();
     return pdfjsLib;
   }
 }

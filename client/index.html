@@ -21,16 +21,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     
-    <!-- Critical font (Inter): preconnect + preload + async stylesheet.
-         JetBrains Mono is declared via @font-face in index.css so it only
+    <!-- Fonts: using the system font stack for instant FCP — no network round
+         trip. JetBrains Mono is declared via @font-face in index.css and only
          loads on demand when an element actually uses font-mono. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    </noscript>
+
+    <!-- Preload the LCP hero background so the browser starts fetching it
+         before the JS bundle parses. -->
+    <link rel="preload" as="image" href="/assets/hero_bg_1280.webp" type="image/webp" fetchpriority="high">
     
     <!-- Analytics -->
     <script async src="https://plausible.io/js/pa-zdPlswqHtQW8aiyX6hR6z.js"></script>

@@ -8,10 +8,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-// Static pages (immediate load)
-import Home from "@/pages/Home";
-
-// Lazy load all other pages
+// Lazy load all pages, including Home, so the initial JS bundle stays
+// small and TBT/Speed Index improve. The hero image is preloaded in
+// index.html so LCP is unaffected.
+const Home = lazy(() => import("@/pages/Home"));
 const About = lazy(() => import("@/pages/About"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const ApiPage = lazy(() => import("@/pages/ApiPage"));
