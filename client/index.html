@@ -26,8 +26,19 @@
          loads on demand when an element actually uses font-mono. -->
 
     <!-- Preload the LCP hero background so the browser starts fetching it
-         before the JS bundle parses. -->
-    <link rel="preload" as="image" href="/assets/hero_bg_1280.webp" type="image/webp" fetchpriority="high">
+         before the JS bundle parses. imagesrcset + imagesizes must mirror
+         the <img>'s srcSet/sizes exactly, otherwise the browser preloads
+         one variant and then renders a different one (wasted bytes +
+         "preloaded but not used" console warning). -->
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/hero_bg_1280.webp"
+      imagesrcset="/assets/hero_bg_768.webp 768w, /assets/hero_bg_1280.webp 1280w, /assets/hero_bg_1768.webp 1768w"
+      imagesizes="100vw"
+      type="image/webp"
+      fetchpriority="high"
+    >
     
     <!-- Analytics -->
     <script async src="https://plausible.io/js/pa-zdPlswqHtQW8aiyX6hR6z.js"></script>
