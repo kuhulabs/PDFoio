@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "wouter";
+import { prefetchPage } from "@/lib/page-loaders";
 // 1. All icons imported from lucide-react (Matches your other pages)
 import {
   Coffee,
@@ -461,7 +462,12 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   {filteredTools.map((tool) => (
                     <Link key={tool.path} href={tool.path}>
-                      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group">
+                      <div
+                        onMouseEnter={() => prefetchPage(tool.path)}
+                        onFocus={() => prefetchPage(tool.path)}
+                        onTouchStart={() => prefetchPage(tool.path)}
+                        className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group"
+                      >
                         <div className="flex items-center">
                           <div
                             className={`w-14 h-14 ${tool.iconBg} rounded-xl flex items-center justify-center text-white mr-5 group-hover:scale-105 transition-transform`}

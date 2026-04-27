@@ -7,46 +7,48 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { pageLoaders } from "@/lib/page-loaders";
 
-// Lazy load all pages, including Home, so the initial JS bundle stays
-// small and TBT/Speed Index improve. The hero image is preloaded in
-// index.html so LCP is unaffected.
-const Home = lazy(() => import("@/pages/Home"));
-const About = lazy(() => import("@/pages/About"));
-const Contact = lazy(() => import("@/pages/Contact"));
-const ApiPage = lazy(() => import("@/pages/ApiPage"));
-const Privacy = lazy(() => import("@/pages/Privacy"));
-const Terms = lazy(() => import("@/pages/Terms"));
+// All page chunks are defined in `page-loaders.ts` so the same import
+// functions back both `lazy()` (for routing) and `prefetchPage()` (for
+// hover prefetching from Home). Single source of truth — adding a new
+// page only requires one edit there.
+const Home = lazy(pageLoaders["/"]);
+const About = lazy(pageLoaders["/about"]);
+const Contact = lazy(pageLoaders["/contact"]);
+const ApiPage = lazy(pageLoaders["/api"]);
+const Privacy = lazy(pageLoaders["/privacy"]);
+const Terms = lazy(pageLoaders["/terms"]);
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 // PDF Tools
-const AISummarizer = lazy(() => import("@/pages/AISummarizer"));
-const MergePDF = lazy(() => import("@/pages/MergePDF"));
-const CompressPDF = lazy(() => import("@/pages/CompressPDF"));
-const SplitPDF = lazy(() => import("@/pages/SplitPDF"));
-const RotatePDF = lazy(() => import("@/pages/RotatePDF"));
-const UnlockPDF = lazy(() => import("@/pages/UnlockPDF"));
-const LockPDF = lazy(() => import("@/pages/LockPDF"));
-const WatermarkPDF = lazy(() => import("@/pages/WatermarkPDF"));
-const EditMetadata = lazy(() => import("@/pages/EditMetadata"));
-const PageNumbers = lazy(() => import("@/pages/PageNumbers"));
-const RemoveBlankPages = lazy(() => import("@/pages/RemoveBlankPages"));
-const DeletePages = lazy(() => import("@/pages/DeletePages"));
-const ReorderPages = lazy(() => import("@/pages/ReorderPages"));
+const AISummarizer = lazy(pageLoaders["/summarize"]);
+const MergePDF = lazy(pageLoaders["/merge"]);
+const CompressPDF = lazy(pageLoaders["/compress"]);
+const SplitPDF = lazy(pageLoaders["/split"]);
+const RotatePDF = lazy(pageLoaders["/rotate"]);
+const UnlockPDF = lazy(pageLoaders["/unlock"]);
+const LockPDF = lazy(pageLoaders["/lock"]);
+const WatermarkPDF = lazy(pageLoaders["/watermark"]);
+const EditMetadata = lazy(pageLoaders["/metadata"]);
+const PageNumbers = lazy(pageLoaders["/page-numbers"]);
+const RemoveBlankPages = lazy(pageLoaders["/remove-blank-pages"]);
+const DeletePages = lazy(pageLoaders["/delete-pages"]);
+const ReorderPages = lazy(pageLoaders["/reorder"]);
 
 // Conversions
-const WordToPDF = lazy(() => import("@/pages/WordToPDF"));
-const ExcelToPDF = lazy(() => import("@/pages/ExcelToPDF"));
-const PNGToPDF = lazy(() => import("@/pages/PNGToPDF"));
-const ImagesToPDF = lazy(() => import("@/pages/ImagesToPDF"));
-const PDFToWord = lazy(() => import("@/pages/PDFToWord"));
-const PDFToExcel = lazy(() => import("@/pages/PDFToExcel"));
-const PDFToPPT = lazy(() => import("@/pages/PDFToPPT"));
-const PDFToJPG = lazy(() => import("@/pages/PDFToJPG"));
-const PDFToPNG = lazy(() => import("@/pages/PDFToPNG"));
-const PDFToTIFF = lazy(() => import("@/pages/PDFToTIFF"));
-const PDFToTXT = lazy(() => import("@/pages/PDFToTXT"));
-const PDFToJSON = lazy(() => import("@/pages/PDFToJSON"));
+const WordToPDF = lazy(pageLoaders["/word-to-pdf"]);
+const ExcelToPDF = lazy(pageLoaders["/excel-to-pdf"]);
+const PNGToPDF = lazy(pageLoaders["/png-to-pdf"]);
+const ImagesToPDF = lazy(pageLoaders["/images-to-pdf"]);
+const PDFToWord = lazy(pageLoaders["/pdf-to-word"]);
+const PDFToExcel = lazy(pageLoaders["/pdf-to-excel"]);
+const PDFToPPT = lazy(pageLoaders["/pdf-to-ppt"]);
+const PDFToJPG = lazy(pageLoaders["/pdf-to-jpg"]);
+const PDFToPNG = lazy(pageLoaders["/pdf-to-png"]);
+const PDFToTIFF = lazy(pageLoaders["/pdf-to-tiff"]);
+const PDFToTXT = lazy(pageLoaders["/pdf-to-txt"]);
+const PDFToJSON = lazy(pageLoaders["/pdf-to-json"]);
 
 // Loading fallback — lightweight skeleton that matches a typical tool page
 // layout, avoiding the layout shift / flash of a full-screen spinner.

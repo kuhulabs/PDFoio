@@ -7,6 +7,24 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import { spawn } from "child_process";
+import rateLimit from "express-rate-limit";
+
+/* =======================
+   RATE LIMIT
+   =======================
+   Caps each IP at 20 requests / minute across all /api routes. PDF
+   work is heavy (Ghostscript spawn, pdf-lib parsing, etc.) so a
+   handful of bots could pin CPU and starve real users. Keep the
+   limit generous enough that an actual person clicking through tools
+   stays well under it. */
+
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 20,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many requests, please slow down." },
+});
 
 /* =======================
    CONFIG
@@ -219,6 +237,10 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express,
 ): Promise<Server> {
+  // Apply rate limiting to every /api route. Mounted before route
+  // handlers so it runs first; Express composes middleware in order.
+  app.use("/api/", apiLimiter);
+
   /* ---------- LOCK PDF ---------- */
   app.post(
     "/api/pdf/lock",

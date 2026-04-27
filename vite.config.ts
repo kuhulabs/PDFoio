@@ -48,8 +48,7 @@ export default defineConfig({
             if (id.includes("jszip")) return "jszip-vendor";
             if (id.includes("pptxgenjs")) return "pptx-vendor";
             if (id.includes("mammoth")) return "mammoth-vendor";
-            if (id.includes("recharts")) return "charts-vendor";
-            if (id.includes("framer-motion")) return "motion-vendor";
+            if (id.includes("@dnd-kit")) return "dnd-vendor";
             if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
             if (id.includes("react") || id.includes("wouter") || id.includes("@tanstack")) return "react-vendor";
           }
