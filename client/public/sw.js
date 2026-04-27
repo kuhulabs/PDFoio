@@ -8,7 +8,7 @@
 // Bump CACHE_VERSION when shipping breaking SW changes; old caches are
 // purged on activate.
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const STATIC_CACHE = `pdfo-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `pdfo-runtime-${CACHE_VERSION}`;
 const FONT_CACHE = `pdfo-fonts-${CACHE_VERSION}`;
