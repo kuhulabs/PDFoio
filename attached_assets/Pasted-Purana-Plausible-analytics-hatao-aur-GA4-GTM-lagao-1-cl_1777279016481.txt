@@ -1,0 +1,114 @@
+Purana Plausible analytics hatao aur GA4 + GTM lagao.
+
+1. client/index.html mein:
+   - Yeh 3 lines HATAO:
+     <script async src="https://plausible.io/js/pa-zdPlswqHtQW8aiyX6hR6z.js"></script>
+     window.plausible=window.plausible||...
+     plausible.init()
+
+   - <head> ke SABSE UPAR yeh add karo (charset ke baad):
+     <!-- Google Tag Manager -->
+     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+     })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+   - <body> tag ke TURANT BAAD yeh add karo:
+     <!-- Google Tag Manager (noscript) -->
+     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+2. client/src/lib/analytics.ts poora replace karo:
+
+// Analytics — GA4 via GTM dataLayer + fallback direct gtag
+// Events fire in production only; dev gets console.log
+
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}
+
+// Push event to GTM dataLayer
+function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
+  if (typeof window === 'undefined') return;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: eventName, ...params });
+}
+
+// ── Page View ─────────────────────────────────────────────────────────────
+export function trackPageView(path: string, title: string) {
+  if (import.meta.env.DEV) {
+    console.log('[Analytics] page_view:', path, title);
+    return;
+  }
+  pushEvent('page_view', { page_path: path, page_title: title });
+}
+
+// ── Tool Opened ───────────────────────────────────────────────────────────
+export function trackToolOpen(toolName: string) {
+  if (import.meta.env.DEV) {
+    console.log('[Analytics] tool_open:', toolName);
+    return;
+  }
+  pushEvent('tool_open', { tool_name: toolName });
+}
+
+// ── File Uploaded ─────────────────────────────────────────────────────────
+export function trackFileUpload(toolName: string, fileCount: number, totalSizeMB: number) {
+  if (import.meta.env.DEV) {
+    console.log('[Analytics] file_upload:', toolName, fileCount, totalSizeMB + 'MB');
+    return;
+  }
+  pushEvent('file_upload', {
+    tool_name: toolName,
+    file_count: fileCount,
+    total_size_mb: Math.round(totalSizeMB * 10) / 10,
+  });
+}
+
+// ── Tool Success ──────────────────────────────────────────────────────────
+export function trackToolSuccess(toolName: string, fileCount: number) {
+  if (import.meta.env.DEV) {
+    console.log('[Analytics] tool_success:', toolName, fileCount);
+    return;
+  }
+  pushEvent('tool_success', { tool_name: toolName, file_count: fileCount });
+}
+
+// ── Tool Error ────────────────────────────────────────────────────────────
+export function trackToolError(toolName: string, errorMessage: string) {
+  if (import.meta.env.DEV) {
+    console.log('[Analytics] tool_error:', toolName, errorMessage);
+    return;
+  }
+  pushEvent('tool_error', { tool_name: toolName, error_message: errorMessage });
+}
+
+// ── File Downloaded ───────────────────────────────────────────────────────
+export function trackDownload(toolName: string, fileName: string) {
+  if (import.meta.env.DEV) {
+    console.log('[Analytics] file_download:', toolName, fileName);
+    return;
+  }
+  pushEvent('file_download', { tool_name: toolName, file_name: fileName });
+}
+
+// ── Backward compatible — purane trackToolUsage calls kaam karte rahe ────
+export const trackToolUsage = async (
+  name: string,
+  category: string,
+  count: number,
+) => {
+  trackToolSuccess(name, count);
+};
+
+3. client/src/types/global.d.ts mein purani plausible type hatao, yeh rakho:
+interface Window {
+  dataLayer: any[];
+  gtag: (...args: any[]) => void;
+}
+
+4. GTM-XXXXXXX ki jagah apna actual GTM ID daalo dono jagah index.html mein

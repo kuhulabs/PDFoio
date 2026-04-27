@@ -1,7 +1,4 @@
-declare global {
-  interface Window {
-    plausible?: (eventName: string, options?: Record<string, unknown>) => void;
-  }
+interface Window {
+  dataLayer: any[];
+  gtag: (...args: any[]) => void;
 }
-
-export {};
