@@ -26,10 +26,15 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             {/* Replaced inline styles with Tailwind classes for better performance */}
-            <img 
-              src="/logo.webp" 
-              alt="PDFo - Free Online PDF Tools Home" 
+            <img
+              src="/logo.webp"
+              alt="PDFo - Free Online PDF Tools Home"
+              width={120}
+              height={40}
               className="w-[120px] h-[40px] object-contain"
+              loading="eager"
+              decoding="async"
+              {...({ fetchpriority: "high" } as Record<string, string>)}
             />
           </Link>
 
