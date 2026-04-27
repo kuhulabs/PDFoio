@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -207,13 +208,13 @@ export default function WatermarkPDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Watermark PDF", url: `${window.location.origin}/watermark` },
+          { name: "Home", url: SITE_URL },
+          { name: "Watermark PDF", url: `${SITE_URL}/watermark` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="watermark pdf, add watermark to pdf, stamp pdf, protect pdf document"
-        canonicalUrl={`${window.location.origin}/watermark`}
+        canonicalUrl={`${SITE_URL}/watermark`}
         faqs={seoData.faqs}
       />
 

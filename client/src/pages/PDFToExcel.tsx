@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -105,10 +106,10 @@ export default function PDFToExcel() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
+          { name: "Home", url: SITE_URL },
           {
             name: "PDF to Excel",
-            url: `${window.location.origin}/pdf-to-excel`,
+            url: `${SITE_URL}/pdf-to-excel`,
           },
         ]}
         title={seoData.title}
@@ -117,7 +118,7 @@ export default function PDFToExcel() {
           (seoData as any).keywords ||
           "pdf to excel, convert pdf to xlsx, pdf table extractor"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-excel`}
+        canonicalUrl={`${SITE_URL}/pdf-to-excel`}
         faqs={seoData.faqs}
       />
 

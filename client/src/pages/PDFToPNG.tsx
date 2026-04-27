@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -125,8 +126,8 @@ export default function PDFToPNG() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PDF to PNG", url: `${window.location.origin}/pdf-to-png` },
+          { name: "Home", url: SITE_URL },
+          { name: "PDF to PNG", url: `${SITE_URL}/pdf-to-png` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -134,7 +135,7 @@ export default function PDFToPNG() {
           (seoData as any).keywords ||
           "pdf to png, convert pdf to transparent png, pdf image extractor"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-png`}
+        canonicalUrl={`${SITE_URL}/pdf-to-png`}
         faqs={seoData.faqs}
       />
 

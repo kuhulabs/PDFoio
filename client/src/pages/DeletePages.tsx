@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -165,7 +166,7 @@ export default function DeletePages() {
       <SEOHead
         title={seoData.title}
         description={seoData.metaDescription}
-        canonicalUrl={`${window.location.origin}/delete-pages`}
+        canonicalUrl={`${SITE_URL}/delete-pages`}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">

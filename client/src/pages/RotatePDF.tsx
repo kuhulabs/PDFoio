@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -148,13 +149,13 @@ export default function RotatePDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Rotate PDF", url: `${window.location.origin}/rotate` },
+          { name: "Home", url: SITE_URL },
+          { name: "Rotate PDF", url: `${SITE_URL}/rotate` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="rotate pdf, flip pdf pages, change pdf orientation"
-        canonicalUrl={`${window.location.origin}/rotate`}
+        canonicalUrl={`${SITE_URL}/rotate`}
         faqs={seoData.faqs}
       />
 

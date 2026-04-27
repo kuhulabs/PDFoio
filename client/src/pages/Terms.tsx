@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { SEOHead } from "@/components/SEOHead";
 import { MainFooter } from "@/components/MainFooter";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,12 +21,12 @@ export default function TermsOfUse() {
     <div className="min-h-screen flex flex-col bg-background">
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Terms of Use", url: `${window.location.origin}/terms` },
+          { name: "Home", url: SITE_URL },
+          { name: "Terms of Use", url: `${SITE_URL}/terms` },
         ]}
         title="Terms of Use - PDFo"
         description="Read the Terms of Use for PDFo. Understanding your rights and responsibilities when using our PDF tools."
-        canonicalUrl={`${window.location.origin}/terms`}
+        canonicalUrl={`${SITE_URL}/terms`}
       />
 
       {/* Hero Section */}

@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -146,13 +147,13 @@ export default function ReorderPages() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Reorder Pages", url: `${window.location.origin}/reorder` },
+          { name: "Home", url: SITE_URL },
+          { name: "Reorder Pages", url: `${SITE_URL}/reorder` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="reorder pdf pages, rearrange pdf pages, sort pdf pages"
-        canonicalUrl={`${window.location.origin}/reorder`}
+        canonicalUrl={`${SITE_URL}/reorder`}
         faqs={seoData.faqs}
       />
 

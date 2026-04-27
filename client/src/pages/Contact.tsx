@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { Link } from "wouter";
 import { SEOHead } from "@/components/SEOHead";
 import {
@@ -30,13 +31,13 @@ export default function Contact() {
       <div className="flex-1 pb-12">
         <SEOHead
           breadcrumbs={[
-            { name: "Home", url: window.location.origin },
-            { name: "Contact", url: `${window.location.origin}/contact` },
+            { name: "Home", url: SITE_URL },
+            { name: "Contact", url: `${SITE_URL}/contact` },
           ]}
           title="Contact PDFo Support | Kuhu Labs"
           description="Get in touch with the PDFo team. Support, API inquiries, and feedback. Proudly built by Kuhu Labs in India."
           keywords="contact pdfo, pdfo support, pdf tool help"
-          canonicalUrl={`${window.location.origin}/contact`}
+          canonicalUrl={`${SITE_URL}/contact`}
         />
 
         {/* 1. Hero Section */}

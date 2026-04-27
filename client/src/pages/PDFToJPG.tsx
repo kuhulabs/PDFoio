@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -126,8 +127,8 @@ export default function PDFToJPG() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PDF to JPG", url: `${window.location.origin}/pdf-to-jpg` },
+          { name: "Home", url: SITE_URL },
+          { name: "PDF to JPG", url: `${SITE_URL}/pdf-to-jpg` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -135,7 +136,7 @@ export default function PDFToJPG() {
           (seoData as any).keywords ||
           "pdf to jpg, convert pdf to images, pdf to jpeg"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-jpg`}
+        canonicalUrl={`${SITE_URL}/pdf-to-jpg`}
         faqs={seoData.faqs}
       />
 

@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useEffect } from "react";
 import { Link } from "wouter";
 import { ToolFooter } from "@/components/ToolFooter";
@@ -23,8 +24,8 @@ export default function AISummarizer() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "AI Summarizer", url: `${window.location.origin}/summarize` },
+          { name: "Home", url: SITE_URL },
+          { name: "AI Summarizer", url: `${SITE_URL}/summarize` },
         ]}
         title={
           seoData?.title || "AI PDF Summarizer - Summarize Documents Instantly"
@@ -37,7 +38,7 @@ export default function AISummarizer() {
           (seoData as any)?.keywords ||
           "ai pdf summarizer, summarize pdf, ai document analysis"
         }
-        canonicalUrl={`${window.location.origin}/summarize`}
+        canonicalUrl={`${SITE_URL}/summarize`}
       />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[70vh] flex flex-col">

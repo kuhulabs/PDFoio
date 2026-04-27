@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -258,16 +259,16 @@ export default function ImagesToPDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
+          { name: "Home", url: SITE_URL },
           {
             name: "Images to PDF",
-            url: `${window.location.origin}/images-to-pdf`,
+            url: `${SITE_URL}/images-to-pdf`,
           },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="jpg to pdf, png to pdf, convert images to pdf, merge photos to pdf"
-        canonicalUrl={`${window.location.origin}/images-to-pdf`}
+        canonicalUrl={`${SITE_URL}/images-to-pdf`}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">

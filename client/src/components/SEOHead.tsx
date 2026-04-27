@@ -1,4 +1,7 @@
 import { Helmet } from "react-helmet-async";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
+
+export { SITE_URL, SITE_NAME };
 
 interface FAQ {
   question: string;
@@ -32,9 +35,6 @@ interface SEOHeadProps {
   locale?: string;
 }
 
-// Site config
-const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://pdfo.io';
-const SITE_NAME = 'PDFo.io';
 const DEFAULT_OG_IMAGE = '/og-image.jpg';
 
 // Escape JSON-LD for security
@@ -58,8 +58,10 @@ export function SEOHead({
   locale = 'en_US',
 }: SEOHeadProps) {
 
-  // Full URLs
-  const fullCanonicalUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href : SITE_URL);
+  // Full URLs - always anchor canonical to SITE_URL, never the runtime origin
+  const fullCanonicalUrl = canonicalUrl
+    ? (canonicalUrl.startsWith('http') ? canonicalUrl : `${SITE_URL}${canonicalUrl}`)
+    : (typeof window !== 'undefined' ? `${SITE_URL}${window.location.pathname}` : SITE_URL);
   const fullOgImage = ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`;
 
   /* ---------- FAQ SCHEMA ---------- */

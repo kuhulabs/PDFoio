@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -143,13 +144,13 @@ export default function MergePDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Merge PDF", url: `${window.location.origin}/merge` },
+          { name: "Home", url: SITE_URL },
+          { name: "Merge PDF", url: `${SITE_URL}/merge` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="merge pdf, combine pdf, join pdf online, pdf merger, stitch pdf"
-        canonicalUrl={`${window.location.origin}/merge`}
+        canonicalUrl={`${SITE_URL}/merge`}
         faqs={seoData.faqs}
       />
 

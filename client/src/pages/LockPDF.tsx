@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -133,13 +134,13 @@ export default function LockPDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Lock PDF", url: `${window.location.origin}/lock` },
+          { name: "Home", url: SITE_URL },
+          { name: "Lock PDF", url: `${SITE_URL}/lock` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="lock pdf, password protect pdf, encrypt pdf, secure pdf"
-        canonicalUrl={`${window.location.origin}/lock`}
+        canonicalUrl={`${SITE_URL}/lock`}
         faqs={seoData.faqs}
       />
 

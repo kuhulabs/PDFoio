@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -153,13 +154,13 @@ export default function SplitPDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Split PDF", url: `${window.location.origin}/split` },
+          { name: "Home", url: SITE_URL },
+          { name: "Split PDF", url: `${SITE_URL}/split` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="split pdf, extract pdf pages, separate pdf pages, cut pdf online"
-        canonicalUrl={`${window.location.origin}/split`}
+        canonicalUrl={`${SITE_URL}/split`}
         faqs={seoData.faqs}
       />
 

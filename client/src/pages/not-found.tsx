@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -10,7 +11,7 @@ export default function NotFound() {
       <SEOHead
         title="404 - Page Not Found | PDFo"
         description="The page you requested could not be found."
-        canonicalUrl={`${window.location.origin}/404`}
+        canonicalUrl={`${SITE_URL}/404`}
         noIndex={true}
       />
       <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-4">

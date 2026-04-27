@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -163,13 +164,13 @@ export default function CompressPDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Compress PDF", url: `${window.location.origin}/compress` },
+          { name: "Home", url: SITE_URL },
+          { name: "Compress PDF", url: `${SITE_URL}/compress` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="compress pdf, reduce pdf size, shrink pdf, optimize pdf"
-        canonicalUrl={`${window.location.origin}/compress`}
+        canonicalUrl={`${SITE_URL}/compress`}
         faqs={seoData.faqs}
       />
 

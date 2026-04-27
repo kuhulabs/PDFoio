@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -107,8 +108,8 @@ export default function PDFToTIFF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PDF to TIFF", url: `${window.location.origin}/pdf-to-tiff` },
+          { name: "Home", url: SITE_URL },
+          { name: "PDF to TIFF", url: `${SITE_URL}/pdf-to-tiff` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -116,7 +117,7 @@ export default function PDFToTIFF() {
           (seoData as any).keywords ||
           "pdf to tiff, convert pdf to tiff, pdf to image high quality"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-tiff`}
+        canonicalUrl={`${SITE_URL}/pdf-to-tiff`}
         faqs={seoData.faqs}
       />
 

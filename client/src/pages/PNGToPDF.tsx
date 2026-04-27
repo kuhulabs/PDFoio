@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -255,8 +256,8 @@ export default function PNGToPDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PNG to PDF", url: `${window.location.origin}/png-to-pdf` },
+          { name: "Home", url: SITE_URL },
+          { name: "PNG to PDF", url: `${SITE_URL}/png-to-pdf` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -264,7 +265,7 @@ export default function PNGToPDF() {
           (seoData as any).keywords ||
           "png to pdf, convert png to pdf, image to pdf"
         }
-        canonicalUrl={`${window.location.origin}/png-to-pdf`}
+        canonicalUrl={`${SITE_URL}/png-to-pdf`}
         faqs={seoData.faqs}
       />
 

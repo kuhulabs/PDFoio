@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { SEOHead } from "@/components/SEOHead";
 import { MainFooter } from "@/components/MainFooter";
 
@@ -8,11 +9,11 @@ export default function Privacy() {
         <SEOHead 
           title="Privacy Policy | PDFo"
           description="Privacy Policy for PDFo - Your privacy is our priority."
-          canonicalUrl={`${window.location.origin}/privacy`}
+          canonicalUrl={`${SITE_URL}/privacy`}
           keywords="pdfo privacy policy, pdf privacy, secure file processing"
           breadcrumbs={[
-            { name: "Home", url: window.location.origin },
-            { name: "Privacy", url: `${window.location.origin}/privacy` },
+            { name: "Home", url: SITE_URL },
+            { name: "Privacy", url: `${SITE_URL}/privacy` },
           ]}
         />
         

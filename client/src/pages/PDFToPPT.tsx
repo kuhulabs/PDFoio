@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -95,8 +96,8 @@ export default function PDFToPPT() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PDF to PPT", url: `${window.location.origin}/pdf-to-ppt` },
+          { name: "Home", url: SITE_URL },
+          { name: "PDF to PPT", url: `${SITE_URL}/pdf-to-ppt` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -104,7 +105,7 @@ export default function PDFToPPT() {
           (seoData as any).keywords ||
           "pdf to ppt, convert pdf to powerpoint, pdf to pptx"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-ppt`}
+        canonicalUrl={`${SITE_URL}/pdf-to-ppt`}
         faqs={seoData.faqs}
       />
 

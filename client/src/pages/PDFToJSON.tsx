@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -113,8 +114,8 @@ export default function PDFToJSON() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PDF to JSON", url: `${window.location.origin}/pdf-to-json` },
+          { name: "Home", url: SITE_URL },
+          { name: "PDF to JSON", url: `${SITE_URL}/pdf-to-json` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -122,7 +123,7 @@ export default function PDFToJSON() {
           (seoData as any).keywords ||
           "pdf to json, convert pdf to json, pdf scraper, pdf data extraction"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-json`}
+        canonicalUrl={`${SITE_URL}/pdf-to-json`}
         faqs={seoData.faqs}
       />
 

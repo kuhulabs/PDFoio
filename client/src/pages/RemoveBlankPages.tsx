@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { removeBlankPagesSEO } from "@/seo/remove-blank-pages";
 import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
@@ -125,11 +126,11 @@ export default function RemoveBlankPages() {
 
   return (
     <>
-      <SEOHead breadcrumbs={[{ name: "Home", url: window.location.origin }, { name: "Remove Blank Pages", url: `${window.location.origin}/remove-blank-pages` }]}  
+      <SEOHead breadcrumbs={[{ name: "Home", url: SITE_URL }, { name: "Remove Blank Pages", url: `${SITE_URL}/remove-blank-pages` }]}  
         title={seoData.title}
         description={seoData.metaDescription}
         keywords={(seoData as any).keywords || ""}
-        canonicalUrl={`${window.location.origin}/remove-blank-pages`}
+        canonicalUrl={`${SITE_URL}/remove-blank-pages`}
       />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}

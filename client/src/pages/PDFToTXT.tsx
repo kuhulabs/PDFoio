@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -119,8 +120,8 @@ export default function PDFToTXT() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PDF to TXT", url: `${window.location.origin}/pdf-to-txt` },
+          { name: "Home", url: SITE_URL },
+          { name: "PDF to TXT", url: `${SITE_URL}/pdf-to-txt` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -128,7 +129,7 @@ export default function PDFToTXT() {
           (seoData as any).keywords ||
           "pdf to text, extract text from pdf, convert pdf to txt"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-txt`}
+        canonicalUrl={`${SITE_URL}/pdf-to-txt`}
         faqs={seoData.faqs}
       />
 

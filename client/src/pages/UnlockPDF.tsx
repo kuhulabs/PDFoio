@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -141,13 +142,13 @@ export default function UnlockPDF() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Unlock PDF", url: `${window.location.origin}/unlock` },
+          { name: "Home", url: SITE_URL },
+          { name: "Unlock PDF", url: `${SITE_URL}/unlock` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="unlock pdf, remove pdf password, decrypt pdf, open protected pdf"
-        canonicalUrl={`${window.location.origin}/unlock`}
+        canonicalUrl={`${SITE_URL}/unlock`}
         faqs={seoData.faqs}
       />
 

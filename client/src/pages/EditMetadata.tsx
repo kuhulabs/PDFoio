@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -156,13 +157,13 @@ export default function EditMetadata() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Edit Metadata", url: `${window.location.origin}/metadata` },
+          { name: "Home", url: SITE_URL },
+          { name: "Edit Metadata", url: `${SITE_URL}/metadata` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="edit pdf metadata, change pdf author, pdf title editor, pdf properties"
-        canonicalUrl={`${window.location.origin}/metadata`}
+        canonicalUrl={`${SITE_URL}/metadata`}
         faqs={seoData.faqs}
       />
 

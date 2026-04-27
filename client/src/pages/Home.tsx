@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import { prefetchPage } from "@/lib/page-loaders";
@@ -88,7 +89,7 @@ export default function Home() {
       name: "PDFo",
       description:
         "Free online PDF tools for professionals and businesses. Securely merge, split, and convert PDF documents with ease.",
-      url: typeof window !== "undefined" ? window.location.origin : "",
+      url: typeof window !== "undefined" ? SITE_URL : "",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Any",
       offers: {
@@ -316,7 +317,7 @@ export default function Home() {
         description={homeSEO.description}
         keywords={homeSEO.keywords}
         canonicalUrl={
-          typeof window !== "undefined" ? window.location.origin : ""
+          typeof window !== "undefined" ? SITE_URL : ""
         }
         structuredData={homeSEO.structuredData}
       />

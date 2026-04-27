@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,13 +27,13 @@ export default function About() {
       <div className="flex-1 pb-12">
         <SEOHead 
           breadcrumbs={[
-            { name: "Home", url: window.location.origin },
-            { name: "About", url: `${window.location.origin}/about` }
+            { name: "Home", url: SITE_URL },
+            { name: "About", url: `${SITE_URL}/about` }
           ]}  
           title="About PDFo - Simple, Secure & Free PDF Tools"
           description="PDFo helps individuals and businesses work with PDFs easily using fast, secure, and privacy-first online tools. No sign-up, no watermarks, 100% free."
           keywords="about pdfo, free pdf tools, secure pdf tools"
-          canonicalUrl={`${window.location.origin}/about`}
+          canonicalUrl={`${SITE_URL}/about`}
         />
 
         {/* 1. Hero Section */}

@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -106,10 +107,10 @@ export default function PageNumbers() {
         title={seoData.title}
         description={seoData.metaDescription}
         keywords="add page numbers to pdf, pdf pagination online, number pdf pages"
-        canonicalUrl={`${window.location.origin}/page-numbers`}
+        canonicalUrl={`${SITE_URL}/page-numbers`}
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "Page Numbers", url: `${window.location.origin}/page-numbers` },
+          { name: "Home", url: SITE_URL },
+          { name: "Page Numbers", url: `${SITE_URL}/page-numbers` },
         ]}
         faqs={seoData.faqs}
       />

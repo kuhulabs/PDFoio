@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -103,8 +104,8 @@ export default function PDFToWord() {
     <>
       <SEOHead
         breadcrumbs={[
-          { name: "Home", url: window.location.origin },
-          { name: "PDF to Word", url: `${window.location.origin}/pdf-to-word` },
+          { name: "Home", url: SITE_URL },
+          { name: "PDF to Word", url: `${SITE_URL}/pdf-to-word` },
         ]}
         title={seoData.title}
         description={seoData.metaDescription}
@@ -112,7 +113,7 @@ export default function PDFToWord() {
           (seoData as any).keywords ||
           "pdf to word, convert pdf to docx, editable pdf"
         }
-        canonicalUrl={`${window.location.origin}/pdf-to-word`}
+        canonicalUrl={`${SITE_URL}/pdf-to-word`}
         faqs={seoData.faqs}
       />
 
