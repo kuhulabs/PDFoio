@@ -1,4 +1,4 @@
-import { TOOL_SEO } from "@/seo/seo";
+import { removeBlankPagesSEO } from "@/seo/remove-blank-pages";
 import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
@@ -23,7 +23,7 @@ interface PageInfo {
 }
 
 export default function RemoveBlankPages() {
-  const seoData = TOOL_SEO['remove-blank-pages'];
+  const seoData = removeBlankPagesSEO;
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

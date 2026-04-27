@@ -22,7 +22,7 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToTxtSEO } from "@/seo/pdf-to-txt";
 import {
   ArrowLeft,
   FileText,
@@ -37,7 +37,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToTXT() {
-  const seoData = TOOL_SEO["pdf-to-txt"];
+  const seoData = pdfToTxtSEO;
   const [file, setFile] = useState<File | null>(null);
   const [includePageBreaks, setIncludePageBreaks] = useState(true);
   const [lineEndingStyle, setLineEndingStyle] = useState<

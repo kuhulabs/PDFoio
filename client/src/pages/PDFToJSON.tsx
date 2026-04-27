@@ -21,7 +21,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToJsonSEO } from "@/seo/pdf-to-json";
 import {
   ArrowLeft,
   FileJson,
@@ -36,7 +36,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToJSON() {
-  const seoData = TOOL_SEO["pdf-to-json"];
+  const seoData = pdfToJsonSEO;
   const [file, setFile] = useState<File | null>(null);
   const [structureType, setStructureType] = useState<
     "pages" | "words" | "tables"

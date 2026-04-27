@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { SEOHead } from "@/components/SEOHead";
-import { TOOL_SEO } from "@/seo/seo";
+import { watermarkSEO } from "@/seo/watermark";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
 import {
   addWatermarkToPDF,
@@ -108,7 +108,7 @@ const TEXT_PRESETS = [
 ];
 
 export default function WatermarkPDF() {
-  const seoData = TOOL_SEO["watermark"];
+  const seoData = watermarkSEO;
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [settings, setSettings] = useState<WatermarkSettings>({

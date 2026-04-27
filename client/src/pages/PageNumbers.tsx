@@ -10,7 +10,7 @@ import { ToolSEOContent } from "@/components/ToolSEOContent";
 import { addPageNumbers, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
-import { TOOL_SEO } from "@/seo/seo";
+import { pageNumbersSEO } from "@/seo/page-numbers";
 import {
   ArrowLeft,
   ListOrdered, // ✅ FIXED: Using 'ListOrdered' to match Home Page
@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 
 export default function PageNumbers() {
-  const seoData = TOOL_SEO["page-numbers"] || {
+  const seoData = pageNumbersSEO || {
     title: "Add Page Numbers to PDF",
     h1: "Add PDF Page Numbers Online",
     shortIntro:

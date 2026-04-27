@@ -15,7 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToExcelSEO } from "@/seo/pdf-to-excel";
 import {
   ArrowLeft,
   FileSpreadsheet,
@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToExcel() {
-  const seoData = TOOL_SEO["pdf-to-excel"];
+  const seoData = pdfToExcelSEO;
   const [file, setFile] = useState<File | null>(null);
   const [autoDetectTables, setAutoDetectTables] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);

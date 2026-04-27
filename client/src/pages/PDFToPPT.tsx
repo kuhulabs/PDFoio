@@ -9,7 +9,7 @@ import { convertPDFToPPT, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToPptSEO } from "@/seo/pdf-to-ppt";
 import {
   ArrowLeft,
   Presentation,
@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToPPT() {
-  const seoData = TOOL_SEO["pdf-to-ppt"];
+  const seoData = pdfToPptSEO;
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

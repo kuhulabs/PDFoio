@@ -19,7 +19,7 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToPngSEO } from "@/seo/pdf-to-png";
 import {
   ArrowLeft,
   Images, // ✅ FIXED: Using 'Images' (Multiple) to match Home Page
@@ -37,7 +37,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToPNG() {
-  const seoData = TOOL_SEO["pdf-to-png"];
+  const seoData = pdfToPngSEO;
   const [file, setFile] = useState<File | null>(null);
   const [transparentBackground, setTransparentBackground] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);

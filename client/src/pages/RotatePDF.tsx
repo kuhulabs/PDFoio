@@ -6,7 +6,7 @@ import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
-import { TOOL_SEO } from "@/seo/seo";
+import { rotateSEO } from "@/seo/rotate";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
 import {
   rotatePDFPages,
@@ -34,7 +34,7 @@ interface PDFPage {
 }
 
 export default function RotatePDF() {
-  const seoData = TOOL_SEO["rotate"];
+  const seoData = rotateSEO;
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);

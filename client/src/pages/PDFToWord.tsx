@@ -15,7 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToWordSEO } from "@/seo/pdf-to-word";
 import {
   ArrowLeft,
   FileType, // ✅ FIXED: Using 'FileType' to match Home Page
@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToWord() {
-  const seoData = TOOL_SEO["pdf-to-word"];
+  const seoData = pdfToWordSEO;
   const [file, setFile] = useState<File | null>(null);
   const [ocrEnabled, setOcrEnabled] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);

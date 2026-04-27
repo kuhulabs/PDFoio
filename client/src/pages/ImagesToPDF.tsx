@@ -13,7 +13,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { imagesToPdfSEO } from "@/seo/images-to-pdf";
 import {
   DndContext,
   closestCenter,
@@ -116,7 +116,7 @@ function SortableImageItem({
 }
 
 export default function ImagesToPDF() {
-  const seoData = TOOL_SEO["images-to-pdf"] || {
+  const seoData = imagesToPdfSEO || {
     title: "Images to PDF",
     metaDescription: "Convert images to PDF",
     h1: "Images to PDF",

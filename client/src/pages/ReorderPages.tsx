@@ -14,7 +14,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { reorderSEO } from "@/seo/reorder";
 import {
   ArrowLeft,
   ArrowUpDown,
@@ -34,7 +34,7 @@ interface PDFPage {
 }
 
 export default function ReorderPages() {
-  const seoData = TOOL_SEO["reorder"] || {
+  const seoData = reorderSEO || {
     title: "Reorder Pages",
     h1: "Reorder Pages",
     shortIntro: "Reorder your PDF pages.",

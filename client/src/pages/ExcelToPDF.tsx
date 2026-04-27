@@ -9,7 +9,7 @@ import { convertExcelToPDF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { excelToPdfSEO } from "@/seo/excel-to-pdf";
 import {
   ArrowLeft,
   FileSpreadsheet,
@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 export default function ExcelToPDF() {
-  const seoData = TOOL_SEO["excel-to-pdf"];
+  const seoData = excelToPdfSEO;
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

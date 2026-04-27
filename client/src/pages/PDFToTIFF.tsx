@@ -17,7 +17,7 @@ import { convertPDFToTIFF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToTiffSEO } from "@/seo/pdf-to-tiff";
 import {
   ArrowLeft,
   FileImage,
@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToTIFF() {
-  const seoData = TOOL_SEO["pdf-to-tiff"];
+  const seoData = pdfToTiffSEO;
   const [file, setFile] = useState<File | null>(null);
   const [compressionType, setCompressionType] = useState<
     "none" | "lzw" | "jpeg"

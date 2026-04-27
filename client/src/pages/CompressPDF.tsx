@@ -8,7 +8,7 @@ import { downloadBlob, type CompressionLevel } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { SEOHead } from "@/components/SEOHead";
-import { TOOL_SEO } from "@/seo/seo";
+import { compressSEO } from "@/seo/compress";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
 import {
   ArrowLeft,
@@ -32,7 +32,7 @@ export default function CompressPDF() {
   const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
-  const seoData = TOOL_SEO["compress"];
+  const seoData = compressSEO;
 
   useEffect(() => {
     window.scrollTo(0, 0);

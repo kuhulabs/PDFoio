@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea"; // Assuming you have this, otherwise Input is fine
 import { SEOHead } from "@/components/SEOHead";
-import { TOOL_SEO } from "@/seo/seo";
+import { metadataSEO } from "@/seo/metadata";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
 import {
   editPDFMetadata,
@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 
 export default function EditMetadata() {
-  const seoData = TOOL_SEO["metadata"];
+  const seoData = metadataSEO;
   const [file, setFile] = useState<File | null>(null);
   const [metadata, setMetadata] = useState<PDFMetadata>({
     title: "",

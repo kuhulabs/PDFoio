@@ -14,7 +14,7 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
-import { TOOL_SEO } from "@/seo/seo";
+import { deletePagesSEO } from "@/seo/delete-pages";
 import {
   ArrowLeft,
   Trash2,
@@ -35,7 +35,7 @@ interface PDFPage {
 }
 
 export default function DeletePages() {
-  const seoData = TOOL_SEO["delete-pages"] || {
+  const seoData = deletePagesSEO || {
       title: "Delete PDF Pages",
       h1: "Delete PDF Pages",
       shortIntro: "Remove unwanted pages from your PDF securely.",

@@ -19,7 +19,7 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pdfToJpgSEO } from "@/seo/pdf-to-jpg";
 import {
   ArrowLeft,
   Image as ImageIcon,
@@ -37,7 +37,7 @@ import {
 } from "lucide-react";
 
 export default function PDFToJPG() {
-  const seoData = TOOL_SEO["pdf-to-jpg"];
+  const seoData = pdfToJpgSEO;
   const [file, setFile] = useState<File | null>(null);
   const [quality, setQuality] = useState(90);
   const [isProcessing, setIsProcessing] = useState(false);

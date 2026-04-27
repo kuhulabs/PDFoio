@@ -9,7 +9,7 @@ import { convertWordToPDF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { wordToPdfSEO } from "@/seo/word-to-pdf";
 import {
   ArrowLeft,
   FileType, // ✅ FIXED: Using 'FileType' to match Home Page
@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 export default function WordToPDF() {
-  const seoData = TOOL_SEO["word-to-pdf"];
+  const seoData = wordToPdfSEO;
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

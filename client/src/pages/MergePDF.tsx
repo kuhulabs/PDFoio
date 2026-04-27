@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { ProgressBar } from "@/components/ProgressBar";
-import { TOOL_SEO } from "@/seo/seo";
+import { mergeSEO } from "@/seo/merge";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
 
 export default function MergePDF() {
@@ -30,7 +30,7 @@ export default function MergePDF() {
   const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
-  const seoData = TOOL_SEO["merge"];
+  const seoData = mergeSEO;
 
   // Scroll to top on mount
   useEffect(() => {

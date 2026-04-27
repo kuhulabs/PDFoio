@@ -13,7 +13,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { trackToolUsage } from "@/lib/analytics";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { pngToPdfSEO } from "@/seo/png-to-pdf";
 import {
   DndContext,
   closestCenter,
@@ -117,7 +117,7 @@ function SortableImageItem({
 }
 
 export default function PNGToPDF() {
-  const seoData = TOOL_SEO["png-to-pdf"];
+  const seoData = pngToPdfSEO;
   const [images, setImages] = useState<ImageFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

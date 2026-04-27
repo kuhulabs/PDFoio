@@ -12,7 +12,7 @@ import {
 } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from "@/components/SEOHead";
-import { TOOL_SEO } from "@/seo/seo";
+import { splitSEO } from "@/seo/split";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
 import {
   ArrowLeft,
@@ -37,7 +37,7 @@ interface SplitPoint {
 }
 
 export default function SplitPDF() {
-  const seoData = TOOL_SEO["split"];
+  const seoData = splitSEO;
 
   const [files, setFiles] = useState<File[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

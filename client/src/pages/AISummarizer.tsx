@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { ToolFooter } from "@/components/ToolFooter";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { TOOL_SEO } from "@/seo/seo";
+import { summarizeSEO } from "@/seo/summarize";
 import {
   ArrowLeft,
   Bot,
@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 export default function AISummarizer() {
-  const seoData = TOOL_SEO["summarize"];
+  const seoData = summarizeSEO;
 
   useEffect(() => {
     window.scrollTo(0, 0);

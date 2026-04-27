@@ -10,7 +10,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { ToolSEOContent } from "@/components/ToolSEOContent";
-import { TOOL_SEO } from "@/seo/seo";
+import { unlockSEO } from "@/seo/unlock";
 import {
   ArrowLeft,
   Unlock,
@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 export default function UnlockPDF() {
-  const seoData = TOOL_SEO["unlock"];
+  const seoData = unlockSEO;
 
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
