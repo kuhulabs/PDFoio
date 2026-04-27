@@ -1,0 +1,77 @@
+Karo yeh changes:
+
+1. client/index.html mein — purana Plausible HATAO (yeh 3 lines delete karo):
+<script async src="https://plausible.io/js/pa-zdPlswqHtQW8aiyX6hR6z.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+2. client/index.html mein <head> ke andar sabse pehle (charset meta ke turant baad) yeh add karo:
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PBF2RCNS');</script>
+
+3. client/index.html mein <body> tag ke turant baad yeh add karo:
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PBF2RCNS"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+4. client/src/lib/analytics.ts ka poora content replace karo with:
+
+// Analytics — GA4 via GTM dataLayer
+// Events fire in production only; dev gets console.log
+
+function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
+  if (typeof window === 'undefined') return;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: eventName, ...params });
+}
+
+export function trackPageView(path: string, title: string) {
+  if (import.meta.env.DEV) { console.log('[Analytics] page_view:', path); return; }
+  pushEvent('page_view', { page_path: path, page_title: title });
+}
+
+export function trackToolOpen(toolName: string) {
+  if (import.meta.env.DEV) { console.log('[Analytics] tool_open:', toolName); return; }
+  pushEvent('tool_open', { tool_name: toolName });
+}
+
+export function trackFileUpload(toolName: string, fileCount: number, totalSizeMB: number) {
+  if (import.meta.env.DEV) { console.log('[Analytics] file_upload:', toolName, fileCount); return; }
+  pushEvent('file_upload', {
+    tool_name: toolName,
+    file_count: fileCount,
+    total_size_mb: Math.round(totalSizeMB * 10) / 10,
+  });
+}
+
+export function trackToolSuccess(toolName: string, fileCount: number) {
+  if (import.meta.env.DEV) { console.log('[Analytics] tool_success:', toolName); return; }
+  pushEvent('tool_success', { tool_name: toolName, file_count: fileCount });
+}
+
+export function trackToolError(toolName: string, errorMessage: string) {
+  if (import.meta.env.DEV) { console.log('[Analytics] tool_error:', toolName, errorMessage); return; }
+  pushEvent('tool_error', { tool_name: toolName, error_message: errorMessage });
+}
+
+export function trackDownload(toolName: string, fileName: string) {
+  if (import.meta.env.DEV) { console.log('[Analytics] file_download:', toolName); return; }
+  pushEvent('file_download', { tool_name: toolName, file_name: fileName });
+}
+
+// Backward compatible — purane trackToolUsage calls kaam karte rahe
+export const trackToolUsage = async (name: string, _category: string, count: number) => {
+  trackToolSuccess(name, count);
+};
+
+5. client/src/types/global.d.ts mein yeh add karo (ya replace karo):
+interface Window {
+  dataLayer: any[];
+  gtag: (...args: any[]) => void;
+}
