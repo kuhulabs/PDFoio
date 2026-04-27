@@ -52,6 +52,10 @@ export default defineConfig({
             if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
             if (id.includes("react") || id.includes("wouter") || id.includes("@tanstack")) return "react-vendor";
           }
+          const seoMatch = id.match(/[\\/]client[\\/]src[\\/]seo[\\/]([^\\/]+)\.ts$/);
+          if (seoMatch) {
+            return `seo-${seoMatch[1]}`;
+          }
         },
       },
     },
