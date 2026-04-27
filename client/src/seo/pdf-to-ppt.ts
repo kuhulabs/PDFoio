@@ -10,6 +10,34 @@ export const pdfToPptSEO = {
       "Transform your static PDF documents back into dynamic, editable PowerPoint presentations.",
     intro:
       "The PDF to PPT converter by PDFo is the perfect solution for recovering lost presentation files or making last-minute changes to a PDF report. Our tool intelligently turns each PDF page into a PowerPoint slide, maintaining the original layout, images, and text positioning. This allows you to regain full editing control over your slides in Microsoft PowerPoint or Google Slides.",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "PDFo PDF to PPT Converter",
+      description:
+        "Convert PDF files to editable PowerPoint (PPTX) presentations online for free. Preserves layouts, images, and text positioning.",
+      applicationCategory: "UtilityApplication",
+      operatingSystem: "Web Browser",
+      url: "https://pdfo.io/pdf-to-ppt",
+      publisher: {
+        "@type": "Organization",
+        name: "PDFo",
+        url: "https://pdfo.io",
+      },
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      featureList: [
+        "Convert PDF to editable PPTX",
+        "Preserves slide layouts and images",
+        "OCR support for scanned documents",
+        "No watermarks",
+        "Secure SSL encryption",
+        "Automatic file deletion",
+      ],
+    },
     howItWorks: [
       "Upload your PDF presentation from your computer or mobile device.",
       "Our AI engine processes the document and creates a slide-based structure.",

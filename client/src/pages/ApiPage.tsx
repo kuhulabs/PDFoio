@@ -29,6 +29,7 @@ export default function ApiPage() {
           description="PDFo API is coming soon. Powerful PDF processing APIs for developers. Request early access today."
           canonicalUrl={`${SITE_URL}/api`}
           keywords="pdf api, pdf processing api, developer pdf api"
+          noIndex={true}
           breadcrumbs={[
             { name: "Home", url: SITE_URL },
             { name: "API", url: `${SITE_URL}/api` },
