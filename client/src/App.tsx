@@ -47,18 +47,35 @@ const PDFToTIFF = lazy(() => import("@/pages/PDFToTIFF"));
 const PDFToTXT = lazy(() => import("@/pages/PDFToTXT"));
 const PDFToJSON = lazy(() => import("@/pages/PDFToJSON"));
 
-// Loading component
-function LoadingSpinner() {
+// Loading fallback — lightweight skeleton that matches a typical tool page
+// layout, avoiding the layout shift / flash of a full-screen spinner.
+function PageFallback() {
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+    <div
+      className="container mx-auto px-4 py-10"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      data-testid="loader-page"
+    >
+      <span className="sr-only">Loading…</span>
+      <div className="mx-auto max-w-3xl space-y-6 animate-pulse">
+        <div className="h-8 w-2/3 rounded-md bg-muted" />
+        <div className="h-4 w-1/2 rounded-md bg-muted" />
+        <div className="h-64 w-full rounded-xl bg-muted" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="h-24 rounded-lg bg-muted" />
+          <div className="h-24 rounded-lg bg-muted" />
+          <div className="h-24 rounded-lg bg-muted" />
+        </div>
+      </div>
     </div>
   );
 }
 
 function Router() {
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <Suspense fallback={<PageFallback />}>
       <Switch>
         {/* Home */}
         <Route path="/" component={Home} />

@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -11,6 +12,20 @@ declare module "http" {
     rawBody: unknown;
   }
 }
+
+// Response compression — gzip for all text-like responses (HTML, JS, CSS,
+// JSON, SVG). Brotli is handled at the platform/CDN edge in production;
+// gzip here covers dev and any direct origin hits. Skips small payloads
+// and respects clients that opt out via `x-no-compression`.
+app.use(
+  compression({
+    threshold: 1024,
+    filter: (req, res) => {
+      if (req.headers["x-no-compression"]) return false;
+      return compression.filter(req, res);
+    },
+  }),
+);
 
 app.use(
   express.json({

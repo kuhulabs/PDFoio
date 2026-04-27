@@ -85,7 +85,7 @@ export async function generatePDFThumbnail(
       intent: "display",
     }).promise;
 
-    const thumbnailUrl = canvas.toDataURL("image/webp", 0.92);
+    const thumbnailUrl = canvas.toDataURL("image/webp", 0.75);
 
     // Cleanup memory
     page.cleanup();
