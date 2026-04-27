@@ -31,6 +31,9 @@ import { Button } from "@/components/ui/button";
 import { MainFooter } from "@/components/MainFooter";
 import { SEOHead } from "@/components/SEOHead";
 import heroBg from "@assets/hero_bg_1768974463459.webp";
+import heroBg768 from "@assets/hero_bg_768.webp";
+import heroBg1280 from "@assets/hero_bg_1280.webp";
+import heroBg1768 from "@assets/hero_bg_1768.webp";
 
 // 2. Updated Interface to accept React Component for Icon
 interface Tool {
@@ -315,14 +318,29 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section
-        className="hero-bg py-12 lg:py-16 relative overflow-hidden bg-gray-900"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${heroBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+      <section className="hero-bg py-12 lg:py-16 relative overflow-hidden bg-gray-900">
+        <img
+          src={heroBg1280}
+          srcSet={`${heroBg768} 768w, ${heroBg1280} 1280w, ${heroBg1768} 1768w`}
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          width={1768}
+          height={995}
+          loading="eager"
+          decoding="async"
+          {...({ fetchpriority: "high" } as Record<string, string>)}
+          className="absolute inset-0 w-full h-full object-cover"
+          data-testid="img-hero-bg"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6))",
+          }}
+          aria-hidden="true"
+        />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
             Professional PDF Tools

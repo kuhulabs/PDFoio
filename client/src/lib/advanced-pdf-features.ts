@@ -1,6 +1,14 @@
 // Performance-optimized PDF utilities
 
-import { PDFDocument, rgb, StandardFonts, PageSizes, degrees } from 'pdf-lib';
+// pdf-lib is loaded lazily on first use — keeps the ~2MB library out of
+// the initial bundle. The dynamic import is cached by the module loader,
+// so subsequent calls are essentially free.
+import type * as PdfLibType from 'pdf-lib';
+let _pdfLibPromise: Promise<typeof PdfLibType> | null = null;
+function loadPdfLib(): Promise<typeof PdfLibType> {
+  if (!_pdfLibPromise) _pdfLibPromise = import('pdf-lib');
+  return _pdfLibPromise;
+}
 
 export interface AdvancedPDFOptions {
   compression?: 'low' | 'medium' | 'high';
@@ -59,6 +67,7 @@ export class AdvancedPDFProcessor {
     file: File, 
     ranges: Array<{ start: number; end: number; name?: string }>
   ): Promise<File[]> {
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     const arrayBuffer = await file.arrayBuffer();
     const sourcePdf = await PDFDocument.load(arrayBuffer);
     const results: File[] = [];
@@ -88,6 +97,7 @@ export class AdvancedPDFProcessor {
       pageLayout?: 'single' | 'continuous' | 'facing';
     } = {}
   ): Promise<File> {
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     const mergedPdf = await PDFDocument.create();
     const bookmarks: BookmarkItem[] = [];
     let currentPageIndex = 0;
@@ -133,6 +143,7 @@ export class AdvancedPDFProcessor {
     file: File, 
     compressionLevel: 'low' | 'medium' | 'high' = 'medium'
   ): Promise<File> {
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await PDFDocument.load(arrayBuffer);
 
@@ -179,6 +190,7 @@ export class AdvancedPDFProcessor {
       position?: 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
     } = {}
   ): Promise<File> {
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await PDFDocument.load(arrayBuffer);
     const font = await pdf.embedFont(StandardFonts.Helvetica);
@@ -239,6 +251,7 @@ export class AdvancedPDFProcessor {
 
   // Extract and download all images from PDF (simplified for performance)
   static async extractAllImages(file: File): Promise<{ images: File[]; imageCount: number }> {
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     const arrayBuffer = await file.arrayBuffer();
     
     // Use pdf.js for image extraction
@@ -296,6 +309,7 @@ export class AdvancedPDFProcessor {
 
   // Advanced OCR text extraction
   static async extractTextAdvanced(file: File): Promise<{
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     fullText: string;
     pageTexts: string[];
     metadata: any;
@@ -334,6 +348,7 @@ export class AdvancedPDFProcessor {
     fields: FormField[],
     title: string = 'Form Document'
   ): Promise<File> {
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     const pdf = await PDFDocument.create();
     const page = pdf.addPage(pageSize);
     const font = await pdf.embedFont(StandardFonts.Helvetica);
@@ -395,6 +410,7 @@ export class AdvancedPDFProcessor {
 
   // PDF comparison tool
   static async comparePDFs(file1: File, file2: File): Promise<{
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     differences: Array<{
       page: number;
       type: 'content' | 'structure' | 'metadata';
@@ -464,6 +480,7 @@ export class AdvancedPDFProcessor {
     operation: (file: File) => Promise<T>,
     concurrency: number = 3
   ): Promise<T[]> {
+    const { PDFDocument, rgb, StandardFonts, PageSizes, degrees } = await loadPdfLib();
     const results: T[] = [];
     
     for (let i = 0; i < files.length; i += concurrency) {

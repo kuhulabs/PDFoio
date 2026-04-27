@@ -1,4 +1,12 @@
-import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
+// pdf-lib is loaded lazily on first use — keeps the ~2MB library out of
+// the initial bundle. The dynamic import is cached by the module loader,
+// so subsequent calls are essentially free.
+import type * as PdfLibType from 'pdf-lib';
+let _pdfLibPromise: Promise<typeof PdfLibType> | null = null;
+function loadPdfLib(): Promise<typeof PdfLibType> {
+  if (!_pdfLibPromise) _pdfLibPromise = import('pdf-lib');
+  return _pdfLibPromise;
+}
 // FIXED: Use centralized PDF worker initialization
 import { getPdfjsLib } from './pdfjs-loader';
 
@@ -80,6 +88,7 @@ export async function mergePDFs(
   files: File[], 
   onProgress?: (current: number, total: number) => void
 ): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   debugLog('mergePDFs - Starting merge with', files.length, 'files');
   const mergedPdf = await PDFDocument.create();
   
@@ -115,6 +124,7 @@ export async function mergePDFs(
 
 // Real PDF splitting - simplified version for page ranges  
 export async function splitPDF(file: File, pageRanges: number[][]): Promise<Blob[]> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
@@ -142,6 +152,7 @@ export async function splitPDF(file: File, pageRanges: number[][]): Promise<Blob
 
 // Advanced splitting with named groups
 export async function splitPDFWithPoints(file: File, splitPoints: SplitPoint[]): Promise<{ blob: Blob; name: string }[]> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   const totalPages = pdf.getPageCount();
@@ -188,6 +199,7 @@ export async function splitPDFWithPoints(file: File, splitPoints: SplitPoint[]):
 
 // Real PDF page reordering
 export async function reorderPDFPages(file: File, newOrder: number[]): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   const newPdf = await PDFDocument.create();
@@ -201,6 +213,7 @@ export async function reorderPDFPages(file: File, newOrder: number[]): Promise<B
 
 // Real PDF page deletion
 export async function deletePDFPages(file: File, pagesToKeep: number[]): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   const newPdf = await PDFDocument.create();
@@ -214,6 +227,7 @@ export async function deletePDFPages(file: File, pagesToKeep: number[]): Promise
 
 // Real PDF page rotation
 export async function rotatePDFPages(file: File, rotations: Record<number, number>): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   const pages = pdf.getPages();
@@ -234,6 +248,7 @@ export async function rotatePDFPages(file: File, rotations: Record<number, numbe
 
 // Real PDF page numbering (alias for compatibility)
 export async function addPageNumbers(file: File, settings: PageNumberSettings): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
@@ -386,6 +401,7 @@ export async function addPageNumbers(file: File, settings: PageNumberSettings): 
 
 // Get PDF page count using PDF.js for accuracy
 export async function getPDFPageCount(file: File): Promise<number> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   try {
     // PRODUCTION: Getting PDF page count
     
@@ -411,6 +427,7 @@ export async function getPDFPageCount(file: File): Promise<number> {
 
 // Generate actual PDF pages array from file with thumbnails
 export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   try {
     // PRODUCTION: Generating PDF page objects
     
@@ -443,6 +460,7 @@ export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
 
 // Edit PDF metadata
 export async function editPDFMetadata(file: File, metadata: PDFMetadata): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
@@ -461,6 +479,7 @@ export async function editPDFMetadata(file: File, metadata: PDFMetadata): Promis
 
 // Get PDF metadata
 export async function getPDFMetadata(file: File): Promise<PDFMetadata> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   try {
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await PDFDocument.load(arrayBuffer);
@@ -487,6 +506,7 @@ function parseHexColor(hex: string) {
 
 // Add watermark to PDF - Text only with rotation and font support
 export async function addWatermarkToPDF(file: File, settings: WatermarkSettings): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   debugLog('addWatermarkToPDF - Starting with settings:', settings);
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
@@ -603,6 +623,7 @@ export async function addWatermarkToPDF(file: File, settings: WatermarkSettings)
 
 // Password protect PDF with enhanced security simulation
 export async function lockPDF(file: File, password: string): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   debugLog('lockPDF - Starting password protection');
   debugLog('lockPDF - File:', file.name, 'Size:', file.size);
   
@@ -729,6 +750,7 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
 
 // Remove password from PDF (simulated)
 export async function unlockPDF(file: File, password: string): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   debugLog('unlockPDF - Starting unlock process');
   debugLog('unlockPDF - File:', file.name, 'Size:', file.size);
   debugLog('unlockPDF - Password length:', password.length);
@@ -799,6 +821,7 @@ export async function unlockPDF(file: File, password: string): Promise<Blob> {
 
 // Compress PDF with improved size reduction
 export async function compressPDF(file: File, level: CompressionLevel): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
@@ -884,6 +907,7 @@ export async function compressPDF(file: File, level: CompressionLevel): Promise<
 
 // Helper to create ZIP from blobs
 async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const JSZipModule = await import('jszip');
   const JSZip = JSZipModule.default;
   const zip = new JSZip();
@@ -895,6 +919,7 @@ async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> 
 
 // Convert PDF to images (JPG/PNG/TIFF)
 export async function convertPDFToImages(file: File, format: 'jpg' | 'png' | 'tiff', options: ImageConversionOptions = {}): Promise<{ zipBlob: Blob; images: Blob[]; pageCount: number }> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const loadingTask = (await getPdfjsLib()).getDocument({ 
     data: arrayBuffer,
@@ -957,6 +982,7 @@ export async function convertPDFToImages(file: File, format: 'jpg' | 'png' | 'ti
 
 // Convert PDF to Word document using enhanced text extraction
 export async function convertPDFToWord(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   // PRODUCTION: Starting PDF to Word conversion
   
   try {
@@ -1090,6 +1116,7 @@ ${htmlContent.replace('<html><head><meta charset="utf-8"><title>Converted from P
 
 // Convert PDF to Excel using XLSX library
 export async function convertPDFToExcel(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   // PRODUCTION: Starting PDF to Excel conversion
   
   try {
@@ -1195,6 +1222,7 @@ export async function convertPDFToExcel(file: File, options: DocumentConversionO
 
 // Convert PDF to PowerPoint using pptxgenjs
 export async function convertPDFToPPT(file: File): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   // PRODUCTION: Starting PDF to PowerPoint conversion
   
   try {
@@ -1317,6 +1345,7 @@ export async function convertPDFToPPT(file: File): Promise<Blob> {
 
 // Convert PDF to TIFF images (enhanced implementation)
 export async function convertPDFToTIFF(file: File): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   // PRODUCTION: Starting PDF to TIFF conversion
   
   try {
@@ -1362,6 +1391,7 @@ export async function convertPDFToTIFF(file: File): Promise<Blob> {
 
 // Convert PDF to plain text
 export async function convertPDFToTXT(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
@@ -1392,6 +1422,7 @@ export async function convertPDFToTXT(file: File, options: DocumentConversionOpt
 
 // Convert PDF to JSON
 export async function convertPDFToJSON(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
@@ -1441,6 +1472,7 @@ export async function convertPDFToJSON(file: File, options: DocumentConversionOp
 
 // Convert PNG images to PDF
 export async function convertImagesToPDF(files: File[], options: ImageToPDFOptions = {}): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const pdf = await PDFDocument.create();
   
   for (const file of files) {
@@ -1474,6 +1506,7 @@ export async function convertImagesToPDF(files: File[], options: ImageToPDFOptio
 
 // Convert Word document to PDF using mammoth.js
 export async function convertWordToPDF(file: File): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   // PRODUCTION: Starting Word to PDF conversion
   
   try {
@@ -1617,6 +1650,7 @@ export async function convertWordToPDF(file: File): Promise<Blob> {
 
 // Convert Excel spreadsheet to PDF using xlsx
 export async function convertExcelToPDF(file: File): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   // PRODUCTION: Starting Excel to PDF conversion
   
   try {
@@ -1703,6 +1737,7 @@ export async function convertExcelToPDF(file: File): Promise<Blob> {
 
 // Extract Images from PDF with real image extraction
 export async function extractImagesFromPDF(file: File): Promise<{ images: { url: string; name: string; index: number }[], zipBlob: Blob }> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
@@ -1768,6 +1803,7 @@ export async function extractImagesFromPDF(file: File): Promise<{ images: { url:
 
 // Detect blank pages in PDF
 export async function detectBlankPages(file: File): Promise<number[]> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await (await getPdfjsLib()).getDocument({ data: arrayBuffer }).promise;
   
@@ -1833,6 +1869,7 @@ export async function detectBlankPages(file: File): Promise<number[]> {
 
 // Remove blank pages from PDF
 export async function removeBlankPages(file: File): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
@@ -1859,6 +1896,7 @@ export async function removeBlankPages(file: File): Promise<Blob> {
 
 // Add Headers/Footers to PDF
 export async function addHeadersFooters(file: File, headerText: string, footerText: string): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   const pages = pdf.getPages();
@@ -1897,6 +1935,7 @@ export async function addHeadersFooters(file: File, headerText: string, footerTe
 
 // PDF Optimizer - Remove unused resources
 export async function optimizePDF(file: File): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
@@ -1911,6 +1950,7 @@ export async function optimizePDF(file: File): Promise<Blob> {
 
 // Create PDF from multiple file types
 export async function createPDFFromFiles(files: File[]): Promise<Blob> {
+  const { PDFDocument, rgb, StandardFonts, degrees } = await loadPdfLib();
   const pdf = await PDFDocument.create();
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   
